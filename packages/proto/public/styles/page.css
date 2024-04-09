@@ -1,0 +1,114 @@
+body {
+    color:white;
+    background-color: rgb(25, 37, 40);
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+header {
+    color: white;
+    background-color: rgb(59, 167, 194);
+    text-align: center;
+    line-height: 6rem;
+}
+h1 { 
+    font-size: 3rem;
+    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+h2 { 
+    font-size: 3rem; 
+}
+
+h3 { font-size: 2rem; }
+
+h4 { font-size: 1.5rem; }
+
+h5 { font-size: 1.25rem; }
+
+h6 { font-size: 1rem; }
+h2, h3, h4, h5, h6 {
+    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+a {
+    color:rgb(48, 128, 220);
+}
+
+th, td {
+    /* border: 1px solid rgb(160 160 160); */
+    padding: 4px 16px;
+}
+
+th {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+dt {
+    margin-bottom: 0.25rem;
+}
+
+dd {
+    margin-bottom: 1rem;
+}
+
+strong {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+em {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Mono */
+.roboto-mono-code-snippet {
+    font-family: Roboto Mono, Consolas, monaco, monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Body Text */
+.roboto-regular {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+.roboto-medium {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.roboto-regular-italic {
+    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* Display Text */
+.roboto-slab-main-title {
+    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+} 
+
+.roboto-slab-title {
+    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+} 
