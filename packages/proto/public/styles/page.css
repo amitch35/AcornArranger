@@ -1,43 +1,47 @@
 body {
-    color:white;
-    background-color: rgb(25, 37, 40);
-    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-weight: 400;
+    color: var(--text-color-body);
+    background-color: var(--background-color);
+    font-family: var(--text-font-family-body);
+    font-weight: var(--text-font-weight-body);
+    font-optical-sizing: auto;
     font-style: normal;
 }
+
 header {
-    color: white;
-    background-color: rgb(59, 167, 194);
+    background-color: var(--background-color-header);
     text-align: center;
-    line-height: 6rem;
+    padding: 0.5rem;
 }
+
 h1 { 
-    font-size: 3rem;
-    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-size: var(--text-font-size-xxxlarge);
+    font-family: var(--text-font-family-display);
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 }
+
 h2 { 
-    font-size: 3rem; 
+    font-size: var(--text-font-size-xxlarge); 
 }
 
-h3 { font-size: 2rem; }
+h3 { font-size: var(--text-font-size-xlarge); }
 
-h4 { font-size: 1.5rem; }
+h4 { font-size: var(--text-font-size-large); }
 
-h5 { font-size: 1.25rem; }
+h5 { font-size: var(--text-font-size-medium); }
 
-h6 { font-size: 1rem; }
+h6 { font-size: var(--text-font-size-body); }
+
 h2, h3, h4, h5, h6 {
-    font-family: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    font-family: var(--text-font-family-display);
     font-optical-sizing: auto;
-    font-weight: 300;
+    font-weight: var(--text-font-weight-light);
     font-style: normal;
 }
 
 a {
-    color:rgb(48, 128, 220);
+    color: var(--text-color-link);
 }
 
 th, td {
@@ -46,9 +50,7 @@ th, td {
 }
 
 th {
-    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-weight: 500;
-    font-style: normal;
+    font-weight: var(--text-font-weight-bold);
 }
 
 dt {
@@ -60,14 +62,12 @@ dd {
 }
 
 strong {
-    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-weight: 500;
-    font-style: normal;
+    font-weight: var(--text-font-weight-bold);
 }
 
 em {
-    font-family: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-weight: 400;
+    font-family: var(--text-font-family-body);
+    font-weight: var(--text-font-weight-body);
     font-style: italic;
 }
 

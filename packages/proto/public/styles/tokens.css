@@ -1,0 +1,27 @@
+:root {
+    --accent-color: rgb(59, 167, 194);
+    --background-color: rgb(25, 37, 40);
+    --background-color-header: var(--accent-color);
+    --btn-background-color: 200 10% 91%;
+    --btn-background-hover-color: 200 10% 89%;
+    --foreground-color: 200 50% 3%;
+    --text-font-size-small: 0.5rem;
+    --text-font-size-body: 1rem;
+    --text-font-size-medium: 1.25rem;
+    --text-font-size-large: 1.5rem;
+    --text-font-size-xlarge: 2rem;
+    --text-font-size-xxlarge: 2.5rem;
+    --text-font-size-xxxlarge: 3rem; 
+    --text-color-body: white;
+    --text-color-link: rgb(48, 128, 220);
+
+    --text-font-family-body: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
+    --text-font-family-display: Roboto Slab, Rockwell, Georgia, Times, Times New Roman, serif;
+    --text-font-family-mono: Roboto Mono, Consolas, monaco, monospace;
+    
+    --text-font-weight-light: 300;
+    --text-font-weight-body: 400;
+    --text-font-weight-bold: 500;
+
+
+}
