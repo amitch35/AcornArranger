@@ -5,6 +5,7 @@
     --btn-background-color: 200 10% 91%;
     --btn-background-hover-color: 200 10% 89%;
     --foreground-color: 200 50% 3%;
+
     --text-font-size-small: 0.5rem;
     --text-font-size-body: 1rem;
     --text-font-size-medium: 1.25rem;
@@ -12,6 +13,7 @@
     --text-font-size-xlarge: 2rem;
     --text-font-size-xxlarge: 2.5rem;
     --text-font-size-xxxlarge: 3rem; 
+
     --text-color-body: white;
     --text-color-link: rgb(48, 128, 220);
 
@@ -23,5 +25,8 @@
     --text-font-weight-body: 400;
     --text-font-weight-bold: 500;
 
-
+    --spacing-size-small: 0.5rem;
+    --spacing-size-medium: 1rem;
+    --spacing-size-large: 1.5rem;
+    --spacing-size-xlarge: 2rem
 }

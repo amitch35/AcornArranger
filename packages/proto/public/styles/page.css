@@ -8,9 +8,19 @@ body {
 }
 
 header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: var(--background-color-header);
-    text-align: center;
-    padding: 0.5rem;
+    line-height: 1;
+    padding: var(--spacing-size-medium);
+}
+
+header img {
+    width: auto;
+    height: auto;
+    max-width: calc(var(--text-font-size-xxxlarge) + 1rem);
+    max-height: calc(var(--text-font-size-xxxlarge) + 1rem);
 }
 
 h1 { 
@@ -60,6 +70,20 @@ dt {
 dd {
     margin-bottom: 1rem;
 }
+
+button {
+    color: currentColor;
+    border-color: currentColor;
+    border-style: solid;
+    border-radius: 0.375rem;
+    background-color: inherit;
+    height: fit-content;
+}
+
+button:hover {
+    background-color: var(--background-color); /* Green */
+    color: white;
+  }
 
 strong {
     font-weight: var(--text-font-weight-bold);
