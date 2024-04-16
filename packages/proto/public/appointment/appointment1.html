@@ -7,10 +7,42 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+        <script>
+            const parser = new DOMParser();
+      
+            function loadProperty(href, container) {
+              console.log("Loading Property:", href, container);
+      
+              fetch(href)
+                .then((response) => {
+                  if (response.status !== 200) {
+                    throw `Status: ${response.status}`;
+                  }
+                  return response.text();
+                })
+                .then((htmlString) => {
+                  const doc = parser.parseFromString(
+                    htmlString,
+                    "text/html"
+                  );
+      
+                  console.log("Property Document:", doc);
+                  const article = doc.body.firstChild;
+                  container.replaceChildren(article);
+                })
+                .catch((error) => {
+                  const message = document.createTextNode(
+                    `Failed to fetch ${href}: ${error}`
+                  );
+      
+                  container.append(message);
+                });
+            }
+          </script>
     </head>
     <body class="page">
         <header>
-            <img src="/Acorn Vacation Properties Inc Logo High Quality.png" alt="Acorn Vactaion Properties Logo">
+            <img src="../images/Acorn Vacation Properties Inc Logo High Quality.png" alt="Acorn Vactaion Properties Logo">
             <h1>
                 Appointment 9192115
             </h1>
@@ -53,7 +85,7 @@
                     <dl class="property-split-left">
                         <dt>Property ID</dt>
                         <dd>
-                            <a href="property1.html">
+                            <a href="../property/property1.html">
                                 117138
                             </a>
                         </dd>
