@@ -7,8 +7,25 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+        <script type="module">
+            import { relayEvent } from "/js/relay-event.js";
+            import { toggleDarkMode } from "/js/toggle-dark-mode.js";
+
+            window.relayEvent = relayEvent;
+            window.toggleDarkMode = toggleDarkMode;
+        </script>
+        <script type="module">
+             document.body.addEventListener(
+                "dark-mode:toggle",
+                (event) => {
+                    const page = event.currentTarget;
+                    const checked = event.detail.checked;
+                    page.classList.toggle("dark-mode", checked);
+                }
+            );
+        </script>
     </head>
-    <body class="page">
+    <body class="page dark-mode">
         <header>
             <a href="../index.html">
                 <img src="../images/Acorn Vacation Properties Inc Logo High Quality.png" alt="Acorn Vactaion Properties Logo">
@@ -51,5 +68,9 @@
                 </dl>
             </section>
         </main>
+        <label class="dark-mode-btn" onchange="relayEvent(event,'dark-mode:toggle',{checked: event.target.checked})">
+            <input type="checkbox" autocomplete="off" checked="true" />
+            Dark mode
+        </label>
     </body>
 </html>

@@ -1,7 +1,7 @@
 :root {
     --accent-color: rgb(59, 167, 194);
-    --background-color: rgb(25, 37, 40);
-    --background-color-accent: rgb(40, 59, 64);
+    --background-color: rgb(227, 240, 244);
+    --background-color-accent: rgb(182, 217, 227);
     --background-color-header: var(--accent-color);
     --btn-background-color: 200 10% 91%;
     --btn-background-hover-color: 200 10% 89%;
@@ -15,7 +15,8 @@
     --text-font-size-xxlarge: 2.5rem;
     --text-font-size-xxxlarge: 3rem; 
 
-    --text-color-body: white;
+    --text-color-header: white;
+    --text-color-body: black;
     --text-color-link: rgb(48, 128, 220);
 
     --text-font-family-body: Roboto, Arial, Helvetica Neue, Helvetica, sans-serif;
@@ -31,4 +32,14 @@
     --spacing-size-medium: 1rem;
     --spacing-size-large: 1.5rem;
     --spacing-size-xlarge: 2rem
+}
+
+body.dark-mode {
+    --background-color: rgb(25, 37, 40);
+    --background-color-accent: rgb(40, 59, 64);
+    --background-color-header: var(--accent-color);
+
+    --text-color-header: white;
+    --text-color-body: white;
+    --text-color-link: rgb(48, 128, 220);
 }

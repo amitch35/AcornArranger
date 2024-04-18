@@ -36,6 +36,12 @@ body {
     grid-column-end: span 4;
 }
 
+.dark-mode-btn {
+    position:absolute;
+    bottom: calc(0px + var(--spacing-size-small));
+    left: calc(0px + var(--spacing-size-small));
+}
+
 .appointment {
     --appointment-grid-columns: 2;
     display: grid;
@@ -118,6 +124,7 @@ body {
 }
 
 header {
+    color: var(--text-color-header);
     display: flex;
     align-items: center;
     justify-content: space-between;
