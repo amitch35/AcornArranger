@@ -31,7 +31,12 @@
     --spacing-size-small: 0.5rem;
     --spacing-size-medium: 1rem;
     --spacing-size-large: 1.5rem;
-    --spacing-size-xlarge: 2rem
+    --spacing-size-xlarge: 2rem;
+    
+    --border-size-radius: 0.375rem;
+
+    --shadow-color: rgba(2, 68, 69, 0.5);
+    --shadow-popover: 1px 1px 2px var(--shadow-color);
 }
 
 body.dark-mode {
