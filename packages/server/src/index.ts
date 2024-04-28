@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
-import property from "./routes/properties";
 import {createClient} from '@supabase/supabase-js'
+import { Database } from '../database.types'
+// import {createClient} from '@/utils/supabase/server'
 
 require('dotenv').config({ path: ['.env.local', '.env'] });
 
@@ -12,41 +13,47 @@ app.use(express.static(staticDir));
 
 app.use(express.json());
 
-const supabase = createClient(
-  process.env.PUBLIC_SUPABASE_URL!,
-  process.env.PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient<Database>(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
 );
 
 app.get('/api/properties', async (req, res) => {
   const {data, error} = await supabase
-      .from('rc_properties')
-      .select(`
-        properties_id,
-        property_name,
-        address:rc_addresses (
-          address, city, state_name, postal_code, country
-        ),
-        status_id,
-        estimated_cleaning_mins,
-        double_unit
-      `)
+    .from('rc_properties')
+    .select(`
+      properties_id,
+      property_name,
+      address:rc_addresses (
+        address, city, state_name, postal_code, country
+      ),
+      status_id,
+      estimated_cleaning_mins,
+      double_unit
+    `)
+  if (error) {
+    res.send(error);
+  }
   res.send(data);
 });
 
 app.get('/api/properties/:propertyId', async (req: Request, res: Response) => {
   const {data, error} = await supabase
-      .from('rc_properties')
-      .select(`
-        properties_id,
-        property_name,
-        address:rc_addresses (
-          address, city, state_name, postal_code, country
-        ),
-        status_id,
-        estimated_cleaning_mins,
-        double_unit
-      `)
-      .eq('properties_id', req.params.propertyId)
+    .from('rc_properties')
+    .select(`
+      properties_id,
+      property_name,
+      address:rc_addresses (
+        address, city, state_name, postal_code, country
+      ),
+      status_id,
+      estimated_cleaning_mins,
+      double_unit
+    `)
+    .eq('properties_id', req.params.propertyId)
+  if (error) {
+    res.send(error);
+  }
   res.send(data);
 });
 

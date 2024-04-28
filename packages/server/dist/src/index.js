@@ -55,28 +55,34 @@ const supabase = (0, import_supabase_js.createClient)(
 );
 app.get("/api/properties", (req, res) => __async(exports, null, function* () {
   const { data, error } = yield supabase.from("rc_properties").select(`
-        properties_id,
-        property_name,
-        address:rc_addresses (
-          address, city, state_name, postal_code, country
-        ),
-        status_id,
-        estimated_cleaning_mins,
-        double_unit
-      `);
+      properties_id,
+      property_name,
+      address:rc_addresses (
+        address, city, state_name, postal_code, country
+      ),
+      status_id,
+      estimated_cleaning_mins,
+      double_unit
+    `);
+  if (error) {
+    res.send(error);
+  }
   res.send(data);
 }));
 app.get("/api/properties/:propertyId", (req, res) => __async(exports, null, function* () {
   const { data, error } = yield supabase.from("rc_properties").select(`
-        properties_id,
-        property_name,
-        address:rc_addresses (
-          address, city, state_name, postal_code, country
-        ),
-        status_id,
-        estimated_cleaning_mins,
-        double_unit
-      `).eq("properties_id", req.params.propertyId);
+      properties_id,
+      property_name,
+      address:rc_addresses (
+        address, city, state_name, postal_code, country
+      ),
+      status_id,
+      estimated_cleaning_mins,
+      double_unit
+    `).eq("properties_id", req.params.propertyId);
+  if (error) {
+    res.send(error);
+  }
   res.send(data);
 }));
 app.listen(port, () => {

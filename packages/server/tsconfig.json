@@ -7,9 +7,13 @@
       "strict": true,
       "esModuleInterop": true,
       "moduleResolution": "NodeNext",
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      // "skipLibCheck": true,
+      "paths": {
+        "@/*": ["./*"]
+      }
     },
-    "include": ["src/**/*.ts"],
+    "include": ["src/**/*.ts", "src/utils/supabase/server.js", "src/utils/supabase/client.js", "database.types.ts"],
     "exclude": ["node_modules"],
     "lib": ["esnext"]
 }
