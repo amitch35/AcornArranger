@@ -44,42 +44,40 @@ var __async = (__this, __arguments, generator) => {
 var import_express = __toESM(require("express"));
 var import_supabase_js = require("@supabase/supabase-js");
 require("dotenv").config({ path: [".env.local", ".env"] });
+const { queryParser } = require("express-query-parser");
 const app = (0, import_express.default)();
 const port = process.env.PORT || 4e3;
 const staticDir = process.env.STATIC || "public";
 app.use(import_express.default.static(staticDir));
 app.use(import_express.default.json());
+app.use(
+  queryParser({
+    parseNull: true,
+    parseUndefined: true,
+    parseBoolean: true,
+    parseNumber: true
+  })
+);
 const supabase = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
 app.get("/api/properties", (req, res) => __async(exports, null, function* () {
-  const { data, error } = yield supabase.from("rc_properties").select(`
-      properties_id,
-      property_name,
-      address:rc_addresses (
-        address, city, state_name, postal_code, country
+  const { data, error } = yield supabase.from("rc_staff").select(`
+      user_id,
+      name,
+      role:roles (
+        role_id:id, 
+        title, 
+        description, 
+        priority, 
+        can_lead_team, 
+        can_clean
       ),
       status_id,
-      estimated_cleaning_mins,
-      double_unit
+      first_name,
+      last_name
     `);
-  if (error) {
-    res.send(error);
-  }
-  res.send(data);
-}));
-app.get("/api/properties/:propertyId", (req, res) => __async(exports, null, function* () {
-  const { data, error } = yield supabase.from("rc_properties").select(`
-      properties_id,
-      property_name,
-      address:rc_addresses (
-        address, city, state_name, postal_code, country
-      ),
-      status_id,
-      estimated_cleaning_mins,
-      double_unit
-    `).eq("properties_id", req.params.propertyId);
   if (error) {
     res.send(error);
   }

@@ -13,7 +13,7 @@
         "@/*": ["./*"]
       }
     },
-    "include": ["src/**/*.ts", "src/utils/supabase/server.js", "src/utils/supabase/client.js", "database.types.ts"],
+    "include": ["src/**/*.ts", "src/utils/supabase/server.js", "src/utils/supabase/client.js", "src/database.types.ts"],
     "exclude": ["node_modules"],
     "lib": ["esnext"]
 }
