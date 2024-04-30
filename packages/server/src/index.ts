@@ -154,6 +154,22 @@ app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
   res.send(data);
 });
 
+app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
+  const { error } = await supabase
+    .from('roles')
+    .update({ 
+      priority: 4,
+      title: "",
+      description: "",
+      can_lead_team: false,
+      can_clean: false
+     })
+    .eq('id', req.params.role_id)
+  if (error) {
+    res.send(error);
+  }
+});
+
 // Appointments
 app.get('/api/appointments', async (req: Request, res: Response) => {
   const per_page = req.query.per_page || 50;

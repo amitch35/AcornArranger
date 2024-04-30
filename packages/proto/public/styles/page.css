@@ -205,6 +205,17 @@ dd {
     margin-left: var(--spacing-size-small);
 }
 
+json-object dl {
+    margin-left: 0;
+    padding-left: var(--spacing-size-small);
+    border-left: 1px solid;
+    border-color: var(--accent-color);
+}
+
+json-object ul {
+    padding-left: 0;
+}
+
 button {
     color: currentColor;
     border-color: currentColor;

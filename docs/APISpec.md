@@ -1,7 +1,7 @@
 # API Specification
 Base URL: `~/api`
 ## 1. Properties
-### 1.1 Show Properties `/properties/` - GET
+### 1.1 Show Properties `/properties` - GET
 Allows users to see all properties available on the database
 
 Returns: 
@@ -91,13 +91,13 @@ Returns:
     }
 ]
 ```
-### 2.3 Assign Staff Role - `/staff/{user_id}/role/{role_id}` - POST
+<!-- ### 2.3 Assign Staff Role - `/staff/{user_id}/role` - PUT
 Change the role of the given staff member
 
 Input:
 ```commandline
 {
-    
+    "role_id": <id>
 }
 ```
 Returns:
@@ -107,7 +107,7 @@ Returns:
         
     }
 ]
-```
+``` -->
 
 ## 3. Roles
 ### 3.1 Show Roles - `/roles` - GET
@@ -140,7 +140,7 @@ Gets full information about a single role
     }
 ]
 ```
-### 3.3 Assign Role Settings - `/roles/{role_id}` - POST
+### 3.3 Assign Role Settings - `/roles/{role_id}` - PUT
 Change settings for specified role
 
 Input:

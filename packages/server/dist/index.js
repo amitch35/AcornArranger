@@ -164,6 +164,18 @@ app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* ()
   }
   res.send(data);
 }));
+app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
+  const { error } = yield supabase.from("roles").update({
+    priority: 4,
+    title: "",
+    description: "",
+    can_lead_team: false,
+    can_clean: false
+  }).eq("id", req.params.role_id);
+  if (error) {
+    res.send(error);
+  }
+}));
 app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
   const per_page = req.query.per_page || 50;
   const page = req.query.page || 0;
