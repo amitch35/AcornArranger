@@ -879,12 +879,18 @@ export type Database = {
         }
         Returns: number
       }
+      send_rc_schedule_plans: {
+        Args: {
+          schedule_date: string
+        }
+        Returns: undefined
+      }
       set_rc_appointment_staff: {
         Args: {
           appointment_id: number
           staff_ids: number[]
         }
-        Returns: undefined
+        Returns: boolean
       }
       set_staff_group: {
         Args: {
@@ -909,8 +915,7 @@ export type Database = {
       }
       team_plan_add_staff: {
         Args: {
-          target_plan_date: string
-          target_team: number
+          target_plan: number
           staff_to_add: number
         }
         Returns: undefined

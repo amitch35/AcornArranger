@@ -146,14 +146,16 @@ Change settings for specified role
 Input:
 ```commandline
 {
-    
+    "title": <string>,
+    "description": <string>,
+    "priority": <int>,
+    "can_lead_team": <bool>,
+    "can_clean": <bool>
 }
 ```
 Returns:
 ```commandline
-{
-    
-}
+[]
 ```
 
 ## 4. Appointments
@@ -226,3 +228,22 @@ Returns:
 ```
 
 ## 5. Schedule Plans
+### 5.1 Show Plans - `/plans` - GET
+
+Query Parameters:
+- `per_page`: number from 1 to 1000 - indicates maximum number of appointment records to return
+- `page`: number from 0 - indicates which page of results to return
+- `from_plan_date`: date YYYY-MM-DD - filters out any appointments with service date before this value
+- `to_plan_date`: date YYYY-MM-DD - filters out any appointments with service date after this value
+
+### 5.2 Get Plan - `/plans/{plan_id}` - GET
+
+### 5.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}/add` - POST
+
+### 5.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}/remove` - DELETE
+
+### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}/add` - POST
+
+### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}/remove` - DELETE
+
+### 5.7 Send Plan to ResortCleaning - `/plans/{plan_id}/send` - 

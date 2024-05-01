@@ -7,7 +7,7 @@
     "build": "npx etsc",
     "start": "cross-env STATIC=../proto/public node dist/index.js",
     "check": "npx tsc --noEmit",
-    "db-types": "supabase gen types typescript --project-id fqkcgxfaqhpqrytcixuy > database.types.ts"
+    "db-types": "supabase gen types typescript --project-id fqkcgxfaqhpqrytcixuy > src/database.types.ts"
   },
   "author": "Ashton Mitchell",
   "license": "ISC",

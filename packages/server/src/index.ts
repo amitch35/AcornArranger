@@ -158,16 +158,17 @@ app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
   const { error } = await supabase
     .from('roles')
     .update({ 
-      priority: 4,
-      title: "",
-      description: "",
-      can_lead_team: false,
-      can_clean: false
+      title: req.body.title,
+      description: req.body.description,
+      priority: req.body.priority,
+      can_lead_team: req.body.can_lead_team,
+      can_clean: req.body.can_clean
      })
     .eq('id', req.params.role_id)
   if (error) {
     res.send(error);
   }
+  res.json([]);
 });
 
 // Appointments
@@ -243,6 +244,24 @@ app.get('/api/appointments/:appointment_id', async (req: Request, res: Response)
   const {data, error} = await query
 
   if (error) {
+    res.send(error);
+  }
+  res.send(data);
+});
+
+app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Response) => {
+  
+  const { data, error, status } = await supabase
+    .rpc(
+      'team_plan_add_staff', 
+      {
+        staff_to_add: req.params.user_id, 
+        target_plan: req.params.plan_id
+      }
+    )
+  res.status(status);
+  if (error) {
+    // res.status(parseInt(error.code.replace('PT','')))
     res.send(error);
   }
   res.send(data);

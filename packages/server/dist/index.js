@@ -166,15 +166,16 @@ app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* ()
 }));
 app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
   const { error } = yield supabase.from("roles").update({
-    priority: 4,
-    title: "",
-    description: "",
-    can_lead_team: false,
-    can_clean: false
+    title: req.body.title,
+    description: req.body.description,
+    priority: req.body.priority,
+    can_lead_team: req.body.can_lead_team,
+    can_clean: req.body.can_clean
   }).eq("id", req.params.role_id);
   if (error) {
     res.send(error);
   }
+  res.json([]);
 }));
 app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
   const per_page = req.query.per_page || 50;
@@ -235,6 +236,20 @@ app.get("/api/appointments/:appointment_id", (req, res) => __async(exports, null
     )
   `).eq("appointment_id", req.params.appointment_id);
   const { data, error } = yield query;
+  if (error) {
+    res.send(error);
+  }
+  res.send(data);
+}));
+app.post("/api/plans/:plan_id/staff/:user_id/add", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "team_plan_add_staff",
+    {
+      staff_to_add: req.params.user_id,
+      target_plan: req.params.plan_id
+    }
+  );
+  res.status(status);
   if (error) {
     res.send(error);
   }
