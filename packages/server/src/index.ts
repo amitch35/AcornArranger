@@ -30,7 +30,7 @@ const supabase = createClient<Database>(
 
 // Properties
 app.get('/api/properties', async (req, res) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('rc_properties')
     .select(`
       properties_id,
@@ -42,6 +42,7 @@ app.get('/api/properties', async (req, res) => {
       estimated_cleaning_mins,
       double_unit
     `)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -49,7 +50,7 @@ app.get('/api/properties', async (req, res) => {
 });
 
 app.get('/api/properties/:property_id', async (req: Request, res: Response) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('rc_properties')
     .select(`
       properties_id,
@@ -66,6 +67,7 @@ app.get('/api/properties/:property_id', async (req: Request, res: Response) => {
       double_unit
     `)
     .eq('properties_id', req.params.property_id)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -74,7 +76,7 @@ app.get('/api/properties/:property_id', async (req: Request, res: Response) => {
 
 // Staff
 app.get('/api/staff', async (req: Request, res: Response) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('rc_staff')
     .select(`
       user_id,
@@ -87,6 +89,7 @@ app.get('/api/staff', async (req: Request, res: Response) => {
       first_name,
       last_name
     `)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -94,7 +97,7 @@ app.get('/api/staff', async (req: Request, res: Response) => {
 });
 
 app.get('/api/staff/:user_id', async (req: Request, res: Response) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('rc_staff')
     .select(`
       user_id,
@@ -112,6 +115,7 @@ app.get('/api/staff/:user_id', async (req: Request, res: Response) => {
       last_name
     `)
     .eq('user_id', req.params.user_id)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -120,7 +124,7 @@ app.get('/api/staff/:user_id', async (req: Request, res: Response) => {
 
 // Roles
 app.get('/api/roles', async (req: Request, res: Response) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('roles')
     .select(`
       role_id:id, 
@@ -130,6 +134,7 @@ app.get('/api/roles', async (req: Request, res: Response) => {
       can_lead_team, 
       can_clean
     `)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -137,7 +142,7 @@ app.get('/api/roles', async (req: Request, res: Response) => {
 });
 
 app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
-  const {data, error} = await supabase
+  const {data, error, status} = await supabase
     .from('roles')
     .select(`
       role_id:id, 
@@ -148,6 +153,7 @@ app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
       can_clean
     `)
     .eq('id', req.params.role_id)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -155,7 +161,7 @@ app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
 });
 
 app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
-  const { error } = await supabase
+  const { error, status } = await supabase
     .from('roles')
     .update({ 
       title: req.body.title,
@@ -165,6 +171,7 @@ app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
       can_clean: req.body.can_clean
      })
     .eq('id', req.params.role_id)
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -208,8 +215,8 @@ app.get('/api/appointments', async (req: Request, res: Response) => {
     .order('property_name', { referencedTable: 'rc_properties', ascending: true })
     .order('appointment_id', { ascending: true })
 
-  const {data, error} = await query
-
+  const {data, error, status} = await query
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -241,8 +248,8 @@ app.get('/api/appointments/:appointment_id', async (req: Request, res: Response)
   `)
   .eq('appointment_id', req.params.appointment_id)
 
-  const {data, error} = await query
-
+  const {data, error, status} = await query
+  res.status(status);
   if (error) {
     res.send(error);
   }
@@ -261,7 +268,6 @@ app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Res
     )
   res.status(status);
   if (error) {
-    // res.status(parseInt(error.code.replace('PT','')))
     res.send(error);
   }
   res.send(data);
