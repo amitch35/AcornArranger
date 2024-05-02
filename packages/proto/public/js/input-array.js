@@ -39,7 +39,8 @@ export class InputArrayElement extends HTMLElement {
       const label = input.closest("label");
       label.remove();
     });
-    this._array = Array.isArray(array) ? array : [array];
+    // this._array = Array.isArray(array) ? array : [array];
+    this._array = array;
     const html = this._array
       .map((value, i) => renderItem(this.name, i, value))
       .join("");

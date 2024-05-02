@@ -62,171 +62,69 @@ const supabase = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
-app.get("/api/properties", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(`
-      properties_id,
-      property_name,
-      address:rc_addresses (
-        address, city, state_name, postal_code, country
-      ),
+const selectProperties = supabase.from("rc_properties").select(`
+    properties_id,
+    property_name,
+    estimated_cleaning_mins,
+    double_unit,
+    address:rc_addresses (
+      address, 
+      city, 
+      state_name, 
+      postal_code, 
+      country
+    ),
+    status:property_status_key (
       status_id,
-      estimated_cleaning_mins,
-      double_unit
-    `);
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.get("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(`
-      properties_id,
-      property_name,
-      address:rc_addresses (
-        address, 
-        city, 
-        state_name, 
-        postal_code, 
-        country
-      ),
+      status
+    )
+  `);
+const selectStaffBasic = supabase.from("rc_staff").select(`
+    user_id,
+    name,
+    first_name,
+    last_name,
+    role:roles (
+      role_id:id, 
+      title
+    ),
+    status:staff_status_key (
       status_id,
-      estimated_cleaning_mins,
-      double_unit
-    `).eq("properties_id", req.params.property_id).maybeSingle();
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.get("/api/staff", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_staff").select(`
-      user_id,
-      name,
-      role:roles (
-        role_id:id, 
-        title
-      ),
-      status_id,
-      first_name,
-      last_name
-    `);
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.get("/api/staff/:user_id", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_staff").select(`
-      user_id,
-      name,
-      role:roles (
-        role_id:id, 
-        title, 
-        description, 
-        priority, 
-        can_lead_team, 
-        can_clean
-      ),
-      status_id,
-      first_name,
-      last_name
-    `).eq("user_id", req.params.user_id).maybeSingle();
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.get("/api/roles", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("roles").select(`
+      status
+    )
+  `);
+const selectStaffFull = supabase.from("rc_staff").select(`
+    user_id,
+    name,
+    first_name,
+    last_name,
+    role:roles (
       role_id:id, 
       title, 
       description, 
       priority, 
       can_lead_team, 
       can_clean
-    `);
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
-  const { data, error, status } = yield supabase.from("roles").select(`
-      role_id:id, 
-      title, 
-      description, 
-      priority, 
-      can_lead_team, 
-      can_clean
-    `).eq("id", req.params.role_id);
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
-  const { error, status } = yield supabase.from("roles").update({
-    title: req.body.title,
-    description: req.body.description,
-    priority: req.body.priority,
-    can_lead_team: req.body.can_lead_team,
-    can_clean: req.body.can_clean
-  }).eq("id", req.params.role_id);
-  if (error) {
-    res.status(status);
-    res.send(error);
-  } else {
-    res.json([{
-      role_id: req.params.role_id,
-      title: req.body.title,
-      description: req.body.description,
-      priority: req.body.priority,
-      can_lead_team: req.body.can_lead_team,
-      can_clean: req.body.can_clean
-    }]);
-  }
-}));
-app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
-  const per_page = req.query.per_page || 50;
-  const page = req.query.page || 0;
-  const offset = per_page * page;
-  let query = supabase.from("rc_appointments").select(`
+    ),
+    status:staff_status_key (
+      status_id,
+      status
+    )
+  `);
+const selectRoles = supabase.from("roles").select(`
+    role_id:id, 
+    title, 
+    description, 
+    priority, 
+    can_lead_team, 
+    can_clean
+  `);
+const selectAppointments = supabase.from("rc_appointments").select(`
     appointment_id, 
     arrival_time, 
     service_time:departure_time, 
     next_arrival_time, 
     turn_around, 
-    app_status_id,
     cancelled_date,
     service,
     property:rc_properties (
@@ -238,8 +136,133 @@ app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
       staff_info:rc_staff ( 
         name 
       )
+    ),
+    status:appointment_status_key (
+      status_id,
+      status
     )
   `);
+app.get("/api/properties", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectProperties;
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.get("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectProperties.eq("properties_id", req.params.property_id).maybeSingle();
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.put("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
+  let { error, status } = yield supabase.from("rc_properties").update({
+    estimated_cleaning_mins: req.body.estimated_cleaning_mins,
+    double_unit: req.body.double_unit
+  }).eq("properties_id", req.params.property_id);
+  if (error) {
+    res.status(status);
+    res.send(error);
+  } else {
+    let { data, error: error2, status: status2 } = yield selectProperties.eq("properties_id", req.params.property_id).maybeSingle();
+    res.status(status2);
+    if (error2) {
+      res.send(error2);
+    } else if (data) {
+      res.send(data);
+    } else {
+      res.status(404);
+      res.send();
+    }
+  }
+}));
+app.get("/api/staff", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectStaffBasic.order("status_id", { ascending: true }).order("name", { ascending: true });
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.get("/api/staff/:user_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectStaffFull.eq("user_id", req.params.user_id).maybeSingle();
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.get("/api/roles", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectRoles;
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield selectRoles.eq("id", req.params.role_id).maybeSingle();
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
+  }
+}));
+app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
+  let { error, status } = yield supabase.from("roles").update({
+    description: req.body.description,
+    priority: req.body.priority,
+    can_lead_team: req.body.can_lead_team,
+    can_clean: req.body.can_clean
+  }).eq("id", req.params.role_id);
+  if (error) {
+    res.status(status);
+    res.send(error);
+  } else {
+    let { data, error: error2, status: status2 } = yield selectRoles.eq("id", req.params.role_id).maybeSingle();
+    res.status(status2);
+    if (error2) {
+      res.send(error2);
+    } else if (data) {
+      res.send(data);
+    } else {
+      res.status(404);
+      res.send();
+    }
+  }
+}));
+app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
+  const per_page = req.query.per_page || 50;
+  const page = req.query.page || 0;
+  const offset = per_page * page;
+  let query = selectAppointments;
   if (req.query.from_service_date) {
     query = query.gte("departure_time", req.query.from_service_date);
   }
@@ -259,26 +282,7 @@ app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
   }
 }));
 app.get("/api/appointments/:appointment_id", (req, res) => __async(exports, null, function* () {
-  let query = supabase.from("rc_appointments").select(`
-    appointment_id, 
-    arrival_time, 
-    service_time:departure_time, 
-    next_arrival_time, 
-    turn_around, 
-    app_status_id,
-    cancelled_date,
-    service,
-    property:rc_properties (
-      properties_id,
-      property_name
-    ),
-    staff:appointments_staff (
-      user_id:staff_id,
-      staff_info:rc_staff ( 
-        name 
-      )
-    )
-  `).eq("appointment_id", req.params.appointment_id).maybeSingle();
+  let query = selectAppointments.eq("appointment_id", req.params.appointment_id).maybeSingle();
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {

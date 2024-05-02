@@ -10,7 +10,6 @@ Returns:
     {
         "properties_id": <id>,
         "property_name": <string>,
-        "status_id": <smallint>,
         "estimated_cleaning_mins": <smallint>,
         "double_unit": Array<id>,
         "address": {
@@ -19,6 +18,10 @@ Returns:
             "country": <string>,
             "state_name": <string>,
             "postal_code": <int>
+        },
+        "status": {
+            "status": <string>,
+            "status_id": <smallint>
         }
     }
 ]
@@ -28,22 +31,53 @@ Gets full information about a single property
 
 Returns:
 ```commandline
-[
-    {
-        "properties_id": <id>,
-        "property_name": <string>,
-        "status_id": <smallint>,
-        "estimated_cleaning_mins": <smallint>,
-        "double_unit": Array<id>,
-        "address": {
-            "city": <string>,
-            "address": <string>,
-            "country": <string>,
-            "state_name": <string>,
-            "postal_code": <int>
-        }
+{
+    "properties_id": <id>,
+    "property_name": <string>,
+    "estimated_cleaning_mins": <smallint>,
+    "double_unit": Array<id>,
+    "address": {
+        "city": <string>,
+        "address": <string>,
+        "country": <string>,
+        "state_name": <string>,
+        "postal_code": <int>
+    },
+    "status": {
+        "status": <string>,
+        "status_id": <smallint>
     }
-]
+}
+```
+### 1.3 Assign Property settings - `/properties/{properties_id}` - PUT
+Gets full information about a single property
+
+Input:
+```commandline
+{
+    "estimated_cleaning_mins": <smallint>,
+    "double_unit": Array<id>
+}
+```
+Returns:
+```commandline
+{
+    "properties_id": <id>,
+    "property_name": <string>,
+    "estimated_cleaning_mins": <smallint>,
+    "double_unit": Array<id>,
+    "address": {
+        "city": <string>,
+        "address": <string>,
+        "country": <string>,
+        "state_name": <string>,
+        "postal_code": <int>
+    },
+    "status": {
+        "status": <string>,
+        "status_id": <smallint>
+    }
+}
 ```
 
 ## 2. Staff
@@ -57,12 +91,15 @@ Returns:
     {
         "user_id": <id>,
         "name": <string>,
-        "status_id": <smallint>,
         "first_name": <string>,
         "last_name": <string>,
         "role": {
             "role_id": <id>,
             "title": <string>
+        },
+        "status": {
+            "status": <string>,
+            "status_id": <smallint>
         }
     }
 ]
@@ -73,23 +110,24 @@ information about their role
 
 Returns:
 ```commandline
-[
-    {
-        "user_id": <id>,
-        "name": <string>,
-        "status_id": <smallint>,
-        "first_name": <string>,
-        "last_name": <string>,
-        "role": {
-            "role_id": <id>,
-            "title": <string>,
-            "priority": <int>,
-            "can_clean": <bool>,
-            "description": <string>,
-            "can_lead_team": <bool>
-        }
+{
+    "user_id": <id>,
+    "name": <string>,
+    "first_name": <string>,
+    "last_name": <string>,
+    "role": {
+        "role_id": <id>,
+        "title": <string>,
+        "priority": <int>,
+        "can_clean": <bool>,
+        "description": <string>,
+        "can_lead_team": <bool>
+    },
+    "status": {
+        "status": <string>,
+        "status_id": <smallint>
     }
-]
+}
 ```
 <!-- ### 2.3 Assign Staff Role - `/staff/{user_id}/role` - PUT
 Change the role of the given staff member
@@ -129,16 +167,14 @@ Returns all roles linked from Homebase
 Gets full information about a single role
 
 ```commandline
-[
-    {
-        "role_id": <id>,
-        "title": <string>,
-        "description": <string>,
-        "priority": <int>,
-        "can_lead_team": <bool>,
-        "can_clean": <bool>
-    }
-]
+{
+    "role_id": <id>,
+    "title": <string>,
+    "description": <string>,
+    "priority": <int>,
+    "can_lead_team": <bool>,
+    "can_clean": <bool>
+}
 ```
 ### 3.3 Assign Role Settings - `/roles/{role_id}` - PUT
 Change settings for specified role
@@ -146,7 +182,6 @@ Change settings for specified role
 Input:
 ```commandline
 {
-    "title": <string>,
     "description": <string>,
     "priority": <int>,
     "can_lead_team": <bool>,
@@ -155,16 +190,14 @@ Input:
 ```
 Returns:
 ```commandline
-[
-    {
-        "role_id": <id>,
-        "title": <string>,
-        "description": <string>,
-        "priority": <int>,
-        "can_lead_team": <bool>,
-        "can_clean": <bool>
-    }
-]
+{
+    "role_id": <id>,
+    "title": <string>,
+    "description": <string>,
+    "priority": <int>,
+    "can_lead_team": <bool>,
+    "can_clean": <bool>
+}
 ```
 
 ## 4. Appointments
@@ -187,7 +220,6 @@ Returns:
         "service_time": <string (ISO Timestamp)>,
         "next_arrival_time": <string (ISO Timestamp)>,
         "turn_around": <bool>,
-        "app_status_id": <smallint>,
         "cancelled_date": <string (ISO Timestamp)>,
         "service": <id>,
         "property": {
@@ -197,11 +229,15 @@ Returns:
         "staff": [
             {
                 "user_id": <id>,
-                "staff_details": {
+                "staff_info": {
                     "name": <string>
                 }
             }
-        ]
+        ],
+        "status": {
+            "status": <string>,
+            "status_id": <smallint>
+        }
     }
 ]
 ```
@@ -210,30 +246,31 @@ Gets full information about a single appointment
 
 Returns:
 ```commandline
-[
-    {
-        "appointment_id": <id>,
-        "arrival_time": <string (ISO Timestamp)>,
-        "service_time": <string (ISO Timestamp)>,
-        "next_arrival_time": <string (ISO Timestamp)>,
-        "turn_around": <bool>,
-        "app_status_id": <smallint>,
-        "cancelled_date": <string (ISO Timestamp)>,
-        "service": <id>,
-        "property": {
-            "properties_id": <id>,
-            "property_name": <string>
-        },
-        "staff": [
-            {
-                "user_id": <id>,
-                "staff_details": {
-                    "name": <string>
-                }
+{
+    "appointment_id": <id>,
+    "arrival_time": <string (ISO Timestamp)>,
+    "service_time": <string (ISO Timestamp)>,
+    "next_arrival_time": <string (ISO Timestamp)>,
+    "turn_around": <bool>,
+    "cancelled_date": <string (ISO Timestamp)>,
+    "service": <id>,
+    "property": {
+        "properties_id": <id>,
+        "property_name": <string>
+    },
+    "staff": [
+        {
+            "user_id": <id>,
+            "staff_info": {
+                "name": <string>
             }
-        ]
+        }
+    ],
+    "status": {
+        "status": <string>,
+        "status_id": <smallint>
     }
-]
+}
 ```
 
 ## 5. Schedule Plans

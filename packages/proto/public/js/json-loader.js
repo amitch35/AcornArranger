@@ -55,7 +55,7 @@ export function loadJSON(src, container, render) {
       }
       return response.json();
     })
-    .then((json) => addFragment(render(json[0]), container))
+    .then((json) => addFragment(render(json), container)) //render(json[0] for always list encapsulated
     .catch((error) =>
       addFragment(
         `<dt class="error">Error</dt>

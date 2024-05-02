@@ -22,7 +22,7 @@ export class RestfulFormElement extends HTMLElement {
         this.src,
         this._state,
         this.isNew ? "POST" : "PUT"
-      ).then((json) => populateForm(json[0], this.form));
+      ).then((json) => populateForm(json, this.form));
     });
     this.addEventListener("restful-form:delete", (event) => {
       event.stopPropagation();
@@ -42,8 +42,8 @@ export class RestfulFormElement extends HTMLElement {
     this.form.reset();
     if (!this.isNew) {
       fetchData(this.src, this.form).then((json) => {
-        this._state = json[0];
-        populateForm(json[0], this.form);
+        this._state = json;
+        populateForm(json, this.form);
       });
     }
   }
@@ -68,24 +68,63 @@ function populateForm(json, form) {
   const entries = Object.entries(json);
 
   for (const [key, val] of entries) {
-    const input =
-      form.elements[key] ||
-      form.querySelector(`[name="${key}"]`);
+    if (typeof(val) === "object" && val && !(Array.isArray(val))) {
+      populateForm(val, form)
+    } else {
+      const input =
+        form.elements[key] ||
+        form.querySelector(`[name="${key}"]`);
 
-    if (input) {
-      switch (input.type) {
-        case "checkbox":
-          input.checked = Boolean(value);
-          break;
-        default:
-          input.value = val;
-          break;
+      if (input) {
+        switch (input.type) {
+          case "checkbox":
+            input.checked = Boolean(value);
+            break;
+          default:
+            input.value = val;
+            break;
+        }
       }
     }
   }
 
   return json;
 }
+
+// function populateForm(json, form) {
+//   const entries = Object.entries(json);
+
+//   for (const [key, val] of entries) {
+//     if (typeof(val) === "object" && val) {
+//       if (Array.isArray(val)) {
+//         for (const item of val) {
+//           if (item) {
+//             populateForm(item, form)
+//           }
+//         }
+//       } else {
+//         populateForm(val, form)
+//       }
+//     } else {
+//       const input =
+//         form.elements[key] ||
+//         form.querySelector(`[name="${key}"]`);
+
+//       if (input) {
+//         switch (input.type) {
+//           case "checkbox":
+//             input.checked = Boolean(value);
+//             break;
+//           default:
+//             input.value = val;
+//             break;
+//         }
+//       }
+//     }
+//   }
+
+//   return json;
+// }
 
 function submitForm(src, json, method = "PUT") {
   return fetch(src, {
