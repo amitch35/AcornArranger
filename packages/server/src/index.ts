@@ -45,8 +45,12 @@ app.get('/api/properties', async (req, res) => {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.get('/api/properties/:property_id', async (req: Request, res: Response) => {
@@ -67,11 +71,16 @@ app.get('/api/properties/:property_id', async (req: Request, res: Response) => {
       double_unit
     `)
     .eq('properties_id', req.params.property_id)
+    .maybeSingle()
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 // Staff
@@ -92,8 +101,12 @@ app.get('/api/staff', async (req: Request, res: Response) => {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.get('/api/staff/:user_id', async (req: Request, res: Response) => {
@@ -115,11 +128,16 @@ app.get('/api/staff/:user_id', async (req: Request, res: Response) => {
       last_name
     `)
     .eq('user_id', req.params.user_id)
+    .maybeSingle()
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 // Roles
@@ -137,8 +155,12 @@ app.get('/api/roles', async (req: Request, res: Response) => {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
@@ -156,8 +178,12 @@ app.get('/api/roles/:role_id', async (req: Request, res: Response) => {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
@@ -171,11 +197,20 @@ app.put('/api/roles/:role_id', async (req: Request, res: Response) => {
       can_clean: req.body.can_clean
      })
     .eq('id', req.params.role_id)
-  res.status(status);
+  
   if (error) {
+    res.status(status);
     res.send(error);
+  } else {
+    res.json([{
+      role_id: req.params.role_id,
+      title: req.body.title,
+      description: req.body.description,
+      priority: req.body.priority,
+      can_lead_team: req.body.can_lead_team,
+      can_clean: req.body.can_clean
+     }]);
   }
-  res.json([]);
 });
 
 // Appointments
@@ -219,8 +254,12 @@ app.get('/api/appointments', async (req: Request, res: Response) => {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.get('/api/appointments/:appointment_id', async (req: Request, res: Response) => {
@@ -247,13 +286,18 @@ app.get('/api/appointments/:appointment_id', async (req: Request, res: Response)
     )
   `)
   .eq('appointment_id', req.params.appointment_id)
+  .maybeSingle()
 
   const {data, error, status} = await query
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Response) => {
@@ -269,8 +313,12 @@ app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Res
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
   }
-  res.send(data);
 });
 
 app.listen(port, () => {

@@ -155,7 +155,16 @@ Input:
 ```
 Returns:
 ```commandline
-[]
+[
+    {
+        "role_id": <id>,
+        "title": <string>,
+        "description": <string>,
+        "priority": <int>,
+        "can_lead_team": <bool>,
+        "can_clean": <bool>
+    }
+]
 ```
 
 ## 4. Appointments
@@ -246,4 +255,4 @@ Query Parameters:
 
 ### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}/remove` - DELETE
 
-### 5.7 Send Plan to ResortCleaning - `/plans/{plan_id}/send` - 
+### 5.7 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST

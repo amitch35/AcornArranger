@@ -76,8 +76,12 @@ app.get("/api/properties", (req, res) => __async(exports, null, function* () {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.from("rc_properties").select(`
@@ -93,12 +97,16 @@ app.get("/api/properties/:property_id", (req, res) => __async(exports, null, fun
       status_id,
       estimated_cleaning_mins,
       double_unit
-    `).eq("properties_id", req.params.property_id);
+    `).eq("properties_id", req.params.property_id).maybeSingle();
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/staff", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.from("rc_staff").select(`
@@ -115,8 +123,12 @@ app.get("/api/staff", (req, res) => __async(exports, null, function* () {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/staff/:user_id", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.from("rc_staff").select(`
@@ -133,12 +145,16 @@ app.get("/api/staff/:user_id", (req, res) => __async(exports, null, function* ()
       status_id,
       first_name,
       last_name
-    `).eq("user_id", req.params.user_id);
+    `).eq("user_id", req.params.user_id).maybeSingle();
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/roles", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.from("roles").select(`
@@ -152,8 +168,12 @@ app.get("/api/roles", (req, res) => __async(exports, null, function* () {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.from("roles").select(`
@@ -167,8 +187,12 @@ app.get("/api/roles/:role_id", (req, res) => __async(exports, null, function* ()
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* () {
   const { error, status } = yield supabase.from("roles").update({
@@ -178,11 +202,19 @@ app.put("/api/roles/:role_id", (req, res) => __async(exports, null, function* ()
     can_lead_team: req.body.can_lead_team,
     can_clean: req.body.can_clean
   }).eq("id", req.params.role_id);
-  res.status(status);
   if (error) {
+    res.status(status);
     res.send(error);
+  } else {
+    res.json([{
+      role_id: req.params.role_id,
+      title: req.body.title,
+      description: req.body.description,
+      priority: req.body.priority,
+      can_lead_team: req.body.can_lead_team,
+      can_clean: req.body.can_clean
+    }]);
   }
-  res.json([]);
 }));
 app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
   const per_page = req.query.per_page || 50;
@@ -219,8 +251,12 @@ app.get("/api/appointments", (req, res) => __async(exports, null, function* () {
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.get("/api/appointments/:appointment_id", (req, res) => __async(exports, null, function* () {
   let query = supabase.from("rc_appointments").select(`
@@ -242,13 +278,17 @@ app.get("/api/appointments/:appointment_id", (req, res) => __async(exports, null
         name 
       )
     )
-  `).eq("appointment_id", req.params.appointment_id);
+  `).eq("appointment_id", req.params.appointment_id).maybeSingle();
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.post("/api/plans/:plan_id/staff/:user_id/add", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.rpc(
@@ -261,8 +301,12 @@ app.post("/api/plans/:plan_id/staff/:user_id/add", (req, res) => __async(exports
   res.status(status);
   if (error) {
     res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404);
+    res.send();
   }
-  res.send(data);
 }));
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
