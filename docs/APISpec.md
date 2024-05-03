@@ -288,8 +288,8 @@ Allows users to see all valid plans available on the database
 Query Parameters:
 - `per_page`: number from 1 to 1000 - indicates maximum number of appointment records to return
 - `page`: number from 0 - indicates which page of results to return
-- `from_plan_date`: date YYYY-MM-DD - filters out any appointments with service date before this value
-- `to_plan_date`: date YYYY-MM-DD - filters out any appointments with service date after this value
+- `from_plan_date`: date YYYY-MM-DD - filters out any plans with service date before this value
+- `to_plan_date`: date YYYY-MM-DD - filters out any plans with service date after this value
 
 Returns:
 ```commandline
@@ -389,10 +389,15 @@ Adds given staff to a plan
 Removes given staff from a plan
 
 ### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}/add` - POST
-Adds given appointment to a plan as long as that appointment is not already in another plan for the same day
+Adds given appointment to a plan as long as that appointment is not already in 
+another plan for the same day
 
 ### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}/remove` - DELETE
 Removes given appointment from a plan
 
-### 5.7 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
+### 5.7 Build Schedule Plans - `/plans/build/{plan_date}` - POST
+Uses input parameters to run a complex scheduling algorithm and create plans to 
+complete all appointments for the given day
+
+### 5.8 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
 Sends all valid plans for the given day to ResortCleaning to be assigned to staff

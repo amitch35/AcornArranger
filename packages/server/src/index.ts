@@ -415,6 +415,58 @@ app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Res
   }
 });
 
+app.post('/api/plans/:plan_id/staff/:user_id/remove', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'plan_remove_staff', 
+      {
+        staff_to_remove: req.params.user_id, 
+        target_plan: req.params.plan_id
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+app.post('/api/plans/:plan_id/appointment/:appointment_id/add', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'plan_add_appointment', 
+      {
+        appointment_to_add: req.params.user_id, 
+        target_plan: req.params.plan_id
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+app.post('/api/plans/:plan_id/appointment/:appointment_id/remove', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'plan_remove_appointment', 
+      {
+        appointment_to_remove: req.params.user_id, 
+        target_plan: req.params.plan_id
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
