@@ -103,7 +103,6 @@ const selectAppointments = supabase
     next_arrival_time, 
     turn_around, 
     cancelled_date,
-    service,
     property:rc_properties (
       properties_id,
       property_name
@@ -114,11 +113,54 @@ const selectAppointments = supabase
         name 
       )
     ),
+    service:service_key (
+      service_id,
+      service_name:name
+    ),
     status:appointment_status_key (
       status_id,
       status
     )
   `)
+  const selectPlans = supabase
+  .from('schedule_plans')
+  .select(`
+    plan_id:id,
+    plan_date,
+    team,
+    appointments:plan_appointments (
+      appointment_id,
+      sent_to_rc,
+      appointment_info:rc_appointments (
+        arrival_time, 
+        service_time:departure_time, 
+        next_arrival_time, 
+        turn_around, 
+        cancelled_date,
+        property:rc_properties (
+          properties_id,
+          property_name
+        ),
+        service:service_key (
+          service_id,
+          service_name:name
+        ),
+        status:appointment_status_key (
+          status_id,
+          status
+        )
+      )
+    ),
+    staff:plan_staff (
+      user_id:staff_id,
+      staff_info:rc_staff ( 
+        name 
+      )
+    )
+  `)
+  .eq('valid', true)
+  .filter('plan_appointments.valid', 'eq', true)
+  .filter('plan_staff.valid', 'eq', true)
 
 // Properties
 app.get('/api/properties', async (req, res) => {
@@ -312,16 +354,22 @@ app.get('/api/appointments/:appointment_id', async (req: Request, res: Response)
   }
 });
 
-app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Response) => {
-  
-  const { data, error, status } = await supabase
-    .rpc(
-      'team_plan_add_staff', 
-      {
-        staff_to_add: req.params.user_id, 
-        target_plan: req.params.plan_id
-      }
-    )
+// Plans
+app.get('/api/plans', async (req: Request, res: Response) => {
+  const per_page = req.query.per_page || 20;
+  const page = req.query.page || 0;
+  const offset = (per_page * page);
+
+  let query = selectPlans
+
+  if (req.query.from_plan_date)  { query = query.gte('plan_date', req.query.from_plan_date) }
+  if (req.query.to_plan_date)  { query = query.lte('plan_date', req.query.to_plan_date) }
+
+  query = query.range(offset, (offset + per_page - 1))
+    .order('plan_date', { ascending: false })
+    .order('team', { ascending: true })
+
+  const {data, error, status} = await query
   res.status(status);
   if (error) {
     res.send(error);
@@ -330,6 +378,40 @@ app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Res
   } else {
     res.status(404)
     res.send()
+  }
+});
+
+app.get('/api/plans/:plan_id', async (req: Request, res: Response) => {
+  let query = selectPlans
+  .eq('id', req.params.plan_id)
+  .maybeSingle()
+
+  const {data, error, status} = await query
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else if (data) {
+    res.send(data);
+  } else {
+    res.status(404)
+    res.send()
+  }
+});
+
+app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'plan_add_staff', 
+      {
+        staff_to_add: req.params.user_id, 
+        target_plan: req.params.plan_id
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
   }
 });
 

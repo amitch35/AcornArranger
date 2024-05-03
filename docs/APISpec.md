@@ -237,6 +237,10 @@ Returns:
         "status": {
             "status": <string>,
             "status_id": <smallint>
+        },
+        "service": {
+            "service_id": <id>,
+            "service_name": <string>
         }
     }
 ]
@@ -269,12 +273,17 @@ Returns:
     "status": {
         "status": <string>,
         "status_id": <smallint>
+    },
+    "service": {
+        "service_id": <id>,
+        "service_name": <string>
     }
 }
 ```
 
 ## 5. Schedule Plans
 ### 5.1 Show Plans - `/plans` - GET
+Allows users to see all valid plans available on the database
 
 Query Parameters:
 - `per_page`: number from 1 to 1000 - indicates maximum number of appointment records to return
@@ -282,14 +291,108 @@ Query Parameters:
 - `from_plan_date`: date YYYY-MM-DD - filters out any appointments with service date before this value
 - `to_plan_date`: date YYYY-MM-DD - filters out any appointments with service date after this value
 
+Returns:
+```commandline
+[
+    {
+        "plan_id": <id>,
+        "plan_date": <string (ISO Date)>,
+        "team": <smallint>,
+        "appointments": [
+            {
+                "sent_to_rc": <string (ISO Timestamp)>,
+                "appointment_id": <id>,
+                "appointment_info": {
+                    "arrival_time": <string (ISO Timestamp)>,
+                    "service_time": <string (ISO Timestamp)>,
+                    "next_arrival_time": <string (ISO Timestamp)>,
+                    "cancelled_date": <string (ISO Timestamp)>,
+                    "turn_around": <bool>
+                    "status": {
+                        "status_id": <smallint>,
+                        "status": <string>
+                    },
+                    "service": {
+                        "service_id": <id>,
+                        "service_name": <string>
+                    },
+                    "property": {
+                        "properties_id": <id>,
+                        "property_name": <string>
+                    }
+                }
+            }
+        ],
+        "staff": [
+            {
+                "user_id": <id>,
+                "staff_info": {
+                    "name": <string>
+                }
+            }
+        ]
+    }
+]
+```
+
 ### 5.2 Get Plan - `/plans/{plan_id}` - GET
+Gets full information about a single plan
+
+Returns:
+```commandline
+[
+    {
+        "plan_id": <id>,
+        "plan_date": <string (ISO Date)>,
+        "team": <smallint>,
+        "appointments": [
+            {
+                "sent_to_rc": <string (ISO Timestamp)>,
+                "appointment_id": <id>,
+                "appointment_info": {
+                    "arrival_time": <string (ISO Timestamp)>,
+                    "service_time": <string (ISO Timestamp)>,
+                    "next_arrival_time": <string (ISO Timestamp)>,
+                    "cancelled_date": <string (ISO Timestamp)>,
+                    "turn_around": <bool>
+                    "status": {
+                        "status_id": <smallint>,
+                        "status": <string>
+                    },
+                    "service": {
+                        "service_id": <id>,
+                        "service_name": <string>
+                    },
+                    "property": {
+                        "properties_id": <id>,
+                        "property_name": <string>
+                    }
+                }
+            }
+        ],
+        "staff": [
+            {
+                "user_id": <id>,
+                "staff_info": {
+                    "name": <string>
+                }
+            }
+        ]
+    }
+]
+```
 
 ### 5.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}/add` - POST
+Adds given staff to a plan
 
 ### 5.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}/remove` - DELETE
+Removes given staff from a plan
 
 ### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}/add` - POST
+Adds given appointment to a plan as long as that appointment is not already in another plan for the same day
 
 ### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}/remove` - DELETE
+Removes given appointment from a plan
 
 ### 5.7 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
+Sends all valid plans for the given day to ResortCleaning to be assigned to staff

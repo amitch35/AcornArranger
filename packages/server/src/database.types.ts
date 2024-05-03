@@ -14,19 +14,19 @@ export type Database = {
           created_at: string
           id: number
           status: string | null
-          status_id: number | null
+          status_id: number
         }
         Insert: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id: number
         }
         Update: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id?: number
         }
         Relationships: []
       }
@@ -259,19 +259,19 @@ export type Database = {
           created_at: string
           id: number
           status: string | null
-          status_id: number | null
+          status_id: number
         }
         Insert: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id: number
         }
         Update: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id?: number
         }
         Relationships: []
       }
@@ -356,11 +356,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_rc_appointments_service_fkey"
-            columns: ["service"]
+            foreignKeyName: "rc_appointments_app_status_id_fkey"
+            columns: ["app_status_id"]
             isOneToOne: false
-            referencedRelation: "service_key"
-            referencedColumns: ["service_id"]
+            referencedRelation: "appointment_status_key"
+            referencedColumns: ["status_id"]
           },
           {
             foreignKeyName: "rc_appointments_property_fkey"
@@ -368,6 +368,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "rc_properties"
             referencedColumns: ["properties_id"]
+          },
+          {
+            foreignKeyName: "rc_appointments_service_fkey"
+            columns: ["service"]
+            isOneToOne: false
+            referencedRelation: "service_key"
+            referencedColumns: ["service_id"]
           },
         ]
       }
@@ -410,6 +417,13 @@ export type Database = {
             referencedRelation: "rc_addresses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "rc_properties_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "property_status_key"
+            referencedColumns: ["status_id"]
+          },
         ]
       }
       rc_staff: {
@@ -450,6 +464,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "roles"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rc_staff_status_id_fkey"
+            columns: ["status_id"]
+            isOneToOne: false
+            referencedRelation: "staff_status_key"
+            referencedColumns: ["status_id"]
           },
         ]
       }
@@ -647,19 +668,19 @@ export type Database = {
           created_at: string
           id: number
           status: string | null
-          status_id: number | null
+          status_id: number
         }
         Insert: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id: number
         }
         Update: {
           created_at?: string
           id?: number
           status?: string | null
-          status_id?: number | null
+          status_id?: number
         }
         Relationships: []
       }
@@ -879,6 +900,44 @@ export type Database = {
         }
         Returns: number
       }
+      plan_add_appointment: {
+        Args: {
+          target_plan: number
+          appointment_to_add: number
+        }
+        Returns: undefined
+      }
+      plan_add_staff: {
+        Args: {
+          target_plan: number
+          staff_to_add: number
+        }
+        Returns: undefined
+      }
+      plan_create_new: {
+        Args: {
+          target_plan_date: string
+        }
+        Returns: {
+          id: number
+          plan_date: string
+          team: number
+        }[]
+      }
+      plan_remove_appointment: {
+        Args: {
+          target_plan: number
+          appointment_to_remove: number
+        }
+        Returns: undefined
+      }
+      plan_remove_staff: {
+        Args: {
+          target_plan: number
+          staff_to_remove: number
+        }
+        Returns: undefined
+      }
       send_rc_schedule_plans: {
         Args: {
           schedule_date: string
@@ -905,50 +964,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      team_plan_add_appointment: {
-        Args: {
-          target_plan_date: string
-          target_team: number
-          appointment_to_add: number
-        }
-        Returns: undefined
-      }
-      team_plan_add_staff: {
-        Args: {
-          target_plan: number
-          staff_to_add: number
-        }
-        Returns: undefined
-      }
-      team_plan_create_new: {
-        Args: {
-          target_plan_date: string
-        }
-        Returns: number
-      }
-      team_plan_remove_appointment: {
-        Args: {
-          target_plan_date: string
-          appointment_to_remove: number
-        }
-        Returns: undefined
-      }
-      team_plan_remove_staff:
-        | {
-            Args: {
-              target_plan_date: string
-              staff_to_remove: number
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              target_plan_date: string
-              target_team: number
-              staff_to_remove: number
-            }
-            Returns: undefined
-          }
       update_appointments: {
         Args: {
           date_from: string
