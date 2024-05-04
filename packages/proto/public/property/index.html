@@ -13,6 +13,7 @@
         <script type="module" src="/js/json-loader.js"></script>
         <script type="module" src="/js/restful-form.js"></script>
         <script type="module" src="/js/input-array.js"></script>
+        <script type="module" src="/js/property-view.js"></script>
         <script type="module">
             import { relayEvent } from "/js/relay-event.js";
             import { toggleDarkMode } from "/js/toggle-dark-mode.js";
@@ -67,63 +68,8 @@
             </drop-down>
         </header>
         <main>
-            <h2>Update Property: A Relaxing Place</h2>
-            <restful-form slot="form" src="/api/properties/117138">
-                <label>
-                    <span>Property ID</span>
-                    <input name="properties_id" />
-                </label>
-                <label>
-                    <span>Property Name</span>
-                    <input name="property_name" />
-                </label>
-                <label>
-                    <span>Estimated Cleaning Time (minutes)</span>
-                    <input name="estimated_cleaning_mins" />
-                </label>
-                <label>
-                    <span>Address</span>
-                    <input name="address" />
-                </label>
-                <label>
-                    <span>City</span>
-                    <input name="city" />
-                </label>
-                <label>
-                    <span>State</span>
-                    <input name="state_name" />
-                </label>
-                <label>
-                    <span>Postal Code</span>
-                    <input name="postal_code" />
-                </label>
-                <label>
-                    <span>Country</span>
-                    <input name="country" />
-                </label>
-                <label>
-                    <span>Status ID</span>
-                    <input name="status_id" />
-                </label>
-                <label>
-                    <span>Status</span>
-                    <input name="status" />
-                </label>
-                <label>
-                    <span>Double Unit Links</span>
-                    <input-array name="double_unit">
-                      <span slot="label-add">Add a property_id</span>
-                    </input-array>
-                </label>
-                <!-- <button slot="submit" type="submit">Submit</button> -->
-            </restful-form>
-            <json-object src="/api/properties/117138">
-                <a
-                href="#"
-                onclick="relayEvent(event, 'json-object:open')">
-                A Relaxing Place
-                </a>
-            </json-object>
+            <h2>View Property: A Relaxing Place</h2>
+            <property-view src="/api/properties/117138"></property-view>
         </main>
     </body>
 </html>
