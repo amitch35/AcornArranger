@@ -399,5 +399,19 @@ Removes given appointment from a plan
 Uses input parameters to run a complex scheduling algorithm and create plans to 
 complete all appointments for the given day
 
+Input:
+```commandline
+{
+    "available_staff": Array<userId>,
+    "office_location"?: <Geometry>,
+    "services"?: Array<serviceId>,
+    "omissions"?: Array<appointmentId>,
+    "routing_type"?: <int 1 to 5>,
+    "cleaning_window"?: <float>,
+    "max_hours"?: <float>,
+    "target_staff_count"?: <int>
+}
+```
+
 ### 5.8 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
 Sends all valid plans for the given day to ResortCleaning to be assigned to staff
