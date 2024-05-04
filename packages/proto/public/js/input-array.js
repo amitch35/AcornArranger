@@ -67,7 +67,6 @@ export class InputArrayElement extends HTMLElement {
       this.removeClosestItem(event.target);
     });
     this.addEventListener("change", (event) => {
-      event.stopPropagation();
       console.log("Change event:", event);
       const target = event.target;
       const value = target.value;
@@ -75,8 +74,9 @@ export class InputArrayElement extends HTMLElement {
       const [name, index] = indexedName.split(".");
 
       if (target !== this && name === this.name) {
+        event.stopPropagation();
         this._array[index] = value;
-        const newEvent = new Event("change", { bubbles: true });
+        const newEvent = new Event("change", { bubbles: true, composed: true });
         this.dispatchEvent(newEvent);
       }
     });
