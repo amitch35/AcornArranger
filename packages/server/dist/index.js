@@ -206,7 +206,7 @@ app.get("/api/properties/:property_id", (req, res) => __async(exports, null, fun
 app.put("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
   let { error, status } = yield supabase.from("rc_properties").update({
     estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-    double_unit: req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
+    double_unit: req.body.double_unit && req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
   }).eq("properties_id", req.params.property_id);
   if (error) {
     res.status(status);

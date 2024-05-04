@@ -1,9 +1,7 @@
 import { prepareTemplate } from "./template.js";
 
 export class RestfulFormElement extends HTMLElement {
-  get form() {
-    return this.querySelector("form");
-  }
+  static observedAttributes = ["src", "new"];
 
   get src() {
     return this.getAttribute("src");
@@ -13,23 +11,85 @@ export class RestfulFormElement extends HTMLElement {
     return this.hasAttribute("new");
   }
 
+  static styles = `
+    form {
+      display: grid;
+      gap: var(--spacing-size-medium);
+      grid-template-columns: [start] 1fr [label] 1fr [input] 1fr [input-center] 3fr [input-end] 1fr [end];
+    }
+    
+    ::slotted(label) {
+      display: contents;
+      grid-template-columns: subgrid;
+      color: var(--accent-color);
+      font-family: var(--text-font-family-display);
+    }
+    
+    ::slotted(label > span) {
+      grid-column-start: label;
+      color: orange;
+    }
+    
+    ::slotted(input) {
+      grid-column: input / input-end;
+    }
+    
+    button[type="submit"] {
+      grid-column-start: input;
+    }
+    `
+
+
+  static template = prepareTemplate(`
+    <template>
+      <form autocomplete="off">
+        <slot></slot>
+        <slot name="submit"><button type="submit">Submit</button></slot>
+      </form>
+      <slot name="delete"></slot>
+      <style>
+      ${this.styles}
+      </style>
+    </template>
+  `);
+
+  get form() {
+    return this.shadowRoot.querySelector("form");
+  }
+
   constructor() {
     super();
     this._state = {};
-    this.addEventListener("submit", (event) => {
+    this.attachShadow({ mode: "open" }).appendChild(
+      RestfulFormElement.template.cloneNode(true)
+    );
+
+    this.form.addEventListener("submit", (event) => {
       event.preventDefault();
-      submitForm(
-        this.src,
-        this._state,
-        this.isNew ? "POST" : "PUT"
-      ).then((json) => populateForm(json, this.form));
+      console.log("Submitting form", this._state);
+      const method = this.isNew ? "POST" : "PUT";
+      const action = this.isNew ? "created" : "updated";
+      const src = this.isNew
+        ? this.src.replace(/[/][$]new$/, "")
+        : this.src;
+
+      submitForm(src, this._state, method)
+        .then((json) => populateForm(json, this))
+        .then((json) => {
+          const customType = `restful-form:${action}`;
+          const event = new CustomEvent(customType, {
+            bubbles: true,
+            composed: true,
+            detail: {
+              [action]: json,
+              url: src
+            }
+          });
+          this.dispatchEvent(event);
+        });
     });
-    this.addEventListener("restful-form:delete", (event) => {
-      event.stopPropagation();
-      deleteResource(this.src, this.form);
-    });
+
     this.addEventListener("change", (event) => {
-      console.log("Change event on restful-form", event);
       const target = event.target;
       const name = target.name;
       const value = target.value;
@@ -39,12 +99,30 @@ export class RestfulFormElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.form.reset();
-    if (!this.isNew) {
-      fetchData(this.src, this.form).then((json) => {
-        this._state = json;
-        populateForm(json, this.form);
-      });
+    console.log(`ConnectedCallback: src=`, this.src);
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(
+      `restful-form: Attribute ${name} changed from ${oldValue} to`,
+      newValue
+    );
+    switch (name) {
+      case "src":
+        if (newValue && newValue !== oldValue && !this.isNew) {
+          fetchData(this.src).then((json) => {
+            this._state = json;
+            populateForm(json, this);
+          });
+        }
+        break;
+      case "new":
+        if (newValue) {
+          console.log("Blanking state for new form");
+          this._state = {};
+          populateForm({}, this);
+        }
+        break;
     }
   }
 }
@@ -64,17 +142,16 @@ export function fetchData(src) {
     );
 }
 
-function populateForm(json, form) {
+function populateForm(json, formBody) {
   const entries = Object.entries(json);
 
   for (const [key, val] of entries) {
     if (typeof(val) === "object" && val && !(Array.isArray(val))) {
-      populateForm(val, form)
+      populateForm(val, formBody)
     } else {
-      const input =
-        form.elements[key] ||
-        form.querySelector(`[name="${key}"]`);
+      const input = formBody.querySelector(`[name="${key}"]`);
 
+      // console.log(`Populating ${key}`, input);
       if (input) {
         switch (input.type) {
           case "checkbox":
@@ -91,41 +168,6 @@ function populateForm(json, form) {
   return json;
 }
 
-// function populateForm(json, form) {
-//   const entries = Object.entries(json);
-
-//   for (const [key, val] of entries) {
-//     if (typeof(val) === "object" && val) {
-//       if (Array.isArray(val)) {
-//         for (const item of val) {
-//           if (item) {
-//             populateForm(item, form)
-//           }
-//         }
-//       } else {
-//         populateForm(val, form)
-//       }
-//     } else {
-//       const input =
-//         form.elements[key] ||
-//         form.querySelector(`[name="${key}"]`);
-
-//       if (input) {
-//         switch (input.type) {
-//           case "checkbox":
-//             input.checked = Boolean(value);
-//             break;
-//           default:
-//             input.value = val;
-//             break;
-//         }
-//       }
-//     }
-//   }
-
-//   return json;
-// }
-
 function submitForm(src, json, method = "PUT") {
   return fetch(src, {
     method,
@@ -133,21 +175,9 @@ function submitForm(src, json, method = "PUT") {
     body: JSON.stringify(json)
   })
     .then((res) => {
-      if (res.status != 200)
+      if (res.status != 200 && res.status != 201)
         throw `Form submission failed: Status ${res.status}`;
       return res.json();
     })
     .catch((err) => console.log("Error submitting form:", err));
-}
-
-function deleteResource(src, form) {
-  fetch(src, { method: "DELETE" })
-    .then((res) => {
-      if (res.status != 204)
-        throw `Deletion failed: Status ${res.status}`;
-      form.reset();
-    })
-    .catch((err) =>
-      console.log("Error deleting resource:", err)
-    );
 }
