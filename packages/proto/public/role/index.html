@@ -68,41 +68,7 @@
             </drop-down>
         </header>
         <main>
-            <h2>Update Role #1</h2>
-            <restful-form slot="form" src="/api/roles/1">
-                <label>
-                    <span>Role ID</span>
-                    <input name="role_id" />
-                </label>
-                <label>
-                    <span>Title</span>
-                    <input name="title" />
-                </label>
-                <label>
-                    <span>Description</span>
-                    <input name="description" />
-                </label>
-                <label>
-                    <span>Priority</span>
-                    <input name="priority" />
-                </label>
-                <label>
-                    <span>Can Lead</span>
-                    <input name="can_lead_team" />
-                </label>
-                <label>
-                    <span>Can Clean</span>
-                    <input name="can_clean" />
-                </label>
-                <!-- <button slot="submit" type="submit">Submit</button> -->
-            </restful-form>
-            <json-object src="/api/roles/1">
-                <a
-                href="#"
-                onclick="relayEvent(event, 'json-object:open')">
-                Role #1
-                </a>
-            </json-object>
+            <h2>View Role #1</h2>
             <role-view src="/api/roles/1"></role-view>
         </main>
     </body>

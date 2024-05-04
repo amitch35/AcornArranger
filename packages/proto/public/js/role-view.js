@@ -147,19 +147,23 @@ export class RoleViewElement extends HTMLElement {
         <dd><slot name="can_clean"></slot></dd>
         </dl>
         <nav>
+        <!--
         <button class="new"
             onclick="relayEvent(event,'role-view:new-mode')"
-        >New…</button>
+        >New…</button>  
+        -->
         <button class="edit"
             onclick="relayEvent(event,'role-view:edit-mode')"
         >Edit</button>
         <button class="close"
             onclick="relayEvent(event,'role-view:view-mode')"
         >Close</button>
+        <!--
         <button class="delete"
             onclick="relayEvent(event,'role-view:delete')"
             >Delete</button
         >
+        -->
         </nav>
     </section>
     <style>${RoleViewElement.styles}</style>
