@@ -382,17 +382,17 @@ Returns:
 ]
 ```
 
-### 5.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}/add` - POST
+### 5.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}` - POST
 Adds given staff to a plan
 
-### 5.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}/remove` - DELETE
+### 5.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}` - DELETE
 Removes given staff from a plan
 
-### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}/add` - POST
+### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - POST
 Adds given appointment to a plan as long as that appointment is not already in 
 another plan for the same day
 
-### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}/remove` - DELETE
+### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - DELETE
 Removes given appointment from a plan
 
 ### 5.7 Build Schedule Plans - `/plans/build/{plan_date}` - POST

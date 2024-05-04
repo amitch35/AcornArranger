@@ -196,7 +196,7 @@ app.put('/api/properties/:property_id', async (req: Request, res: Response) => {
     .from('rc_properties')
     .update({
         estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-        double_unit: req.body.double_unit
+        double_unit: (req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null)
      })
     .eq('properties_id', req.params.property_id)
   
@@ -398,7 +398,7 @@ app.get('/api/plans/:plan_id', async (req: Request, res: Response) => {
   }
 });
 
-app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Response) => {
+app.post('/api/plans/:plan_id/staff/:user_id', async (req: Request, res: Response) => {
   const { data, error, status } = await supabase
     .rpc(
       'plan_add_staff', 
@@ -415,7 +415,7 @@ app.post('/api/plans/:plan_id/staff/:user_id/add', async (req: Request, res: Res
   }
 });
 
-app.post('/api/plans/:plan_id/staff/:user_id/remove', async (req: Request, res: Response) => {
+app.delete('/api/plans/:plan_id/staff/:user_id', async (req: Request, res: Response) => {
   const { data, error, status } = await supabase
     .rpc(
       'plan_remove_staff', 
@@ -432,7 +432,7 @@ app.post('/api/plans/:plan_id/staff/:user_id/remove', async (req: Request, res: 
   }
 });
 
-app.post('/api/plans/:plan_id/appointment/:appointment_id/add', async (req: Request, res: Response) => {
+app.post('/api/plans/:plan_id/appointment/:appointment_id', async (req: Request, res: Response) => {
   const { data, error, status } = await supabase
     .rpc(
       'plan_add_appointment', 
@@ -449,7 +449,7 @@ app.post('/api/plans/:plan_id/appointment/:appointment_id/add', async (req: Requ
   }
 });
 
-app.post('/api/plans/:plan_id/appointment/:appointment_id/remove', async (req: Request, res: Response) => {
+app.delete('/api/plans/:plan_id/appointment/:appointment_id', async (req: Request, res: Response) => {
   const { data, error, status } = await supabase
     .rpc(
       'plan_remove_appointment', 
@@ -466,6 +466,45 @@ app.post('/api/plans/:plan_id/appointment/:appointment_id/remove', async (req: R
   }
 });
 
+app.post('/api/plans/build/:plan_date', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'build_schedule_plan', 
+      {
+        date_to_schedule: req.params.plan_date,
+        available_staff: req.body.available_staff,
+        office_location: req.body.office_location || `0101000020E6100000D2DB44D213E95DC01D12088552AC4240`,
+        services: req.body.services || [21942, 23044],
+        omissions: req.body.omissions || null,
+        routing_type: req.body.routing_type,
+        cleaning_window: req.body.cleaning_window,
+        max_hours: req.body.max_hours,
+        target_staff_count: req.body.target_staff_count
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+app.post('/api/plans/send/:plan_date', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'send_rc_schedule_plans', 
+      {
+        schedule_date: req.params.plan_date
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

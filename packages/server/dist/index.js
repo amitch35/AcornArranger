@@ -206,7 +206,7 @@ app.get("/api/properties/:property_id", (req, res) => __async(exports, null, fun
 app.put("/api/properties/:property_id", (req, res) => __async(exports, null, function* () {
   let { error, status } = yield supabase.from("rc_properties").update({
     estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-    double_unit: req.body.double_unit
+    double_unit: req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
   }).eq("properties_id", req.params.property_id);
   if (error) {
     res.status(status);
@@ -367,12 +367,93 @@ app.get("/api/plans/:plan_id", (req, res) => __async(exports, null, function* ()
     res.send();
   }
 }));
-app.post("/api/plans/:plan_id/staff/:user_id/add", (req, res) => __async(exports, null, function* () {
+app.post("/api/plans/:plan_id/staff/:user_id", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_add_staff",
     {
       staff_to_add: req.params.user_id,
       target_plan: req.params.plan_id
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.delete("/api/plans/:plan_id/staff/:user_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "plan_remove_staff",
+    {
+      staff_to_remove: req.params.user_id,
+      target_plan: req.params.plan_id
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.post("/api/plans/:plan_id/appointment/:appointment_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "plan_add_appointment",
+    {
+      appointment_to_add: req.params.user_id,
+      target_plan: req.params.plan_id
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.delete("/api/plans/:plan_id/appointment/:appointment_id", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "plan_remove_appointment",
+    {
+      appointment_to_remove: req.params.user_id,
+      target_plan: req.params.plan_id
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.post("/api/plans/build/:plan_date", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "build_schedule_plan",
+    {
+      date_to_schedule: req.params.plan_date,
+      available_staff: req.body.available_staff,
+      office_location: req.body.office_location || `0101000020E6100000D2DB44D213E95DC01D12088552AC4240`,
+      services: req.body.services || [21942, 23044],
+      omissions: req.body.omissions || null,
+      routing_type: req.body.routing_type,
+      cleaning_window: req.body.cleaning_window,
+      max_hours: req.body.max_hours,
+      target_staff_count: req.body.target_staff_count
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.post("/api/plans/send/:plan_date", (req, res) => __async(exports, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "send_rc_schedule_plans",
+    {
+      schedule_date: req.params.plan_date
     }
   );
   res.status(status);
