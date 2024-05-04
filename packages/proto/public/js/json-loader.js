@@ -69,7 +69,7 @@ export function loadJSON(src, container, render) {
 }
 
 function renderJSON(json) {
-  const entries = Object.entries(json);// Check for object if else (i.e. list recurse)
+  const entries = Object.entries(json);
   const dtdd = ([key, value]) => {
     if (typeof(value) === "object" && value) {
         if (Array.isArray(value)) {
