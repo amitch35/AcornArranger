@@ -11,6 +11,7 @@ body {
     --page-grid-columns: 8;
     display: grid;
     grid-template-columns: [start] repeat(var(--page-grid-columns), 1fr) [end];
+    transition: all 0.5s ease;
 }
 
 .page > header {

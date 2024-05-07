@@ -1,7 +1,7 @@
-import { createServerClient } from "@supabase/ssr"
+const { createServerClient } = require('@supabase/ssr')
 
 exports.createClient = (context) => {
-  return createServerClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
+  return createServerClient<Database>(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
     cookies: {
       get: (key) => {
         const cookies = context.req.cookies

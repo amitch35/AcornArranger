@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import {createClient} from '@supabase/supabase-js'
 import { Database } from './database.types'
 // import {createClient} from '@/utils/supabase/server'
+// const { createClient } = require("./utils/supabase/server")
 
 require('dotenv').config({ path: ['.env.local', '.env'] });
 
