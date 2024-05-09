@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
 import {supabaseClient} from '../utils/supabase/server';
 
-require('dotenv').config({ path: ['.env.local', '.env'] });
-
 const router = express.Router();
 
 const supabase = supabaseClient();

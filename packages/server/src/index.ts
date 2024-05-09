@@ -6,8 +6,9 @@ import roles from './routes/roles';
 import appointments from './routes/appointments';
 import plans from './routes/plans';
 import auth from './routes/auth';
+import dotenv from "dotenv";
 
-require('dotenv').config({ path: ['.env.local', '.env'] });
+dotenv.config({ path: ['.env.local', '.env'] });
 
 const { queryParser } = require('express-query-parser')
 const app = express();

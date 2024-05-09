@@ -53,7 +53,6 @@ __export(auth_exports, {
 module.exports = __toCommonJS(auth_exports);
 var import_express = __toESM(require("express"));
 var import_supabase_js = require("@supabase/supabase-js");
-require("dotenv").config({ path: [".env.local", ".env"] });
 const router = import_express.default.Router();
 const supabase = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,

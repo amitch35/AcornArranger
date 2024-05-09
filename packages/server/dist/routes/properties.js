@@ -53,7 +53,6 @@ __export(properties_exports, {
 module.exports = __toCommonJS(properties_exports);
 var import_express = __toESM(require("express"));
 var import_server = require("../utils/supabase/server");
-require("dotenv").config({ path: [".env.local", ".env"] });
 const router = import_express.default.Router();
 const supabase = (0, import_server.supabaseClient)();
 const selectProperties = `
