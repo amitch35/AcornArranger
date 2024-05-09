@@ -28,7 +28,7 @@ app.use(
   })
 )
 
-const supabase = supabaseClient()
+const supabase = supabaseClient;
 
 app.use('/auth', auth);
 

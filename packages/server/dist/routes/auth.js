@@ -59,7 +59,7 @@ var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
 const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 const router = import_express.default.Router();
-const supabase = (0, import_server.supabaseClient)();
+const supabase = import_server.supabaseClient;
 router.post("/signup", (req, res) => __async(void 0, null, function* () {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });

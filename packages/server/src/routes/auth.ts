@@ -9,7 +9,7 @@ const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 
 const router = express.Router();
 
-const supabase = supabaseClient()
+const supabase = supabaseClient;
 
 // Auth
 router.post('/signup', async (req: Request, res: Response) => {

@@ -54,7 +54,7 @@ module.exports = __toCommonJS(staff_exports);
 var import_express = __toESM(require("express"));
 var import_server = require("../utils/supabase/server");
 const router = import_express.default.Router();
-const supabase = (0, import_server.supabaseClient)();
+const supabase = import_server.supabaseClient;
 const selectStaffBasic = `
     user_id,
     name,

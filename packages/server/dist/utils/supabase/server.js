@@ -34,7 +34,7 @@ module.exports = __toCommonJS(server_exports);
 var import_supabase_js = require("@supabase/supabase-js");
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
-const supabaseClient = () => (0, import_supabase_js.createClient)(
+const supabaseClient = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY,
   {

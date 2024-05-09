@@ -3,7 +3,7 @@ import {supabaseClient} from '../utils/supabase/server';
 
 const router = express.Router();
 
-const supabase = supabaseClient();
+const supabase = supabaseClient;
 
 const selectAppointments = `
     appointment_id, 
