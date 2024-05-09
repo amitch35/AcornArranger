@@ -5,7 +5,7 @@ import staff from './routes/staff';
 import roles from './routes/roles';
 import appointments from './routes/appointments';
 import plans from './routes/plans';
-import auth from './routes/auth';
+import auth, { supabaseMiddleware } from "./routes/auth";
 import dotenv from "dotenv";
 
 dotenv.config({ path: ['.env.local', '.env'] });
@@ -36,7 +36,7 @@ app.use('/api/properties', properties);
 
 app.use('/api/staff', staff);
 
-app.use('/api/roles', roles);
+app.use('/api/roles', supabaseMiddleware, roles);
 
 app.use('/api/appointments', appointments);
 

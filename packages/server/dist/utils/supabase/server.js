@@ -36,7 +36,14 @@ var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
 const supabaseClient = () => (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_ANON_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  }
 );
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

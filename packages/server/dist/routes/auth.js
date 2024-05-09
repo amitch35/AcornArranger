@@ -48,82 +48,101 @@ var __async = (__this, __arguments, generator) => {
 };
 var auth_exports = {};
 __export(auth_exports, {
-  default: () => auth_default
+  default: () => auth_default,
+  supabaseMiddleware: () => supabaseMiddleware
 });
 module.exports = __toCommonJS(auth_exports);
 var import_express = __toESM(require("express"));
-var import_supabase_js = require("@supabase/supabase-js");
+var import_server = require("../utils/supabase/server");
+var import_jsonwebtoken = __toESM(require("jsonwebtoken"));
+var import_dotenv = __toESM(require("dotenv"));
+import_dotenv.default.config({ path: [".env.local", ".env"] });
+const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 const router = import_express.default.Router();
-const supabase = (0, import_supabase_js.createClient)(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-);
+const supabase = (0, import_server.supabaseClient)();
 router.post("/signup", (req, res) => __async(void 0, null, function* () {
-  const { data, error } = yield supabase.auth.signUp(
-    {
-      email: req.body.email,
-      password: req.body.password,
-      options: {
-        data: {
-          display_name: req.body.first_name + " " + req.body.last_name,
-          first_name: req.body.first_name,
-          last_name: req.body.last_name
-        },
-        emailRedirectTo: "/"
-      }
-    }
-  );
-  if (error) {
-    res.send(error);
+  if (!req.body.email || !req.body.password) {
+    res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });
   } else {
-    res.send(data);
+    const { data, error } = yield supabase.auth.signUp(
+      {
+        email: req.body.email,
+        password: req.body.password,
+        options: {
+          data: {
+            display_name: req.body.first_name + " " + req.body.last_name,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name
+          },
+          emailRedirectTo: "/"
+        }
+      }
+    );
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data);
+    }
   }
 }));
 router.post("/login", (req, res) => __async(void 0, null, function* () {
-  const supabase_login_client = (0, import_supabase_js.createClient)(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
-  );
-  const { data, error } = yield supabase_login_client.auth.signInWithPassword(
-    {
-      email: req.body.email,
-      password: req.body.password
+  if (!req.body.email || !req.body.password) {
+    res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });
+  } else {
+    const { data, error } = yield supabase.auth.signInWithPassword(
+      {
+        email: req.body.email,
+        password: req.body.password
+      }
+    );
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data);
     }
-  );
-  if (error) {
-    res.send(error);
-  } else {
-    res.send(data);
-  }
-}));
-router.post("/logout", (req, res) => __async(void 0, null, function* () {
-  const { error } = yield supabase.auth.signOut();
-  if (error) {
-    res.send(error);
-  } else {
-    res.send();
   }
 }));
 router.get("/user", (req, res) => __async(void 0, null, function* () {
-  const { data: { user }, error } = yield supabase.auth.getUser();
-  if (error) {
-    res.send(error);
+  const token = getToken(req);
+  if (token) {
+    const { data: { user }, error } = yield supabase.auth.getUser(token);
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(user);
+    }
   } else {
-    res.send(user);
+    res.status(401).json({ "error": "Authorization header is not present" });
   }
 }));
-router.put("/user", (req, res) => __async(void 0, null, function* () {
-  const { data, error } = yield supabase.auth.updateUser({
-    data: {
-      display_name: req.body.first_name + " " + req.body.last_name,
-      first_name: req.body.first_name,
-      last_name: req.body.last_name
+function getToken(req) {
+  if (req.headers.authorization && req.headers.authorization.split(" ")[0] === "Bearer") {
+    return req.headers.authorization.split(" ")[1];
+  }
+  return null;
+}
+function supabaseMiddleware(req, res, next) {
+  return __async(this, null, function* () {
+    const token = getToken(req);
+    switch (token) {
+      case null:
+        res.status(401).json({ "error": "Authorization header is not present" }).end();
+        break;
+      default:
+        import_jsonwebtoken.default.verify(token, TOKEN_SECRET, (error, decoded) => {
+          if (error)
+            res.send(error).end();
+          else if (decoded)
+            next();
+          else
+            res.status(403).end();
+        });
+        break;
     }
   });
-  if (error) {
-    res.send(error);
-  } else {
-    res.send(data);
-  }
-}));
+}
 var auth_default = router;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  supabaseMiddleware
+});

@@ -69,7 +69,7 @@ const supabase = (0, import_server.supabaseClient)();
 app.use("/auth", import_auth.default);
 app.use("/api/properties", import_properties.default);
 app.use("/api/staff", import_staff.default);
-app.use("/api/roles", import_roles.default);
+app.use("/api/roles", import_auth.supabaseMiddleware, import_roles.default);
 app.use("/api/appointments", import_appointments.default);
 app.use("/api/plans", import_plans.default);
 app.get("/api/user-session", (req, res) => __async(exports, null, function* () {
