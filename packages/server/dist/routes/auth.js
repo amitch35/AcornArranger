@@ -46,76 +46,85 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-var properties_exports = {};
-__export(properties_exports, {
-  default: () => properties_default
+var auth_exports = {};
+__export(auth_exports, {
+  default: () => auth_default
 });
-module.exports = __toCommonJS(properties_exports);
+module.exports = __toCommonJS(auth_exports);
 var import_express = __toESM(require("express"));
-var import_server = require("../utils/supabase/server");
+var import_supabase_js = require("@supabase/supabase-js");
 require("dotenv").config({ path: [".env.local", ".env"] });
 const router = import_express.default.Router();
-const supabase = (0, import_server.supabaseClient)();
-const selectProperties = `
-properties_id,
-property_name,
-estimated_cleaning_mins,
-double_unit,
-address:rc_addresses (
-  address, 
-  city, 
-  state_name, 
-  postal_code, 
-  country
-),
-status:property_status_key (
-  status_id,
-  status
-)
-`;
-router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties);
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
-  res.status(status);
-  if (error) {
-    res.send(error);
-  } else if (data) {
-    res.send(data);
-  } else {
-    res.status(404);
-    res.send();
-  }
-}));
-router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
-  let { error, status } = yield supabase.from("rc_properties").update({
-    estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-    double_unit: req.body.double_unit && req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
-  }).eq("properties_id", req.params.property_id);
-  if (error) {
-    res.status(status);
-    res.send(error);
-  } else {
-    let { data, error: error2, status: status2 } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
-    res.status(status2);
-    if (error2) {
-      res.send(error2);
-    } else if (data) {
-      res.send(data);
-    } else {
-      res.status(404);
-      res.send();
+const supabase = (0, import_supabase_js.createClient)(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+router.post("/signup", (req, res) => __async(void 0, null, function* () {
+  const { data, error } = yield supabase.auth.signUp(
+    {
+      email: req.body.email,
+      password: req.body.password,
+      options: {
+        data: {
+          display_name: req.body.first_name + " " + req.body.last_name,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name
+        },
+        emailRedirectTo: "/"
+      }
     }
+  );
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
   }
 }));
-var properties_default = router;
+router.post("/login", (req, res) => __async(void 0, null, function* () {
+  const supabase_login_client = (0, import_supabase_js.createClient)(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+  );
+  const { data, error } = yield supabase_login_client.auth.signInWithPassword(
+    {
+      email: req.body.email,
+      password: req.body.password
+    }
+  );
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+router.post("/logout", (req, res) => __async(void 0, null, function* () {
+  const { error } = yield supabase.auth.signOut();
+  if (error) {
+    res.send(error);
+  } else {
+    res.send();
+  }
+}));
+router.get("/user", (req, res) => __async(void 0, null, function* () {
+  const { data: { user }, error } = yield supabase.auth.getUser();
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(user);
+  }
+}));
+router.put("/user", (req, res) => __async(void 0, null, function* () {
+  const { data, error } = yield supabase.auth.updateUser({
+    data: {
+      display_name: req.body.first_name + " " + req.body.last_name,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name
+    }
+  });
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+var auth_default = router;

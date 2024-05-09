@@ -46,35 +46,26 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-var properties_exports = {};
-__export(properties_exports, {
-  default: () => properties_default
+var roles_exports = {};
+__export(roles_exports, {
+  default: () => roles_default
 });
-module.exports = __toCommonJS(properties_exports);
+module.exports = __toCommonJS(roles_exports);
 var import_express = __toESM(require("express"));
 var import_server = require("../utils/supabase/server");
 require("dotenv").config({ path: [".env.local", ".env"] });
 const router = import_express.default.Router();
 const supabase = (0, import_server.supabaseClient)();
-const selectProperties = `
-properties_id,
-property_name,
-estimated_cleaning_mins,
-double_unit,
-address:rc_addresses (
-  address, 
-  city, 
-  state_name, 
-  postal_code, 
-  country
-),
-status:property_status_key (
-  status_id,
-  status
-)
-`;
+const selectRoles = `
+    role_id:id, 
+    title, 
+    description, 
+    priority, 
+    can_lead_team, 
+    can_clean
+  `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties);
+  const { data, error, status } = yield supabase.from("roles").select(selectRoles);
   res.status(status);
   if (error) {
     res.send(error);
@@ -85,8 +76,8 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
+router.get("/:role_id", (req, res) => __async(void 0, null, function* () {
+  const { data, error, status } = yield supabase.from("roles").select(selectRoles).eq("id", req.params.role_id).maybeSingle();
   res.status(status);
   if (error) {
     res.send(error);
@@ -97,16 +88,18 @@ router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
-  let { error, status } = yield supabase.from("rc_properties").update({
-    estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-    double_unit: req.body.double_unit && req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
-  }).eq("properties_id", req.params.property_id);
+router.put("/:role_id", (req, res) => __async(void 0, null, function* () {
+  let { error, status } = yield supabase.from("roles").update({
+    description: req.body.description,
+    priority: req.body.priority,
+    can_lead_team: req.body.can_lead_team,
+    can_clean: req.body.can_clean
+  }).eq("id", req.params.role_id);
   if (error) {
     res.status(status);
     res.send(error);
   } else {
-    let { data, error: error2, status: status2 } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
+    let { data, error: error2, status: status2 } = yield supabase.from("roles").select(selectRoles).eq("id", req.params.role_id).maybeSingle();
     res.status(status2);
     if (error2) {
       res.send(error2);
@@ -118,4 +111,4 @@ router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
     }
   }
 }));
-var properties_default = router;
+var roles_default = router;

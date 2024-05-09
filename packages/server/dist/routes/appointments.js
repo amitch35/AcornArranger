@@ -46,35 +46,55 @@ var __async = (__this, __arguments, generator) => {
     step((generator = generator.apply(__this, __arguments)).next());
   });
 };
-var properties_exports = {};
-__export(properties_exports, {
-  default: () => properties_default
+var appointments_exports = {};
+__export(appointments_exports, {
+  default: () => appointments_default
 });
-module.exports = __toCommonJS(properties_exports);
+module.exports = __toCommonJS(appointments_exports);
 var import_express = __toESM(require("express"));
 var import_server = require("../utils/supabase/server");
 require("dotenv").config({ path: [".env.local", ".env"] });
 const router = import_express.default.Router();
 const supabase = (0, import_server.supabaseClient)();
-const selectProperties = `
-properties_id,
-property_name,
-estimated_cleaning_mins,
-double_unit,
-address:rc_addresses (
-  address, 
-  city, 
-  state_name, 
-  postal_code, 
-  country
-),
-status:property_status_key (
-  status_id,
-  status
-)
-`;
+const selectAppointments = `
+    appointment_id, 
+    arrival_time, 
+    service_time:departure_time, 
+    next_arrival_time, 
+    turn_around, 
+    cancelled_date,
+    property:rc_properties (
+      properties_id,
+      property_name
+    ),
+    staff:appointments_staff (
+      user_id:staff_id,
+      staff_info:rc_staff ( 
+        name 
+      )
+    ),
+    service:service_key (
+      service_id,
+      service_name:name
+    ),
+    status:appointment_status_key (
+      status_id,
+      status
+    )
+  `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties);
+  const per_page = req.query.per_page || 50;
+  const page = req.query.page || 0;
+  const offset = per_page * page;
+  let query = supabase.from("rc_appointments").select(selectAppointments);
+  if (req.query.from_service_date) {
+    query = query.gte("departure_time", req.query.from_service_date);
+  }
+  if (req.query.to_service_date) {
+    query = query.lte("departure_time", `${req.query.to_service_date}  23:59:59+00`);
+  }
+  query = query.range(offset, offset + per_page - 1).order("departure_time", { ascending: false }).order("property_name", { referencedTable: "rc_properties", ascending: true }).order("appointment_id", { ascending: true });
+  const { data, error, status } = yield query;
   res.status(status);
   if (error) {
     res.send(error);
@@ -85,8 +105,9 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
+router.get("/:appointment_id", (req, res) => __async(void 0, null, function* () {
+  let query = supabase.from("rc_appointments").select(selectAppointments).eq("appointment_id", req.params.appointment_id).maybeSingle();
+  const { data, error, status } = yield query;
   res.status(status);
   if (error) {
     res.send(error);
@@ -97,25 +118,4 @@ router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
-  let { error, status } = yield supabase.from("rc_properties").update({
-    estimated_cleaning_mins: req.body.estimated_cleaning_mins,
-    double_unit: req.body.double_unit && req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null
-  }).eq("properties_id", req.params.property_id);
-  if (error) {
-    res.status(status);
-    res.send(error);
-  } else {
-    let { data, error: error2, status: status2 } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
-    res.status(status2);
-    if (error2) {
-      res.send(error2);
-    } else if (data) {
-      res.send(data);
-    } else {
-      res.status(404);
-      res.send();
-    }
-  }
-}));
-var properties_default = router;
+var appointments_default = router;
