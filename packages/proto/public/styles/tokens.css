@@ -46,6 +46,9 @@
 
     --sidebar-width-collapsed: calc(var(--icon-size) + 2rem);
     --sidebar-width-active: 17rem;
+
+    --transition-duration: 0.5s;
+    --transition-duration-sidebar: var(--transition-duration);
 }
 
 body.dark-mode {

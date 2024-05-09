@@ -179,6 +179,82 @@ const selectPlans = supabase.from("schedule_plans").select(`
       )
     )
   `).eq("valid", true).filter("plan_appointments.valid", "eq", true).filter("plan_staff.valid", "eq", true);
+app.post("/auth/signup", (req, res) => __async(exports, null, function* () {
+  const { data, error } = yield supabase.auth.signUp(
+    {
+      email: req.body.email,
+      password: req.body.password,
+      options: {
+        data: {
+          display_name: req.body.first_name + " " + req.body.last_name,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name
+        },
+        emailRedirectTo: "/"
+      }
+    }
+  );
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.post("/auth/login", (req, res) => __async(exports, null, function* () {
+  const supabase_login_client = (0, import_supabase_js.createClient)(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+  );
+  const { data, error } = yield supabase_login_client.auth.signInWithPassword(
+    {
+      email: req.body.email,
+      password: req.body.password
+    }
+  );
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.post("/auth/logout", (req, res) => __async(exports, null, function* () {
+  const { error } = yield supabase.auth.signOut();
+  if (error) {
+    res.send(error);
+  } else {
+    res.send();
+  }
+}));
+app.get("/auth/user", (req, res) => __async(exports, null, function* () {
+  const { data: { user }, error } = yield supabase.auth.getUser();
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(user);
+  }
+}));
+app.put("/auth/user", (req, res) => __async(exports, null, function* () {
+  const { data, error } = yield supabase.auth.updateUser({
+    data: {
+      display_name: req.body.first_name + " " + req.body.last_name,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name
+    }
+  });
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+app.get("/api/user-session", (req, res) => __async(exports, null, function* () {
+  const { data, error } = yield supabase.auth.getSession();
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
 app.get("/api/properties", (req, res) => __async(exports, null, function* () {
   const { data, error, status } = yield selectProperties;
   res.status(status);

@@ -163,8 +163,92 @@ const selectAppointments = supabase
   .filter('plan_appointments.valid', 'eq', true)
   .filter('plan_staff.valid', 'eq', true)
 
+// Auth
+app.post('/auth/signup', async (req: Request, res: Response) => {
+  const { data, error } = await supabase.auth.signUp(
+    {
+      email: req.body.email,
+      password: req.body.password,
+      options: {
+        data: {
+          display_name: req.body.first_name + ' ' + req.body.last_name,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name
+        },
+        emailRedirectTo: '/'
+      }
+    }
+  )
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+app.post('/auth/login', async (req: Request, res: Response) => {
+  const supabase_login_client = createClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!
+  );
+  const { data, error } = await supabase_login_client.auth.signInWithPassword(
+    {
+      email: req.body.email,
+      password: req.body.password,
+    }
+  )
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+app.post('/auth/logout', async (req: Request, res: Response) => {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    res.send(error);
+  } else {
+    res.send();
+  }
+});
+
+app.get('/auth/user', async (req: Request, res: Response) => {
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(user);
+  }
+});
+
+app.put('/auth/user', async (req: Request, res: Response) => {
+  const { data, error } = await supabase.auth.updateUser({
+    data: {
+      display_name: req.body.first_name + ' ' + req.body.last_name,
+      first_name: req.body.first_name,
+      last_name: req.body.last_name
+    }
+  })
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
+// Local User Session
+app.get('/api/user-session', async (req: Request, res: Response) => {
+  const { data, error } = await supabase.auth.getSession()
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
 // Properties
-app.get('/api/properties', async (req, res) => {
+app.get('/api/properties', async (req: Request, res: Response) => {
   const {data, error, status} = await selectProperties
   res.status(status);
   if (error) {

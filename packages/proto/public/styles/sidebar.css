@@ -6,7 +6,7 @@
     width: var(--sidebar-width-collapsed);
     background-color: var(--background-color-dark);
     padding: var(--spacing-size-small) var(--spacing-size-small);
-    transition: all 0.5s ease;
+    transition: all var(--transition-duration-sidebar) ease;
     z-index: 20;
 }
 
@@ -18,7 +18,7 @@
     position: relative;
     left: var(--sidebar-width-collapsed);
     width: calc(100% - var(--sidebar-width-collapsed));
-    transition: all 0.5s ease;
+    transition: all var(--transition-duration) ease;
 } 
 
 .sidebar.active ~ * {
@@ -31,7 +31,7 @@
     position: absolute;
     top: var(--spacing-size-small);
     left: 50%;
-    color: var(--text-color-body);
+    color: var(--text-color-header);
     line-height: 1;
     transform: translateX(-50%);
     cursor: pointer;
@@ -71,12 +71,11 @@
     max-height: var(--logo-size-small);
     opacity: 1;
     transform: translateY(calc(var(--spacing-size-small) + var(--icon-size)));
-    transition: all 0.5s ease;
+    transition: all var(--transition-duration-sidebar) ease;
 }
 
 .sidebar.active .top .logo img {
     transform: translateY(- calc(var(--spacing-size-small) + var(--icon-size)));
-    transition: all 0.5s ease;
 }
 
 .sidebar.active .top .logo * {
@@ -92,13 +91,14 @@
     margin-top: var(--spacing-size-small);
     display: flex;
     align-items: center;
+    color: var(--text-color-header);
 }
 
 .sidebar .user span {
     /* display: none; */
     opacity: 0;
     transition-property: all;
-    transition-duration: 0.5s;
+    transition-duration: var(--transition-duration-sidebar);
     transition-timing-function: step-start;
     transition-delay: 0s;
 }
@@ -107,7 +107,7 @@
     /* display: inline; */
     opacity: 1;
     transition-property: all;
-    transition-duration: 0.5s;
+    transition-duration: var(--transition-duration-sidebar);
     transition-timing-function: cubic-bezier(0.89, 0, 0.26, 0.9);
     transition-delay: 0s;
 }
@@ -126,7 +126,7 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: var(--text-color-body);
+    color: var(--text-color-header);
     border-radius: var(--border-size-radius);
     min-height: calc(var(--icon-size) + 1rem);
 }
@@ -148,7 +148,7 @@ i.bx {
     /* display: none; */
     opacity: 0;
     transition-property: all;
-    transition-duration: 0.5s;
+    transition-duration: var(--transition-duration-sidebar);
     transition-timing-function: step-start;
     transition-delay: 0s;
 }
@@ -157,7 +157,7 @@ i.bx {
     /* display: inline; */
     opacity: 1;
     transition-property: all;
-    transition-duration: 0.5s;
+    transition-duration: var(--transition-duration-sidebar);
     transition-timing-function: cubic-bezier(0.89, 0, 0.26, 0.9);
     transition-delay: 0s;
 }
