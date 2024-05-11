@@ -1,5 +1,6 @@
 import { prepareTemplate } from "./template.js";
 import { loadJSON } from "./json-loader.js";
+import { Auth, Observer } from "@calpoly/mustang";
 
 export class RoleViewElement extends HTMLElement {
   static observedAttributes = ["src", "mode"];
@@ -214,11 +215,39 @@ export class RoleViewElement extends HTMLElement {
     this.addEventListener("restful-form:updated", (event) => {
       console.log("Updated a role", event.detail);
       this.mode = "view";
-      loadJSON(this.src, this, renderSlots);
+      console.log("Loading JSON", this.authorization);
+      loadJSON(this.src, this, renderSlots, this.authorization);
     });
   }
 
-  connectedCallback() {}
+  _authObserver = new Observer(this, "acorn:auth");
+
+  get authorization() {
+    console.log("Authorization for user, ", this._user);
+    return (
+      this._user?.authenticated && {
+        Authorization: `Bearer ${this._user.token}`
+      }
+    );
+  }
+
+  connectedCallback() {
+    this._authObserver.observe().then((obs) => {
+      obs.setEffect(({ user }) => {
+        console.log("Setting user as effect of change", user);
+        this._user = user;
+        if (this.src) {
+          console.log("Loading JSON", this.authorization);
+          loadJSON(
+            this.src,
+            this,
+            renderSlots,
+            this.authorization
+          );
+        }
+      });
+    });
+  }
 
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(
@@ -227,9 +256,20 @@ export class RoleViewElement extends HTMLElement {
     );
     switch (name) {
       case "src":
-        if (newValue && this.mode !== "new") {
-          console.log("Loading JSON");
-          loadJSON(this.src, this, renderSlots);
+        if (
+          newValue &&
+          this.mode !== "new" &&
+          this.authorization
+        ) {
+          console.log("LOading JSON", this.authorization);
+          loadJSON(
+            this.src,
+            this,
+            renderSlots,
+            this.authorization
+          );
+        } else {
+          console.log('src change: load failed', newValue, this.mode, this.authorization)
         }
         break;
       case "mode":

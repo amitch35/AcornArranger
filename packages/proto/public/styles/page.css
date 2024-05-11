@@ -14,12 +14,12 @@ body {
     transition: all 0.5s ease;
 }
 
-.page > header {
+.page header:first-of-type {
     grid-template-columns: subgrid;
     grid-column: start / end;
 }
 
-.page > main {
+.page main:first-of-type {
     grid-template-columns: subgrid;
     grid-column-start: 2;
     grid-column-end: span 6;

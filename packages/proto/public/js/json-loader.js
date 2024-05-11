@@ -12,7 +12,7 @@ export class JsonObjectElement extends HTMLElement {
           grid-template-columns: 1fr 3fr;
         }
         ::slotted(dt) {
-          color: var(--accent-color);
+            color: var(--accent-color);
           grid-column-start: 1;
         }
         ::slotted(dd) {
@@ -36,39 +36,45 @@ export class JsonObjectElement extends HTMLElement {
     const src = this.getAttribute("src");
     const open = this.hasAttribute("open");
 
-    if (open) loadJSON(src, this, renderJSON);
+    if (open) loadJSON(src, this, renderAssignments);
 
     this.addEventListener("json-object:open", () =>
-      loadJSON(src, this, renderJSON)
+      loadJSON(src, this, renderAssignments)
     );
   }
 }
 
 customElements.define("json-object", JsonObjectElement);
 
-export function loadJSON(src, container, render) {
+export function loadJSON(
+  src,
+  container,
+  render,
+  authorization
+) {
   container.replaceChildren();
-  fetch(src)
+  fetch(src, {
+    headers: authorization
+  })
     .then((response) => {
       if (response.status !== 200) {
         throw `Status: ${response.status}`;
       }
       return response.json();
     })
-    .then((json) => addFragment(render(json), container)) //render(json[0] for always list encapsulated
+    .then((json) => addFragment(render(json), container))
     .catch((error) =>
       addFragment(
-        `<dt class="error">Error</dt>
-         <dd>${error}</dd>
-         <dt>While Loading</dt>
-         <dd>${src}</dd>
-        `,
+        render({
+          Error: error,
+          "While Loading": src
+        }),
         container
       )
     );
 }
 
-function renderJSON(json) {
+function renderAssignments(json) {
   const entries = Object.entries(json);
   const dtdd = ([key, value]) => {
     if (typeof(value) === "object" && value) {
@@ -76,13 +82,13 @@ function renderJSON(json) {
             return (`
                 <dt>${key}</dt>
                 <dd>
-                    <ul><dl>${value.map(renderJSON).join('</dl><dl>')}</dl></ul>
+                    <ul><dl>${value.map(renderAssignments).join('</dl><dl>')}</dl></ul>
                 </dd>
             `)
         } else {
             return (`
                 <dt>${key}</dt>
-                <dd><dl>${renderJSON(value)}</dl></dd>
+                <dd><dl>${renderAssignments(value)}</dl></dd>
             `)
         }
         

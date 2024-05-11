@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 import {supabaseClient} from './utils/supabase/server';
 import properties from './routes/properties';
 import staff from './routes/staff';
@@ -27,6 +28,14 @@ app.use(
     parseNumber: true
   })
 )
+
+// NPM Packages
+const nodeModules = path.resolve(
+  __dirname,
+  "../../../node_modules"
+);
+console.log("Serving NPM packages from", nodeModules);
+app.use("/node_modules", express.static(nodeModules));
 
 const supabase = supabaseClient;
 

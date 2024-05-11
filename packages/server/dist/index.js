@@ -42,6 +42,7 @@ var __async = (__this, __arguments, generator) => {
   });
 };
 var import_express = __toESM(require("express"));
+var import_path = __toESM(require("path"));
 var import_server = require("./utils/supabase/server");
 var import_properties = __toESM(require("./routes/properties"));
 var import_staff = __toESM(require("./routes/staff"));
@@ -65,6 +66,12 @@ app.use(
     parseNumber: true
   })
 );
+const nodeModules = import_path.default.resolve(
+  __dirname,
+  "../../../node_modules"
+);
+console.log("Serving NPM packages from", nodeModules);
+app.use("/node_modules", import_express.default.static(nodeModules));
 const supabase = import_server.supabaseClient;
 app.use("/auth", import_auth.default);
 app.use("/api/properties", import_properties.default);

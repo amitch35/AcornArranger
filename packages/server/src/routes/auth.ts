@@ -77,7 +77,7 @@ router.get('/user', async (req: Request, res: Response) => {
         res.send(user);
       }
     } else {
-      res.status(401).json({'error': 'Authorization header is not present'})
+      res.status(401).json({'error': 'Authorization header not present'})
     }
 });
 
@@ -96,7 +96,7 @@ export async function supabaseMiddleware (req: Request, res: Response, next: Nex
 
   switch(token){
     case null:
-      res.status(401).json({'error': 'Authorization header is not present'}).end()
+      res.status(401).json({'error': 'Authorization header not present'}).end()
       break;
     default:
       jwt.verify(token, TOKEN_SECRET, (error, decoded) => {
@@ -109,24 +109,3 @@ export async function supabaseMiddleware (req: Request, res: Response, next: Nex
 }
 
 export default router;
-
-// const supabase_middleware = async (req, res) => {
-//   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY, {})
-//   const JWT = getToken(req)
-
-//   switch(JWT){
-//     case null:
-//       res.status(401).json({'error': 'no JWT parsed'})
-//       break;
-//     default:
-//       const { user, error } = await supabase.auth.api.getUser(JWT)
-
-//       if(error){ 
-//         res.status(401).json(error) 
-//       }else{ 
-//         await supabase.auth.setAuth(JWT)
-//         return {user,supabase} 
-//       }
-//       break;
-//   }
-// }

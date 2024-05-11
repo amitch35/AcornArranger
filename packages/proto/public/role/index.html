@@ -9,6 +9,13 @@
         <link rel="stylesheet" href="/styles/tokens.css" />
         <link rel="stylesheet" href="/styles/page.css" />
         <link rel="stylesheet" href="/styles/form.css" />
+        <script type="importmap">
+            {
+              "imports": {
+                "@calpoly/mustang": "/node_modules/@calpoly/mustang/dist/mustang.mjs"
+              }
+            }
+        </script>
         <script type="module" src="/js/drop-down.js"></script>
         <script type="module" src="/js/json-loader.js"></script>
         <script type="module" src="/js/restful-form.js"></script>
@@ -23,14 +30,19 @@
         </script>
         <script type="module">
             document.body.addEventListener(
-            "dark-mode:toggle",
-            (event) => {
-                const page = event.currentTarget;
-                const checked = event.detail.checked;
-                page.classList.toggle("dark-mode", checked);
-            }
-        );
-    </script>
+                "dark-mode:toggle",
+                (event) => {
+                    const page = event.currentTarget;
+                    const checked = event.detail.checked;
+                    page.classList.toggle("dark-mode", checked);
+                }
+            );
+        </script>
+        <script type="module">
+            import { define, Auth } from "@calpoly/mustang";
+          
+            define({ "mu-auth": Auth.Provider });
+        </script>
     </head>
     <body class="page dark-mode">
         <header>
@@ -67,9 +79,15 @@
                 </menu>
             </drop-down>
         </header>
-        <main>
-            <h2>View Role #1</h2>
-            <role-view src="/api/roles/1"></role-view>
-        </main>
+        <mu-auth provides="acorn:auth" redirect="../login.html">
+            <main>
+                <h2>View Role #1</h2>
+                <role-view src="/api/roles/1"></role-view>
+                <a href="#" onclick="relayEvent(event, 'auth:message', ['auth/signout'])">
+                    <i class='bx bx-log-out'></i>
+                    <span class="nav-item">Logout</span>
+                </a>
+            </main>
+        </mu-auth>
     </body>
 </html>

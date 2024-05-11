@@ -112,7 +112,7 @@ router.get("/user", (req, res) => __async(void 0, null, function* () {
       res.send(user);
     }
   } else {
-    res.status(401).json({ "error": "Authorization header is not present" });
+    res.status(401).json({ "error": "Authorization header not present" });
   }
 }));
 function getToken(req) {
@@ -126,7 +126,7 @@ function supabaseMiddleware(req, res, next) {
     const token = getToken(req);
     switch (token) {
       case null:
-        res.status(401).json({ "error": "Authorization header is not present" }).end();
+        res.status(401).json({ "error": "Authorization header not present" }).end();
         break;
       default:
         import_jsonwebtoken.default.verify(token, TOKEN_SECRET, (error, decoded) => {
