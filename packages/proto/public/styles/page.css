@@ -50,6 +50,11 @@ side-bar ~ * {
     transition: all var(--transition-duration) ease;
 }
 
+side-bar:state(active) ~ * {
+    left: var(--sidebar-width-active);
+    width: calc(100% - var(--sidebar-width-active));
+}
+
 .appointment {
     --appointment-grid-columns: 2;
     display: grid;
@@ -135,7 +140,7 @@ header {
     color: var(--text-color-header);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     background-color: var(--background-color-header);
     line-height: 1;
     padding: var(--spacing-size-medium);

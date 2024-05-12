@@ -315,6 +315,7 @@ export class SidebarElement extends HTMLElement {
 
     constructor() {
         super();
+        this._internals = this.attachInternals();
 
         this.attachShadow({ mode: "open" }).appendChild(
             SidebarElement.template.cloneNode(true)
@@ -324,9 +325,17 @@ export class SidebarElement extends HTMLElement {
             .querySelector('#sidebar-btn')
             .addEventListener(
                 "click", 
-                () => this.shadowRoot
-                    .querySelector('.sidebar')
-                    .classList.toggle('active')
+                () => {
+                    this.shadowRoot
+                        .querySelector('.sidebar')
+                        .classList.toggle('active');
+                    if (this.active) {
+                        this._internals.states.delete('active');
+                    } else {
+                        this._internals.states.add('active');
+                    }
+
+                }
             );
 
         this.shadowRoot
@@ -347,6 +356,10 @@ export class SidebarElement extends HTMLElement {
                     relayEvent(event, 'auth:message', ['auth/signout'])
                 }
             );
+    }
+
+    get active() {
+        return this._internals.states.has('active');
     }
 
     _authObserver = new Observer(this, "acorn:auth");
