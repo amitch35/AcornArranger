@@ -382,12 +382,14 @@ export class SidebarElement extends HTMLElement {
                     const href = '/auth/user'
                     console.log("Loading display name", this.authorization);
                     this.replaceChildren();
-                    loadJSON(
-                        href,
-                        this,
-                        renderDisplayName,
-                        this.authorization
-                    );
+                    if (this.authorization) {
+                        loadJSON(
+                            href,
+                            this,
+                            renderDisplayName,
+                            this.authorization
+                        );
+                    }
                 }
             });
         });
