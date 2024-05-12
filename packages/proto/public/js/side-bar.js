@@ -104,7 +104,7 @@ export class SidebarElement extends HTMLElement {
     }
     
     .sidebar .user ::slotted(span), .sidebar .user span {
-        /* display: none; */
+        visibility: hidden;
         opacity: 0;
         transition-property: all;
         transition-duration: var(--transition-duration-sidebar);
@@ -113,7 +113,7 @@ export class SidebarElement extends HTMLElement {
     }
     
     .sidebar.active .user ::slotted(span), .sidebar.active .user span{
-        /* display: inline; */
+        visibility: visible;
         opacity: 1;
         transition-property: all;
         transition-duration: var(--transition-duration-sidebar);
@@ -159,7 +159,7 @@ export class SidebarElement extends HTMLElement {
     }
     
     .sidebar .nav-item {
-        /* display: none; */
+        visibility: hidden;
         opacity: 0;
         transition-property: all;
         transition-duration: var(--transition-duration-sidebar);
@@ -168,7 +168,7 @@ export class SidebarElement extends HTMLElement {
     }
     
     .sidebar.active .nav-item {
-        /* display: inline; */
+        visibility: visible;
         opacity: 1;
         transition-property: all;
         transition-duration: var(--transition-duration-sidebar);
@@ -188,10 +188,12 @@ export class SidebarElement extends HTMLElement {
         padding: var(--spacing-size-small) var(--spacing-size-medium);
         /* z-index: 20; */
         opacity: 0;
+        visibility: hidden;
     }
     
     .sidebar ul li a:hover ~ .tooltip {
         opacity: 1;
+        visibility: visible;
     }
     
     .sidebar.active ul li a:hover ~ .tooltip {

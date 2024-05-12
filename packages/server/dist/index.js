@@ -21,29 +21,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 var import_express = __toESM(require("express"));
 var import_path = __toESM(require("path"));
-var import_server = require("./utils/supabase/server");
 var import_properties = __toESM(require("./routes/properties"));
 var import_staff = __toESM(require("./routes/staff"));
 var import_roles = __toESM(require("./routes/roles"));
@@ -72,21 +51,12 @@ const nodeModules = import_path.default.resolve(
 );
 console.log("Serving NPM packages from", nodeModules);
 app.use("/node_modules", import_express.default.static(nodeModules));
-const supabase = import_server.supabaseClient;
 app.use("/auth", import_auth.default);
-app.use("/api/properties", import_properties.default);
-app.use("/api/staff", import_staff.default);
+app.use("/api/properties", import_auth.supabaseMiddleware, import_properties.default);
+app.use("/api/staff", import_auth.supabaseMiddleware, import_staff.default);
 app.use("/api/roles", import_auth.supabaseMiddleware, import_roles.default);
-app.use("/api/appointments", import_appointments.default);
-app.use("/api/plans", import_plans.default);
-app.get("/api/user-session", (req, res) => __async(exports, null, function* () {
-  const { data, error } = yield supabase.auth.getSession();
-  if (error) {
-    res.send(error);
-  } else {
-    res.send(data);
-  }
-}));
+app.use("/api/appointments", import_auth.supabaseMiddleware, import_appointments.default);
+app.use("/api/plans", import_auth.supabaseMiddleware, import_plans.default);
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
