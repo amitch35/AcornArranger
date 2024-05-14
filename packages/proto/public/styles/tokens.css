@@ -2,7 +2,7 @@
     --accent-color: rgb(59, 167, 194);
     --background-color: rgb(227, 240, 244);
     --background-color-accent: rgb(182, 217, 227);
-    --background-color-dark: hsl(from var(--background-color) h s 50%);
+    --background-color-dark: hsl(from var(--background-color) h s 60%);
     --background-color-header: var(--accent-color);
     --btn-background-color: 200 10% 91%;
     --btn-background-hover-color: 200 10% 89%;
@@ -40,6 +40,7 @@
     --shadow-popover: 1px 1px 2px var(--shadow-color);
 
     --logo-size-small: 3rem;
+    --logo-size-medium: 6rem;
     --logo-size-large: 12rem;
 
     --icon-size: 2rem;

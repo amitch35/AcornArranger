@@ -5,6 +5,7 @@ body {
     font-weight: var(--text-font-weight-body);
     font-optical-sizing: auto;
     font-style: normal;
+    font-size: var(--text-font-size-body);
 }
 
 .page {
@@ -37,20 +38,30 @@ body {
     grid-column-end: span 4;
 }
 
-.dark-mode-btn {
-    position:absolute;
-    bottom: calc(0px + var(--spacing-size-small));
-    left: calc(0px + var(--spacing-size-small));
+.page .dark-mode-only {
+    display: none;
 }
 
-side-bar ~ * {
+.page.dark-mode .dark-mode-only {
+    display: contents;
+}
+
+.page .light-mode-only {
+    display: contents;
+}
+
+.page.dark-mode .light-mode-only {
+    display: none;
+} 
+
+.page side-bar ~ * {
     position: relative;
     left: var(--sidebar-width-collapsed);
     width: calc(100% - var(--sidebar-width-collapsed));
     transition: all var(--transition-duration) ease;
 }
 
-side-bar:state(active) ~ * {
+.page side-bar:state(active) ~ * {
     left: var(--sidebar-width-active);
     width: calc(100% - var(--sidebar-width-active));
 }

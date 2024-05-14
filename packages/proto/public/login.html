@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
+        <title>Login | AcornArranger</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -9,6 +10,8 @@
         <link rel="stylesheet" href="/styles/tokens.css" />
         <link rel="stylesheet" href="/styles/page.css" />
         <link rel="stylesheet" href="/styles/form.css" />
+        <link rel="stylesheet" href="/styles/login.css" />
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <script type="importmap">
             {
               "imports": {
@@ -30,8 +33,25 @@
                 "dark-mode:toggle",
                 (event) => {
                     const page = event.currentTarget;
-                    const checked = event.detail.checked;
-                    page.classList.toggle("dark-mode", checked);
+                    page.classList.toggle("dark-mode");
+                }
+            );
+
+            document.body.addEventListener(
+                "action-selector:login",
+                (event) => {
+                    const page = event.currentTarget;
+                    const login_card = page.querySelector(".login-card");
+                    login_card.classList.remove("signup");
+                }
+            );
+
+            document.body.addEventListener(
+                "action-selector:signup",
+                (event) => {
+                    const page = event.currentTarget;
+                    const login_card = page.querySelector(".login-card");
+                    login_card.classList.add("signup");
                 }
             );
         </script>
@@ -42,58 +62,61 @@
         </script>
     </head>
     <body class="page dark-mode">
+        <a href="/index.html" class="home-btn">
+            <i class='bx bxs-home'></i>
+            <span>Home</span>
+        </a>
         <mu-auth>
-            <header>
-                <a href="../index.html">
-                    <img src="../images/Acorn Vacation Properties Inc Logo High Quality.png" alt="Acorn Vactaion Properties Logo">
-                </a>            
-                <h1>
-                    AcornArranger
-                </h1>
-                <drop-down>
-                    <button slot="actuator">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user text-background">
-                            <path d="M7.06473 19.6328C4.61648 18.0244 3 15.2537 3 12.1055C3 7.13491 7.02944 3.10547 12 3.10547C16.9706 3.10547 21 7.13491 21 12.1055C21 15.2537 19.4273 18.0094 16.979 19.6178M16.9799 22.2844V19.7136C16.9799 17.0258 14.8011 14.8469 12.1133 14.8469C9.42547 14.8469 7.24658 17.0258 7.24658 19.7136V22.2844M15 11.8469C15 13.5038 13.6569 14.8469 12 14.8469C10.3431 14.8469 9 13.5038 9 11.8469C9 10.1901 10.3431 8.84692 12 8.84692C13.6569 8.84692 15 10.1901 15 11.8469Z">
-                            </path>
-                        </svg>
+            <main class="login-card">
+                <div class="logo">
+                    <img src="../images/AcornArranger Logo.png" alt="AcornArranger Logo">
+                </div>
+                <nav class="action-selector">
+                    <button id="login-btn" onclick="relayEvent(event,'action-selector:login',{})">
+                        <i class='bx bx-log-in'></i>
+                        <span>Login</span>
                     </button>
-                    <menu>
-                        <li>
-                            <label>
-                                Sign In
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user text-background">
-                                    <path d="M7.06473 19.6328C4.61648 18.0244 3 15.2537 3 12.1055C3 7.13491 7.02944 3.10547 12 3.10547C16.9706 3.10547 21 7.13491 21 12.1055C21 15.2537 19.4273 18.0094 16.979 19.6178M16.9799 22.2844V19.7136C16.9799 17.0258 14.8011 14.8469 12.1133 14.8469C9.42547 14.8469 7.24658 17.0258 7.24658 19.7136V22.2844M15 11.8469C15 13.5038 13.6569 14.8469 12 14.8469C10.3431 14.8469 9 13.5038 9 11.8469C9 10.1901 10.3431 8.84692 12 8.84692C13.6569 8.84692 15 10.1901 15 11.8469Z">
-                                    </path>
-                                </svg>
-                            </label>
-                        </li>
-                        <li><hr /></li>
-                        <li>
-                            <label onchange="relayEvent(event,'dark-mode:toggle',{checked: event.target.checked})">
-                                <input type="checkbox" autocomplete="off" checked="true" />
-                                Dark mode
-                            </label>
-                        </li>
-                    </menu>
-                </drop-down>
-            </header>
-            <main class="card">
-                <h2>User Login</h2>
-                <login-form>
-                    <label>
-                        <span>Email:</span>
-                        <input name="email" autocomplete="off" placeholder="you@example.com" required="true" />
-                    </label>
-                    <label>
-                        <span>Password:</span>
-                        <input type="password" name="password" placeholder="••••••••" required="true" />
-                    </label>
-                </login-form>
-                <p>
-                    Or did you want to
-                    <a href="./newuser.html">Sign up as a new user</a>?
-                </p>
+                    <button id="signup-btn" onclick="relayEvent(event,'action-selector:signup',{})">
+                        <i class='bx bxs-edit'></i>
+                        <span>Signup</span>
+                    </button>
+                </nav>
+                <div class="forms">
+                    <login-form id="login">
+                        <label>
+                            <span>Email:</span>
+                            <input name="email" autocomplete="off" placeholder="you@example.com" required="true" />
+                        </label>
+                        <label>
+                            <span>Password:</span>
+                            <input type="password" name="password" placeholder="••••••••" required="true" />
+                        </label>
+                    </login-form>
+                    <restful-form id="signup" new src="/auth/signup">
+                        <label>
+                            <span>First Name:</span>
+                            <input name="first_name" autocomplete="off" />
+                        </label>
+                        <label>
+                            <span>Last Name:</span>
+                            <input name="last_name" autocomplete="off" />
+                        </label>
+                        <label>
+                            <span>Email:</span>
+                            <input name="email" autocomplete="off" placeholder="you@example.com" required="true" />
+                        </label>
+                        <label>
+                            <span>Password:</span>
+                            <input type="password" name="password" placeholder="••••••••" required="true" />
+                        </label>
+                    </restful-form>
+                </div>
             </main>
         </mu-auth>
+        <a href="#" class="dark-mode-btn" id="theme-btn" onclick="relayEvent(event,'dark-mode:toggle',{})" >
+            <i class='bx bxs-sun dark-mode-only'></i>
+            <i class='bx bxs-moon light-mode-only'></i>
+            <span>Theme</span>
+        </a>
     </body>
 </html>

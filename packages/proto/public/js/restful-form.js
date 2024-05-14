@@ -33,6 +33,7 @@ export class RestfulFormElement extends HTMLElement {
     
     ::slotted(input) {
       grid-column: input / input-end;
+      height: calc(var(--text-font-size-body) + 1rem);
     }
     
     button[type="submit"] {

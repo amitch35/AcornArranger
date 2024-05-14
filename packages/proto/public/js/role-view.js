@@ -130,11 +130,11 @@ export class RoleViewElement extends HTMLElement {
         </label>
         <label>
             <span>Can Lead</span>
-            <input name="can_lead_team" />
+            <input name="can_lead_team" type="checkbox" />
         </label>
         <label>
             <span>Can Clean</span>
-            <input name="can_clean" />
+            <input name="can_clean" type="checkbox" />
         </label>
         </restful-form>
         <dl>

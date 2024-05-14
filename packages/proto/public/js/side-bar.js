@@ -417,4 +417,4 @@ function renderDisplayName(json) {
     };
   
     return entries.map(slot).join("\n");
-  }
+}
