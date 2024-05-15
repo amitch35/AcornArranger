@@ -26,31 +26,25 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var server_exports = {};
-__export(server_exports, {
+var client_exports = {};
+__export(client_exports, {
   supabaseClient: () => supabaseClient
 });
-module.exports = __toCommonJS(server_exports);
+module.exports = __toCommonJS(client_exports);
 var import_supabase_js = require("@supabase/supabase-js");
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
-const supabase = (0, import_supabase_js.createClient)(
+const supabaseClient = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY,
   {
     auth: {
-      persistSession: true,
-      autoRefreshToken: true
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
     }
   }
 );
-supabase.auth.signInWithPassword(
-  {
-    email: process.env.SUPABASE_SERVER_ACCT_EMAIL,
-    password: process.env.SUPABASE_SERVER_ACCT_PSWD
-  }
-);
-const supabaseClient = supabase;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   supabaseClient

@@ -54,14 +54,14 @@ body {
     display: none;
 } 
 
-.page side-bar ~ * {
+.page side-bar ~ header, .page side-bar ~ main {
     position: relative;
     left: var(--sidebar-width-collapsed);
     width: calc(100% - var(--sidebar-width-collapsed));
     transition: all var(--transition-duration) ease;
 }
 
-.page side-bar:state(active) ~ * {
+.page side-bar:state(active) ~ header, .page side-bar:state(active) ~ main {
     left: var(--sidebar-width-active);
     width: calc(100% - var(--sidebar-width-active));
 }

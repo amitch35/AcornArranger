@@ -299,7 +299,7 @@ export class SidebarElement extends HTMLElement {
                     <span class="tooltip">Theme</span>
                 </li>
                 <li>
-                    <a href="#" id="logout-btn">
+                    <a href="../login.html?next=/" id="logout-btn">
                         <i class='bx bx-log-out'></i>
                         <span class="nav-item">Logout</span>
                     </a>

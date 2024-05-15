@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { supabaseClient } from "../utils/supabase/server";
+import { supabaseClient } from "../utils/supabase/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -58,15 +58,6 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
   
-// router.post('/logout', async (req: Request, res: Response) => {
-//     const { error } = await supabase.auth.signOut()
-//     if (error) {
-//       res.send(error);
-//     } else {
-//       res.send();
-//     }
-// });
-  
 router.get('/user', async (req: Request, res: Response) => {
     const token = getToken(req);
     if (token) {
@@ -101,7 +92,13 @@ export async function supabaseMiddleware (req: Request, res: Response, next: Nex
     default:
       jwt.verify(token, TOKEN_SECRET, (error, decoded) => {
         if (error) res.send(error).end()
-        else if (decoded) next();
+        else if (decoded) {
+          if (decoded.user_role && decoded.user_role === 'authorized_user') {
+            next();
+          } else {
+            res.status(403).json({'error': 'User not Authorized, contact administrator for authorization'}).end()
+          }
+        }
         else res.status(403).end();
       });
       break;

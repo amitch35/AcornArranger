@@ -53,13 +53,13 @@ __export(auth_exports, {
 });
 module.exports = __toCommonJS(auth_exports);
 var import_express = __toESM(require("express"));
-var import_server = require("../utils/supabase/server");
+var import_client = require("../utils/supabase/client");
 var import_jsonwebtoken = __toESM(require("jsonwebtoken"));
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
 const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 const router = import_express.default.Router();
-const supabase = import_server.supabaseClient;
+const supabase = import_client.supabaseClient;
 router.post("/signup", (req, res) => __async(void 0, null, function* () {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });
@@ -132,9 +132,13 @@ function supabaseMiddleware(req, res, next) {
         import_jsonwebtoken.default.verify(token, TOKEN_SECRET, (error, decoded) => {
           if (error)
             res.send(error).end();
-          else if (decoded)
-            next();
-          else
+          else if (decoded) {
+            if (decoded.user_role && decoded.user_role === "authorized_user") {
+              next();
+            } else {
+              res.status(403).json({ "error": "User not Authorized, contact administrator for authorization" }).end();
+            }
+          } else
             res.status(403).end();
         });
         break;
