@@ -24,7 +24,7 @@ export class LoginFormElement extends LitElement {
       "mu-rest-form:created",
       (event: Event) => {
         const detail = (event as CustomEvent).detail;
-        const { token } = detail.created.session.access_token;
+        const { token } = { token: detail.created.session.access_token };
         const redirect = this.next || "/";
         console.log("Login successful", detail, redirect);
 

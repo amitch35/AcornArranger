@@ -5,10 +5,10 @@ import { property } from "lit/decorators.js";
 export class SidebarElement extends LitElement {
 
     @property({attribute: false})
-    display_name?: string = undefined;
+    display_name: string = 'Status: 401';
 
     displayNameTemplate() {
-        if (this.display_name === undefined) {
+        if (this.display_name === 'Status: 401') {
             return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);">login</a></span>`;
         } else if (this.display_name === '') {
             return html`<span>Hello, user</span>`;
@@ -51,11 +51,16 @@ export class SidebarElement extends LitElement {
         Events.relay(ev,'dark-mode:toggle',{});
     }
 
+    toggleActive() {
+        this.classList.toggle("active");
+    }
+
     render() {
     return html`
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <nav class="sidebar">
-            <i id="sidebar-btn" class='bx bx-menu'></i>
+            <i id="sidebar-btn" class='bx bx-menu' @click=${this.toggleActive}>
+            </i>
             <div class="top">
                 <div class="logo">
                     <img src="../images/AcornArranger Logo.png" alt="AcornArranger Logo">
@@ -143,7 +148,7 @@ export class SidebarElement extends LitElement {
         z-index: 20;
     }
 
-    .sidebar.active {
+    :host(.active) .sidebar {
         width: var(--sidebar-width-active);
     }
 
@@ -157,7 +162,7 @@ export class SidebarElement extends LitElement {
         cursor: pointer;
     }
 
-    .sidebar.active #sidebar-btn {
+    :host(.active) .sidebar #sidebar-btn {
         left: 87%;
     }
 
@@ -166,7 +171,7 @@ export class SidebarElement extends LitElement {
         line-height: 1;
     }
 
-    .sidebar.active .top {
+    :host(.active) .sidebar .top {
         padding: 0;
     }
 
@@ -194,11 +199,11 @@ export class SidebarElement extends LitElement {
         transition: all var(--transition-duration-sidebar) ease;
     }
 
-    .sidebar.active .top .logo img {
+    :host(.active) .sidebar .top .logo img {
         transform: translateY(- calc(var(--spacing-size-small) + var(--icon-size)));
     }
 
-    .sidebar.active .top .logo * {
+    :host(.active) .sidebar .top .logo * {
         opacity: 1;
     }
 
@@ -214,7 +219,7 @@ export class SidebarElement extends LitElement {
         color: var(--text-color-header);
     }
 
-    .sidebar .user ::slotted(span), .sidebar .user span {
+    .sidebar .user span {
         visibility: hidden;
         opacity: 0;
         transition-property: all;
@@ -223,7 +228,7 @@ export class SidebarElement extends LitElement {
         transition-delay: 0s;
     }
 
-    .sidebar.active .user ::slotted(span), .sidebar.active .user span{
+    :host(.active) .sidebar .user span {
         visibility: visible;
         opacity: 1;
         transition-property: all;
@@ -278,7 +283,7 @@ export class SidebarElement extends LitElement {
         transition-delay: 0s;
     }
 
-    .sidebar.active .nav-item {
+    :host(.active) .sidebar .nav-item {
         visibility: visible;
         opacity: 1;
         transition-property: all;
@@ -307,7 +312,7 @@ export class SidebarElement extends LitElement {
         visibility: visible;
     }
 
-    .sidebar.active ul li a:hover ~ .tooltip {
+    :host(.active) .sidebar ul li a:hover ~ .tooltip {
         display: none;
     }
 
