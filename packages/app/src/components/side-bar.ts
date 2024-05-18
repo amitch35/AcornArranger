@@ -17,20 +17,39 @@ export class SidebarElement extends LitElement {
         }
     }
 
-    // @property({attribute: false})
-    // user_json = null as JSON;
+    _authObserver = new Observer<Auth.Model>(this, "acorn:auth");
 
-    // displayNameTemplate() {
-    //     if (this.user_json === null) {
-    //         return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);">login</a></span>`
-    //     } else if (this.user_json.Error) {
-    //         return html`<span>${this.user_json}</span>`
-    //     } else if (this.user_json.display_name) {
-    //         return html`<span>${this.user_json.display_name}</span>`
-    //     } else {
-    //         return html`<span>Hello, user</span>`
-    //     }
-    // }
+    connectedCallback() {
+        super.connectedCallback();
+        this._authObserver.observe(({ user }) => {
+            if (user) {
+                fetch('/auth/user', {
+                    headers: Auth.headers(user)
+                })
+                .then((response) => {
+                    if (response.status !== 200) {
+                    throw `Status: ${response.status}`;
+                    }
+                    return response.json();
+                })
+                .then((json) => {
+                    if (json.user_metadata.display_name) {
+                        this.display_name = json.user_metadata.display_name;
+                    } else {
+                        this.display_name = '';
+                    }
+                })
+                .catch((error) =>
+                    this.display_name = `${error}`
+                );
+            }
+        });
+    }
+
+    toggleDarkMode(ev: Event) {
+        this.classList.toggle("dark-mode");
+        Events.relay(ev,'dark-mode:toggle',{});
+    }
 
     render() {
     return html`
@@ -334,53 +353,6 @@ export class SidebarElement extends LitElement {
         display: none;
     }   
   `;
-
-_authObserver = new Observer<Auth.Model>(this, "acorn:auth");
-
-_user? = new Auth.User;
-
-get authorization() {
-    console.log("Authorization for user, ", this._user);
-    return (
-      this._user?.authenticated && {
-        Authorization: `Bearer ${this._user.token}`
-      }
-    );
-}
-
-
-connectedCallback() {
-    super.connectedCallback();
-    this._authObserver.observe(({ user }) => {
-        this._user = user;
-        if (user) {
-            fetch('/auth/user', {
-                headers: (this.authorization)
-              })
-            .then((response) => {
-                if (response.status !== 200) {
-                throw `Status: ${response.status}`;
-                }
-                return response.json();
-            })
-            .then((json) => {
-                if (json.display_name) {
-                    this.display_name = json.display_name;
-                } else {
-                    this.display_name = '';
-                }
-            })
-            .catch((error) =>
-                this.display_name = `${error}`
-            );
-        }
-    });
-}
-
-toggleDarkMode(ev: Event) {
-    this.classList.toggle("dark-mode");
-    Events.relay(ev,'dark-mode:toggle',{});
-}
 
 }
 

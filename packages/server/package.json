@@ -2,11 +2,19 @@
   "name": "server",
   "version": "1.0.0",
   "main": "dist/indext.js",
+  "exports": {
+    "./models": {
+      "import": "./src/models/index.ts"
+    }
+  },
   "scripts": {
     "dev": "cross-env STATIC=../proto/public npx nodemon",
     "build": "npx etsc",
-    "start": "cross-env STATIC=../proto/public node dist/index.js",
-    "start-server": "nohup cross-env STATIC=../proto/public node dist/index.js > my.log 2>&1 &",
+    "start": "npm run build && npm run start:node",
+    "start:node": "node dist/index.js",
+    "start:app": "cross-env STATIC=../app/dist npm run start",
+    "start:proto": "cross-env STATIC=../proto/public npm run start",
+    "start-server": "nohup npm run start:app > my.log 2>&1 &",
     "check": "npx tsc --noEmit",
     "db-types": "supabase gen types typescript --project-id fqkcgxfaqhpqrytcixuy > src/database.types.ts"
   },

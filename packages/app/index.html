@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>AcornArranger</title>
+        <link rel="stylesheet" href="/styles/reset.css">
+        <link rel="stylesheet" href="/styles/page.css" />
+        <link rel="stylesheet" href="/styles/tokens.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <script type="module" src="/src/main"></script>
+        <script type="module">
+            document.body.addEventListener(
+                "dark-mode:toggle",
+                (event) => {
+                    const page = event.currentTarget;
+                    page.classList.toggle("dark-mode");
+                }
+            );
+        </script>
+    </head>
+    <body class="dark-mode">
+        <mu-auth provides="acorn:auth" redirect="../login.html">
+        <article class="page">
+            <side-bar class="dark-mode"></side-bar>
+            <header>          
+                <h1>
+                    AcornArranger
+                </h1>
+            </header>
+            <main>
+                <h3>Appointments</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Appointment ID</th>
+                            <th>Service Date</th>
+                            <th>Property</th>
+                            <th>Team</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <a href="appointment/appointment1.html">
+                                    9192115
+                                </a>
+                            </th>
+                            <td>2024-04-07 11:00 AM</td>
+                            <td>
+                                A Relaxing Place
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="staff/staff1.html">
+                                            Jessica Spence
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="staff/staff2.html">
+                                            Kelly  Sifers
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>9287044</th>
+                            <td>2024-04-07 10:00 AM</td>
+                            <td>Blue Door</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="staff/staff1.html">
+                                            Jessica Spence
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>8570046</th>
+                            <td>2024-04-07 10:00 AM</td>
+                            <td>Old Yosemite Rd</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="staff/staff2.html">
+                                            Kelly  Sifers
+                                        </a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+        </article>
+        </mu-auth>
+    </body>
+</html>

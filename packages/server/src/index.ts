@@ -12,7 +12,7 @@ dotenv.config({ path: ['.env.local', '.env'] });
 
 const { queryParser } = require('express-query-parser')
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 const staticDir = process.env.STATIC || "public";
 
 app.use(express.static(staticDir));

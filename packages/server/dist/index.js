@@ -33,7 +33,7 @@ var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
 const { queryParser } = require("express-query-parser");
 const app = (0, import_express.default)();
-const port = process.env.PORT || 4e3;
+const port = process.env.PORT || 3e3;
 const staticDir = process.env.STATIC || "public";
 app.use(import_express.default.static(staticDir));
 app.use(import_express.default.json());
