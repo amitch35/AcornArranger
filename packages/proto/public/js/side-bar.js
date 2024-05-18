@@ -344,7 +344,7 @@ export class SidebarElement extends HTMLElement {
                 "click", 
                 (event) => {
                     this.classList.toggle("dark-mode");
-                    relayEvent(event,'dark-mode:toggle',{checked: event.target.checked});
+                    relayEvent(event,'dark-mode:toggle',{});
                 }
             );
 
