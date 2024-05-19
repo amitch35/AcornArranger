@@ -129,23 +129,6 @@ Returns:
     }
 }
 ```
-<!-- ### 2.3 Assign Staff Role - `/staff/{user_id}/role` - PUT
-Change the role of the given staff member
-
-Input:
-```commandline
-{
-    "role_id": <id>
-}
-```
-Returns:
-```commandline
-[
-    {
-        
-    }
-]
-``` -->
 
 ## 3. Roles
 ### 3.1 Show Roles - `/roles` - GET
@@ -221,8 +204,7 @@ Returns:
         "next_arrival_time": <string (ISO Timestamp)>,
         "turn_around": <bool>,
         "cancelled_date": <string (ISO Timestamp)>,
-        "service": <id>,
-        "property": {
+        "property_info": {
             "properties_id": <id>,
             "property_name": <string>
         },
@@ -230,6 +212,7 @@ Returns:
             {
                 "user_id": <id>,
                 "staff_info": {
+                    "user_id": <id>,
                     "name": <string>
                 }
             }
@@ -257,8 +240,7 @@ Returns:
     "next_arrival_time": <string (ISO Timestamp)>,
     "turn_around": <bool>,
     "cancelled_date": <string (ISO Timestamp)>,
-    "service": <id>,
-    "property": {
+    "property_info": {
         "properties_id": <id>,
         "property_name": <string>
     },
@@ -266,6 +248,7 @@ Returns:
         {
             "user_id": <id>,
             "staff_info": {
+                "user_id": <id>,
                 "name": <string>
             }
         }
@@ -303,6 +286,7 @@ Returns:
                 "sent_to_rc": <string (ISO Timestamp)>,
                 "appointment_id": <id>,
                 "appointment_info": {
+                    "appointment_id": <id>,
                     "arrival_time": <string (ISO Timestamp)>,
                     "service_time": <string (ISO Timestamp)>,
                     "next_arrival_time": <string (ISO Timestamp)>,
@@ -316,7 +300,7 @@ Returns:
                         "service_id": <id>,
                         "service_name": <string>
                     },
-                    "property": {
+                    "property_info": {
                         "properties_id": <id>,
                         "property_name": <string>
                     }
@@ -327,6 +311,7 @@ Returns:
             {
                 "user_id": <id>,
                 "staff_info": {
+                    "user_id": <id>,
                     "name": <string>
                 }
             }
@@ -350,6 +335,7 @@ Returns:
                 "sent_to_rc": <string (ISO Timestamp)>,
                 "appointment_id": <id>,
                 "appointment_info": {
+                    "appointment_id": <id>,
                     "arrival_time": <string (ISO Timestamp)>,
                     "service_time": <string (ISO Timestamp)>,
                     "next_arrival_time": <string (ISO Timestamp)>,
@@ -363,7 +349,7 @@ Returns:
                         "service_id": <id>,
                         "service_name": <string>
                     },
-                    "property": {
+                    "property_info": {
                         "properties_id": <id>,
                         "property_name": <string>
                     }
@@ -374,6 +360,7 @@ Returns:
             {
                 "user_id": <id>,
                 "staff_info": {
+                    "user_id": <id>,
                     "name": <string>
                 }
             }
