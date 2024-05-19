@@ -97,6 +97,9 @@ router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
   }
 }));
 router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
+  if (req.body.estimated_cleaning_mins === void 0 && req.body.double_unit === void 0) {
+    res.status(400).json({ Error: "Bad Request, must provide estimated_cleaning_mins and/or double_unit " });
+  }
   let { error, status } = yield supabase.from("rc_properties").update({
     estimated_cleaning_mins: req.body.estimated_cleaning_mins,
     double_unit: req.body.double_unit && req.body.double_unit[0] && req.body.double_unit.length > 0 ? req.body.double_unit : null

@@ -5,7 +5,7 @@ export interface Model {
   roles?: Array<Role>;
   property?: Property;
   properties?: Array<Property>;
-  single_staff?: Staff;
+  staff_member?: Staff;
   staff?: Array<Staff>;
   appointment?: Appointment;
   appointments?: Array<Appointment>;

@@ -88,7 +88,7 @@ const selectStaffFull = `
     )
   `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  var filter_status_ids = [1, 2];
+  var filter_status_ids = [1, 2, 3];
   if (req.query.filter_status_id) {
     const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
     filter_status_ids = filterStatusIdsStringArray.map((id) => Number(id)).filter((id) => !isNaN(id));

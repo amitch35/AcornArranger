@@ -10,6 +10,17 @@ export interface Plan {
     staff: Array<PlanStaff>;
 }
 
+export interface PlanBuildOptions {
+    available_staff: Array<number>;
+    office_location?: string;
+    services?: Array<number>;
+    omissions?: Array<number>;
+    routing_type?: number;
+    cleaning_window?: number;
+    max_hours?: number;
+    target_staff_count?: number;
+}
+
 interface PlanAppointment {
     appointment_id: number;
     sent_to_rc: string;

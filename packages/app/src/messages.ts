@@ -1,4 +1,4 @@
-import { Property, Role } from "server/models";
+import { Property, Role, PlanBuildOptions } from "server/models";
 
 export type Msg =
   | ["properties/save", { properties_id: number; property: Property; }]
@@ -11,5 +11,11 @@ export type Msg =
   | ["appointments/", { from_service_date: string; to_service_date: string; per_page?: number; page?: number; }]
   | ["plans/select", { plan_id: number; }]
   | ["plans/", { from_plan_date: string; to_plan_date: string; per_page?: number; page?: number; }]
+  | ["plans/staff/add", { plan_id: number; user_id: number; }]
+  | ["plans/staff/remove", { plan_id: number; user_id: number; }]
+  | ["plans/appointment/add", { plan_id: number; appointment_id: number; }]
+  | ["plans/appointment/remove", { plan_id: number; appointment_id: number; }]
+  | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; }]
+  | ["plans/send", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]
-  | ["staff/", { filter_status_ids?: Array<number> }];
+  | ["staff/", { filter_status_ids?: Array<number> }]; // available_staff: Array<number>; office_location?: string; services?: Array<number>; omissions?: Array<number>; routing_type?: number; cleaning_window?: number; max_hours?: number; target_staff_count?: number;

@@ -59,6 +59,11 @@ router.get('/:property_id', async (req: Request, res: Response) => {
 });
 
 router.put('/:property_id', async (req: Request, res: Response) => {
+
+  if (req.body.estimated_cleaning_mins === undefined && req.body.double_unit === undefined) {
+    res.status(400).json({Error: 'Bad Request, must provide estimated_cleaning_mins and/or double_unit '});
+  }
+
   let { error, status } = await supabase
     .from('rc_properties')
     .update({

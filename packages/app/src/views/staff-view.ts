@@ -1,5 +1,5 @@
 import { View } from "@calpoly/mustang";
-import { css, html, TemplateResult, unsafeCSS } from "lit";
+import { css, html, TemplateResult } from "lit";
 import { property } from "lit/decorators.js";
 import { Staff } from "server/models";
 import { Msg } from "../messages";
