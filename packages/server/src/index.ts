@@ -5,6 +5,7 @@ import staff from './routes/staff';
 import roles from './routes/roles';
 import appointments from './routes/appointments';
 import plans from './routes/plans';
+import services from './routes/services'
 import auth, { supabaseMiddleware } from "./routes/auth";
 import dotenv from "dotenv";
 
@@ -46,7 +47,9 @@ app.use('/api/roles', supabaseMiddleware, roles);
 
 app.use('/api/appointments', supabaseMiddleware, appointments);
 
-app.use('/api/plans', supabaseMiddleware, plans)
+app.use('/api/plans', supabaseMiddleware, plans);
+
+app.use('/api/services', supabaseMiddleware, services);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

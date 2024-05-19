@@ -186,8 +186,21 @@ Returns:
 }
 ```
 
-## 4. Appointments
-### 4.1 Show Appointments - `/appointments` - GET
+## 4. Services
+### 4.1 Show Services - `/roles` - GET
+Returns all appointment services available
+
+```commandline
+[
+    {
+        "service_id": <id>,
+        "name": <string>
+    }
+]
+```
+
+## 5. Appointments
+### 5.1 Show Appointments - `/appointments` - GET
 Allows users to see all properties available on the database
 #### Note: Appointment data is only regularly updated for appointments ranging from the previous day to plus 9 days
 
@@ -231,7 +244,7 @@ Returns:
     }
 ]
 ```
-### 4.2 Get Appointment - `/appointments/{appointment_id}` - GET
+### 5.2 Get Appointment - `/appointments/{appointment_id}` - GET
 Gets full information about a single appointment
 
 Returns:
@@ -267,8 +280,8 @@ Returns:
 }
 ```
 
-## 5. Schedule Plans
-### 5.1 Show Plans - `/plans` - GET
+## 6. Schedule Plans
+### 6.1 Show Plans - `/plans` - GET
 Allows users to see all valid plans available on the database
 
 Query Parameters:
@@ -323,7 +336,7 @@ Returns:
 ]
 ```
 
-### 5.2 Get Plan - `/plans/{plan_id}` - GET
+### 6.2 Get Plan - `/plans/{plan_id}` - GET
 Gets full information about a single plan
 
 Returns:
@@ -372,20 +385,20 @@ Returns:
 ]
 ```
 
-### 5.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}` - POST
+### 6.3 Add Staff to Plan - `/plans/{plan_id}/staff/{user_id}` - POST
 Adds given staff to a plan
 
-### 5.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}` - DELETE
+### 6.4 Remove Staff from Plan - `/plans/{plan_id}/staff/{user_id}` - DELETE
 Removes given staff from a plan
 
-### 5.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - POST
+### 6.5 Add Appoinment to Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - POST
 Adds given appointment to a plan as long as that appointment is not already in 
 another plan for the same day
 
-### 5.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - DELETE
+### 6.6 Remove Appoinment from Plan - `/plans/{plan_id}/appointment/{appoinment_id}` - DELETE
 Removes given appointment from a plan
 
-### 5.7 Build Schedule Plans - `/plans/build/{plan_date}` - POST
+### 6.7 Build Schedule Plans - `/plans/build/{plan_date}` - POST
 Uses input parameters to run a complex scheduling algorithm and create plans to 
 complete all appointments for the given day
 
@@ -403,5 +416,5 @@ Input:
 }
 ```
 
-### 5.8 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
+### 6.8 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
 Sends all valid plans for the given day to ResortCleaning to be assigned to staff

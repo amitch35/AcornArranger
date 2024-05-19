@@ -28,6 +28,7 @@ var import_staff = __toESM(require("./routes/staff"));
 var import_roles = __toESM(require("./routes/roles"));
 var import_appointments = __toESM(require("./routes/appointments"));
 var import_plans = __toESM(require("./routes/plans"));
+var import_services = __toESM(require("./routes/services"));
 var import_auth = __toESM(require("./routes/auth"));
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
@@ -57,6 +58,7 @@ app.use("/api/staff", import_auth.supabaseMiddleware, import_staff.default);
 app.use("/api/roles", import_auth.supabaseMiddleware, import_roles.default);
 app.use("/api/appointments", import_auth.supabaseMiddleware, import_appointments.default);
 app.use("/api/plans", import_auth.supabaseMiddleware, import_plans.default);
+app.use("/api/services", import_auth.supabaseMiddleware, import_services.default);
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
