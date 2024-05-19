@@ -19,6 +19,7 @@ router.get('/', async (req: Request, res: Response) => {
     const {data, error, status} = await supabase
         .from('roles')
         .select(selectRoles)
+        .order('priority', { ascending: true })
     res.status(status);
     if (error) {
       res.send(error);

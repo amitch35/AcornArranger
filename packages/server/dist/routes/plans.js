@@ -63,12 +63,13 @@ const selectPlans = `
       appointment_id,
       sent_to_rc,
       appointment_info:rc_appointments (
+        appointment_id,
         arrival_time, 
         service_time:departure_time, 
         next_arrival_time, 
         turn_around, 
         cancelled_date,
-        property:rc_properties (
+        property_info:rc_properties (
           properties_id,
           property_name
         ),
@@ -84,7 +85,8 @@ const selectPlans = `
     ),
     staff:plan_staff (
       user_id:staff_id,
-      staff_info:rc_staff ( 
+      staff_info:rc_staff (
+        user_id, 
         name 
       )
     )

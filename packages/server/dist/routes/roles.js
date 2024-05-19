@@ -64,7 +64,7 @@ const selectRoles = `
     can_clean
   `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("roles").select(selectRoles);
+  const { data, error, status } = yield supabase.from("roles").select(selectRoles).order("priority", { ascending: true });
   res.status(status);
   if (error) {
     res.send(error);

@@ -9,17 +9,17 @@ export default function update(
   user: Auth.User
 ) {
   switch (message[0]) {
-    case "property/save":
+    case "properties/save":
         saveProperty(message[1], user).then((property) =>
         apply((model) => ({ ...model, property }))
       );
       break;
-    case "property/select":
+    case "properties/select":
       selectProperty(message[1], user).then((property) =>
         apply((model) => ({ ...model, property }))
       );
       break;
-    case "role/select":
+    case "roles/select":
         selectRole(message[1], user).then(
         (role: Role | undefined) =>
           apply((model) => ({ ...model, role }))

@@ -96,9 +96,16 @@ export class SidebarElement extends LitElement {
                 <li>
                     <a href="#">
                         <i class='bx bx-male'></i>
-                        <span class="nav-item">Employee Roles</span>
+                        <span class="nav-item">Staff</span>
                     </a>
-                    <span class="tooltip">Employee Roles</span>
+                    <span class="tooltip">Staff</span>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-hard-hat'></i>
+                        <span class="nav-item">Staff Roles</span>
+                    </a>
+                    <span class="tooltip">Staff Roles</span>
                 </li>
             </ul>
             <ul class="bottom">

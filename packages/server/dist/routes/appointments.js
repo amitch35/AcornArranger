@@ -62,13 +62,14 @@ const selectAppointments = `
     next_arrival_time, 
     turn_around, 
     cancelled_date,
-    property:rc_properties (
+    property_info:rc_properties (
       properties_id,
       property_name
     ),
     staff:appointments_staff (
       user_id:staff_id,
       staff_info:rc_staff ( 
+        user_id,
         name 
       )
     ),
