@@ -88,7 +88,12 @@ const selectStaffFull = `
     )
   `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_staff").select(selectStaffBasic).order("status_id", { ascending: true }).order("name", { ascending: true });
+  var filter_status_ids = [1, 2];
+  if (req.query.filter_status_id) {
+    const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
+    filter_status_ids = filterStatusIdsStringArray.map((id) => Number(id)).filter((id) => !isNaN(id));
+  }
+  const { data, error, status } = yield supabase.from("rc_staff").select(selectStaffBasic).in("status_id", filter_status_ids).order("status_id", { ascending: true }).order("name", { ascending: true });
   res.status(status);
   if (error) {
     res.send(error);

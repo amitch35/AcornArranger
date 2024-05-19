@@ -12,4 +12,4 @@ export type Msg =
   | ["plans/select", { plan_id: number; }]
   | ["plans/", { from_plan_date: string; to_plan_date: string; per_page?: number; page?: number; }]
   | ["staff/select", { user_id: number; }]
-  | ["staff/", { }];
+  | ["staff/", { filter_status_ids?: Array<number> }];

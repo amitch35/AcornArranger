@@ -28,7 +28,7 @@ router.get('/', async (req: Request, res: Response) => {
   const {data, error, status} = await supabase
     .from('rc_properties')
     .select(selectProperties)
-    .order('status', { ascending: true })
+    .order('status_id', { ascending: true })
     .order('property_name', { ascending: true })
   res.status(status);
   if (error) {

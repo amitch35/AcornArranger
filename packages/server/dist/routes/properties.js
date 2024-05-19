@@ -73,7 +73,7 @@ status:property_status_key (
 )
 `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
-  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties);
+  const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties).order("status_id", { ascending: true }).order("property_name", { ascending: true });
   res.status(status);
   if (error) {
     res.send(error);

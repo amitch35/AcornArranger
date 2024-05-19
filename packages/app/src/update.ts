@@ -1,5 +1,5 @@
 import { Auth, Update } from "@calpoly/mustang";
-import { Property, Role } from "server/models";
+import { Property, Role, Staff } from "server/models";
 import { Msg } from "./messages";
 import { Model } from "./model";
 
@@ -23,6 +23,12 @@ export default function update(
         selectRole(message[1], user).then(
         (role: Role | undefined) =>
           apply((model) => ({ ...model, role }))
+      );
+      break;
+    case "staff/":
+        selectStaff(message[1], user).then(
+        (staff: Array<Staff> | undefined) =>
+          apply((model) => ({ ...model, staff }))
       );
       break;
     default:
@@ -78,22 +84,52 @@ function selectProperty(
 }
 
 function selectRole(
-    msg: { role_id: number },
-    user: Auth.User
-  ) {
-    return fetch(`/api/roles/${msg.role_id}`, {
-      headers: Auth.headers(user)
+  msg: { role_id: number },
+  user: Auth.User
+) {
+  return fetch(`/api/roles/${msg.role_id}`, {
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      return undefined;
     })
-      .then((response: Response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        return undefined;
-      })
-      .then((json: unknown) => {
-        if (json) {
-          console.log("Role:", json);
-          return json as Role;
-        }
-      });
+    .then((json: unknown) => {
+      if (json) {
+        console.log("Role:", json);
+        return json as Role;
+      }
+    });
+}
+
+function selectStaff(
+  msg: { filter_status_ids?: Array<number> },
+  user: Auth.User
+) {
+  // Base URL
+  let url = `/api/staff`;
+
+  // Add query parameters if filter_status_ids is defined and not empty
+  if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
+    const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
+    url += `?${queryParams}`;
   }
+
+  return fetch(url, {
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        console.log("Staff:", json);
+        return json as Array<Staff>;
+      }
+    });
+}

@@ -33,7 +33,7 @@ export class SidebarElement extends LitElement {
                     return response.json();
                 })
                 .then((json) => {
-                    if (json.user_metadata.display_name) {
+                    if (json.user_metadata.display_name !== undefined) {
                         this.display_name = json.user_metadata.display_name;
                     } else {
                         this.display_name = '';

@@ -4,6 +4,7 @@ import { Model, init } from "./model";
 import update from "./update";
 import { SidebarElement } from "./components/side-bar";
 import { LoginFormElement } from "./components/login-form";
+import { StaffViewElement } from "./views/staff-view";
 
 define({
   "mu-auth": Auth.Provider,
@@ -17,7 +18,8 @@ define({
   },
   "side-bar": SidebarElement,
   "login-form": LoginFormElement,
-  "restful-form": Rest.FormElement 
+  "restful-form": Rest.FormElement,
+  "staff-view": StaffViewElement
 });
 
 // document.body.addEventListener(
