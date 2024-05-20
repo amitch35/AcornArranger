@@ -161,7 +161,7 @@ router.post("/:plan_id/appointment/:appointment_id", (req, res) => __async(void 
   const { data, error, status } = yield supabase.rpc(
     "plan_add_appointment",
     {
-      appointment_to_add: req.params.user_id,
+      appointment_to_add: req.params.appointment_id,
       target_plan: req.params.plan_id
     }
   );
@@ -176,7 +176,7 @@ router.delete("/:plan_id/appointment/:appointment_id", (req, res) => __async(voi
   const { data, error, status } = yield supabase.rpc(
     "plan_remove_appointment",
     {
-      appointment_to_remove: req.params.user_id,
+      appointment_to_remove: req.params.appointment_id,
       target_plan: req.params.plan_id
     }
   );
@@ -214,6 +214,20 @@ router.post("/send/:plan_date", (req, res) => __async(void 0, null, function* ()
     "send_rc_schedule_plans",
     {
       schedule_date: req.params.plan_date
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
+router.post("/add/:plan_date", (req, res) => __async(void 0, null, function* () {
+  const { data, error, status } = yield supabase.rpc(
+    "plan_create_new",
+    {
+      target_plan_date: req.params.plan_date
     }
   );
   res.status(status);

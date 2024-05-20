@@ -1,5 +1,5 @@
 import { Auth, Update } from "@calpoly/mustang";
-import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions } from "server/models";
+import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions, Service } from "server/models";
 import { Msg } from "./messages";
 import { Model } from "./model";
 
@@ -100,6 +100,12 @@ export default function update(
         apply((model) => ({ ...model, plans }))
       );
       break;
+    case "plans/add":
+      addPlan(message[1], user).then(
+      (plans: Array<Plan> | undefined) =>
+        apply((model) => ({ ...model, plans }))
+      );
+      break;
     case "staff/select":
       selectStaffMember(message[1], user).then(
       (staff_member: Staff | undefined) =>
@@ -110,6 +116,11 @@ export default function update(
       selectStaff(message[1], user).then(
         (staff: Array<Staff> | undefined) =>
           apply((model) => ({ ...model, staff }))
+      );
+      break;
+    case "services/":
+      selectServices(user).then((services) =>
+        apply((model) => ({ ...model, services }))
       );
       break;
     default:
@@ -364,6 +375,13 @@ function selectPlans(
     });
 }
 
+interface ErrorResponse {
+  code?: string;
+  details?: string;
+  hint?: string;
+  message?: string;
+}
+
 function addPlanStaff(
   msg: { plan_id: number; user_id: number; },
   user: Auth.User
@@ -373,8 +391,17 @@ function addPlanStaff(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlan(msg, user);
-      return undefined;
+      if (response.status === 204) return selectPlan(msg, user);
+      else if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details && (error_json.details === 'REPEATED_ACTION' || error_json.details === 'IMMUTABLE')) {
+          return selectPlan(msg, user);
+        } else return undefined;
+      }
     });
 }
 
@@ -387,7 +414,7 @@ function removePlanStaff(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlan(msg, user);
+      if (response.status === 204) return selectPlan(msg, user);
       return undefined;
     });
 }
@@ -401,8 +428,17 @@ function addPlanAppointment(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlan(msg, user);
-      return undefined;
+      if (response.status === 204) return selectPlan(msg, user);
+      else if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details && (error_json.details === 'REPEATED_ACTION' || error_json.details === 'IMMUTABLE')) {
+          return selectPlan(msg, user);
+        } else return undefined;
+      }
     });
 }
 
@@ -415,7 +451,7 @@ function removePlanAppointment(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlan(msg, user);
+      if (response.status === 204) return selectPlan(msg, user);
       return undefined;
     });
 }
@@ -433,7 +469,7 @@ function buildPlan(
     body: JSON.stringify(msg.build_options)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlans({ 
+      if (response.status === 204) return selectPlans({ 
         from_plan_date: msg.plan_date, 
         to_plan_date: msg.plan_date }, 
         user );
@@ -446,6 +482,23 @@ function sendPlan(
   user: Auth.User
 ) {
   return fetch(`/api/plans/send/${msg.plan_date}`, {
+    method: "POST",
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 204) return selectPlans({ 
+        from_plan_date: msg.plan_date, 
+        to_plan_date: msg.plan_date }, 
+        user );
+      return undefined;
+    });
+}
+
+function addPlan(
+  msg: { plan_date: string; },
+  user: Auth.User
+) {
+  return fetch(`/api/plans/add/${msg.plan_date}`, {
     method: "POST",
     headers: Auth.headers(user)
   })
@@ -505,6 +558,26 @@ function selectStaff(
       if (json) {
         console.log("Staff:", json);
         return json as Array<Staff>;
+      }
+    });
+}
+
+function selectServices(
+  user: Auth.User
+) {
+  return fetch(`/api/services`, {
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        console.log("Services:", json);
+        return json as Array<Service>;
       }
     });
 }

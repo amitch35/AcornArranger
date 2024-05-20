@@ -418,3 +418,6 @@ Input:
 
 ### 6.8 Send Plan to ResortCleaning - `/plans/send/{plan_date}` - POST
 Sends all valid plans for the given day to ResortCleaning to be assigned to staff
+
+### 6.9 Create new Plan for day - `/plans/add/{plan_date}` - POST
+Add a new plan empty, valid plan to the given day

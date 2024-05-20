@@ -17,5 +17,7 @@ export type Msg =
   | ["plans/appointment/remove", { plan_id: number; appointment_id: number; }]
   | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; }]
   | ["plans/send", { plan_date: string; }]
+  | ["plans/add", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]
-  | ["staff/", { filter_status_ids?: Array<number> }]; // available_staff: Array<number>; office_location?: string; services?: Array<number>; omissions?: Array<number>; routing_type?: number; cleaning_window?: number; max_hours?: number; target_staff_count?: number;
+  | ["staff/", { filter_status_ids?: Array<number> }]
+  | ["services/", { }];

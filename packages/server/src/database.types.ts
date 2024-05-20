@@ -495,6 +495,24 @@ export type Database = {
         }
         Relationships: []
       }
+      role_permissions: {
+        Row: {
+          id: number
+          permission: Database["public"]["Enums"]["app_permission"]
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          id?: number
+          permission: Database["public"]["Enums"]["app_permission"]
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          id?: number
+          permission?: Database["public"]["Enums"]["app_permission"]
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
       roles: {
         Row: {
           can_clean: boolean
@@ -546,30 +564,6 @@ export type Database = {
           plan_date?: string | null
           team?: number | null
           valid?: boolean
-        }
-        Relationships: []
-      }
-      server_log: {
-        Row: {
-          created_at: string
-          function: string | null
-          id: number
-          message: string | null
-          status: string | null
-        }
-        Insert: {
-          created_at?: string
-          function?: string | null
-          id?: number
-          message?: string | null
-          status?: string | null
-        }
-        Update: {
-          created_at?: string
-          function?: string | null
-          id?: number
-          message?: string | null
-          status?: string | null
         }
         Relationships: []
       }
@@ -726,6 +720,58 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          id: number
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: number
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: number
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          display_name: string | null
+          email: string | null
+          id: string
+        }
+        Insert: {
+          display_name?: string | null
+          email?: string | null
+          id: string
+        }
+        Update: {
+          display_name?: string | null
+          email?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       appointment_details: {
@@ -822,6 +868,12 @@ export type Database = {
       }
     }
     Functions: {
+      authorize: {
+        Args: {
+          requested_permission: Database["public"]["Enums"]["app_permission"]
+        }
+        Returns: boolean
+      }
       build_schedule_plan: {
         Args: {
           available_staff: number[]
@@ -835,6 +887,12 @@ export type Database = {
           target_staff_count?: number
         }
         Returns: undefined
+      }
+      custom_access_token_hook: {
+        Args: {
+          event: Json
+        }
+        Returns: Json
       }
       get_geom_and_placeid_from_address: {
         Args: {
@@ -973,7 +1031,7 @@ export type Database = {
       }
       update_employee_roles: {
         Args: Record<PropertyKey, never>
-        Returns: Record<string, unknown>
+        Returns: undefined
       }
       update_properties: {
         Args: Record<PropertyKey, never>
@@ -981,11 +1039,39 @@ export type Database = {
       }
       update_staff: {
         Args: Record<PropertyKey, never>
-        Returns: Record<string, unknown>
+        Returns: undefined
       }
     }
     Enums: {
-      [_ in never]: never
+      app_permission:
+        | "rc_addresses.select"
+        | "rc_appointments.select"
+        | "rc_properties.select"
+        | "rc_properties.update"
+        | "rc_staff.select"
+        | "rc_tokens.select"
+        | "roles.select"
+        | "roles.update"
+        | "schedule_plans.select"
+        | "schedule_plans.update"
+        | "schedule_plans.insert"
+        | "plan_appointments.select"
+        | "plan_appointments.update"
+        | "plan_appointments.insert"
+        | "plan_staff.select"
+        | "plan_staff.update"
+        | "plan_staff.insert"
+        | "service_key.select"
+        | "appointment_status_key.select"
+        | "property_status_key.select"
+        | "staff_status_key.select"
+        | "appointments_staff.select"
+        | "error_log.select"
+        | "error_log.insert"
+        | "http_response.select"
+        | "http_response.insert"
+        | "travel_times.select"
+      app_role: "authenticated" | "authorized_user"
     }
     CompositeTypes: {
       [_ in never]: never

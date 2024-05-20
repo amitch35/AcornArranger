@@ -1,5 +1,6 @@
 import { Property } from "./property";
 import { Staff } from "./staff"
+import { Service } from "./service";
 
 export interface Appointment {
     appointment_id: number;
@@ -22,9 +23,4 @@ interface AppointmentStaff {
 interface AppointmentStatus {
     status_id: number;
     status: string;
-}
-
-interface Service {
-    service_id: number;
-    service_name: string;
 }
