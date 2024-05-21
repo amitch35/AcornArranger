@@ -1,17 +1,17 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
 import { property } from "lit/decorators.js";
-import { Staff } from "server/models";
+import { Property } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 
-export class StaffViewElement extends View<Model, Msg> {
+export class PropertiesViewElement extends View<Model, Msg> {
 
     @property()
-    get staff(): Array<Staff> | undefined {
-        return this.model.staff;
+    get properties(): Array<Property> | undefined {
+        return this.model.properties;
     }
 
     constructor() {
@@ -21,61 +21,67 @@ export class StaffViewElement extends View<Model, Msg> {
     connectedCallback() {
         super.connectedCallback();
         this.dispatchMessage([
-            "staff/",
+            "properties/",
             { }
           ]);
     }
 
     render(): TemplateResult {
-    const renderStaff = (staff: Staff) => {
+    const renderProperty = (property: Property) => {
         return html`
             <tr>
                 <td>
                     <span>
-                    ${staff.user_id}
+                    ${property.properties_id}
                     </span>
                 </td>
                 <td>
                     <span>
-                    ${staff.name}
+                    ${property.property_name}
                     </span>
                 </td>
                 <td>
                     <span>
-                    ${staff.role?.title}
+                    ${property.estimated_cleaning_mins}
                     </span>
                 </td>
                 <td>
                     <span>
-                    ${staff.status?.status}
+                    ${property.double_unit}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                    ${property.status?.status}
                     </span>
                 </td>
             </tr>
         `;
         };
 
-    const staff_list = this.staff || [];
+    const properties_list = this.properties || [];
 
     return html`
         <div class="page">
             <header>
                 <h1>
-                    Staff
+                    Properties
                 </h1>
             </header>
             <main>
                 <table>
                     <thead>
                         <tr>
-                            <th>Staff ID</th>
+                            <th>Propery ID</th>
                             <th>Name</th>
-                            <th>Role</th>
+                            <th>Estimated Cleaning Time</th>
+                            <th>Double Unit References</th>
                             <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                    ${staff_list.map((s) => {
-                        return renderStaff(s);
+                    ${properties_list.map((p) => {
+                        return renderProperty(p);
                     })}
                     </tbody>
                 </table>

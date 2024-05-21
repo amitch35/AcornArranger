@@ -7,19 +7,33 @@ import { SidebarElement } from "./components/side-bar";
 import { LoginFormElement } from "./components/login-form";
 import { LandingViewElement } from "./views/landing-view";
 import { StaffViewElement } from "./views/staff-view";
-import { AppointmentViewElement } from "./views/appointment-view";
+import { AppointmentsViewElement } from "./views/appointments-view";
+import { RolesViewElement } from "./views/roles-view";
+import { PropertiesViewElement } from "./views/properties-view";
 
 const routes = [
   {
     path: "/app/appointments",
     view: () => html`
-      <appointment-view></appointment-view>
+      <appointments-view></appointments-view>
     `
   },
   {
     path: "/app/staff",
     view: () => html`
       <staff-view></staff-view>
+    `
+  },
+  {
+    path: "/app/roles",
+    view: () => html`
+      <roles-view></roles-view>
+    `
+  },
+  {
+    path: "/app/properties",
+    view: () => html`
+      <properties-view></properties-view>
     `
   },
   {
@@ -55,5 +69,7 @@ define({
   "restful-form": Rest.FormElement,
   "landing-view": LandingViewElement,
   "staff-view": StaffViewElement,
-  "appointment-view": AppointmentViewElement
+  "appointments-view": AppointmentsViewElement,
+  "roles-view": RolesViewElement,
+  "properties-view": PropertiesViewElement
 });

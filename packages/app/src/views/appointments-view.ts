@@ -7,7 +7,7 @@ import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 
-export class AppointmentViewElement extends View<Model, Msg> {
+export class AppointmentsViewElement extends View<Model, Msg> {
 
     @property()
     get appointments(): Array<Appointment> | undefined {
@@ -127,24 +127,6 @@ export class AppointmentViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            .page {
-                --page-grid-columns: 8;
-                display: grid;
-                grid-template-columns: [start] repeat(var(--page-grid-columns), 1fr) [end];
-                transition: all 0.5s ease;
-            }
-
-            .page header:first-of-type {
-                grid-template-columns: subgrid;
-                grid-column: start / end;
-            }
-
-            .page main:first-of-type {
-                grid-template-columns: subgrid;
-                grid-column-start: 2;
-                grid-column-end: span 6;
-            }
-
             div.page main {
                 background-color: var(--background-color-accent);
                 border-radius: var(--border-size-radius);

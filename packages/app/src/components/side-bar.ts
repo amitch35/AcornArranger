@@ -80,14 +80,14 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">View Appointments</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/app/schedule">
                         <i class='bx bxs-book-bookmark'></i>
                         <span class="nav-item">Schedule</span>
                     </a>
                     <span class="tooltip">Schedule</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/app/properties">
                         <i class='bx bxs-edit-location' ></i>
                         <span class="nav-item">Properties</span>
                     </a>
@@ -101,7 +101,7 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">Staff</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/app/roles">
                         <i class='bx bxs-hard-hat'></i>
                         <span class="nav-item">Staff Roles</span>
                     </a>
