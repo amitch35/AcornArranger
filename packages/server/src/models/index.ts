@@ -3,4 +3,4 @@ export * from "./role";
 export * from "./appointment";
 export * from "./plan";
 export * from "./staff";
-export * from "./service"
+export * from "./service";

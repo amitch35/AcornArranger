@@ -22,11 +22,13 @@
         </script>
     </head>
     <body class="dark-mode">
+        <mu-history provides="acorn:history">
         <mu-auth provides="acorn:auth" redirect="../login.html">
         <mu-store provides="acorn:model">
             <side-bar class="dark-mode"></side-bar>
-            <staff-view></staff-view>
+            <mu-switch></mu-switch>
         </mu-store>
         </mu-auth>
+        </mu-history>
     </body>
 </html>

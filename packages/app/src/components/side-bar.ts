@@ -9,7 +9,7 @@ export class SidebarElement extends LitElement {
 
     displayNameTemplate() {
         if (this.display_name === 'Status: 401') {
-            return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);">login</a></span>`;
+            return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>`;
         } else if (this.display_name === '') {
             return html`<span>Hello, user</span>`;
         } else {
@@ -73,7 +73,7 @@ export class SidebarElement extends LitElement {
             </div>
             <ul class="menu-items">
                 <li>
-                    <a href="#">
+                    <a href="/app/appointments">
                         <i class='bx bx-calendar-alt'></i>
                         <span class="nav-item">View Appointments</span>
                     </a>
@@ -94,7 +94,7 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">Properties</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="/app/staff">
                         <i class='bx bx-male'></i>
                         <span class="nav-item">Staff</span>
                     </a>

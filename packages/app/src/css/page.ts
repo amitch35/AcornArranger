@@ -1,13 +1,6 @@
-body {
-    color: var(--text-color-body);
-    background-color: var(--background-color);
-    font-family: var(--text-font-family-body);
-    font-weight: var(--text-font-weight-body);
-    font-optical-sizing: auto;
-    font-style: normal;
-    font-size: var(--text-font-size-body);
-}
+import { css } from "lit"
 
+export default css`
 .page {
     --page-grid-columns: 8;
     display: grid;
@@ -38,37 +31,21 @@ body {
     grid-column-end: span 4;
 }
 
-body .dark-mode-only {
+.dark-mode-only {
     display: none;
 }
 
-body.dark-mode .dark-mode-only {
+.dark-mode .dark-mode-only {
     display: contents;
 }
 
-body .light-mode-only {
+.light-mode-only {
     display: contents;
 }
 
-body.dark-mode .light-mode-only {
+.dark-mode .light-mode-only {
     display: none;
 } 
-
-side-bar:not(.active) + * {
-    display: block;
-    position: relative;
-    left: var(--sidebar-width-collapsed);
-    width: calc(100% - var(--sidebar-width-collapsed));
-    transition: all var(--transition-duration) ease;
-}
-
-side-bar.active + * {
-    display: block;
-    position: relative;
-    left: var(--sidebar-width-active);
-    width: calc(100% - var(--sidebar-width-active));
-    transition: all var(--transition-duration) ease;
-}
 
 header {
     color: var(--text-color-header);
@@ -117,6 +94,56 @@ h2, h3, h4, h5, h6 {
 
 a {
     color: var(--text-color-link);
+}
+
+table {
+    /* margin: var(--spacing-size-medium); */
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid;
+    border-color: var(--accent-color);
+    border-radius: var(--border-size-radius);
+}
+
+th, td {
+    /* border: 1px solid rgb(160 160 160); */
+    border: 1px solid;
+    border-color: var(--accent-color);
+    padding: 4px 16px;
+}
+
+th {
+    font-weight: var(--text-font-weight-bold);
+}
+
+dl {
+    margin-left: var(--spacing-size-medium);
+}
+
+dt {
+    margin-bottom: var(--spacing-size-xsmall);
+}
+
+dd {
+    margin-bottom: var(--spacing-size-medium);
+    margin-left: var(--spacing-size-small);
+}
+
+button {
+    color: currentColor;
+    border-color: currentColor;
+    border-style: solid;
+    border-radius: var(--border-size-radius);
+    background-color: inherit;
+    height: fit-content;
+}
+
+button:hover {
+    background-color: var(--background-color-accent); 
+}
+
+button * {
+    padding: 0;
 }
 
 strong {
@@ -170,3 +197,4 @@ em {
     font-weight: 300;
     font-style: normal;
 } 
+`

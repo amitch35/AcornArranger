@@ -20,11 +20,13 @@ __reExport(models_exports, require("./role"), module.exports);
 __reExport(models_exports, require("./appointment"), module.exports);
 __reExport(models_exports, require("./plan"), module.exports);
 __reExport(models_exports, require("./staff"), module.exports);
+__reExport(models_exports, require("./service"), module.exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ...require("./property"),
   ...require("./role"),
   ...require("./appointment"),
   ...require("./plan"),
-  ...require("./staff")
+  ...require("./staff"),
+  ...require("./service")
 });

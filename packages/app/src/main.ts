@@ -1,10 +1,38 @@
-import { Auth, Store, define, Rest } from "@calpoly/mustang";
+import { Auth, History, Store, Switch, define, Rest } from "@calpoly/mustang";
+import { html } from "lit";
 import { Msg } from "./messages";
 import { Model, init } from "./model";
 import update from "./update";
 import { SidebarElement } from "./components/side-bar";
 import { LoginFormElement } from "./components/login-form";
+import { LandingViewElement } from "./views/landing-view";
 import { StaffViewElement } from "./views/staff-view";
+import { AppointmentViewElement } from "./views/appointment-view";
+
+const routes = [
+  {
+    path: "/app/appointments",
+    view: () => html`
+      <appointment-view></appointment-view>
+    `
+  },
+  {
+    path: "/app/staff",
+    view: () => html`
+      <staff-view></staff-view>
+    `
+  },
+  {
+    path: "/app",
+    view: () => html`
+      <landing-view></landing-view>
+    `
+  },
+  {
+    path: "/",
+    redirect: "/app"
+  }
+];
 
 define({
   "mu-auth": Auth.Provider,
@@ -16,16 +44,16 @@ define({
       super(update, init, "acorn:auth");
     }
   },
+  "mu-history": History.Provider,
+  "mu-switch": class AppSwitch extends Switch.Element {
+    constructor() {
+      super(routes, "acorn:history");
+    }
+  },
   "side-bar": SidebarElement,
   "login-form": LoginFormElement,
   "restful-form": Rest.FormElement,
-  "staff-view": StaffViewElement
+  "landing-view": LandingViewElement,
+  "staff-view": StaffViewElement,
+  "appointment-view": AppointmentViewElement
 });
-
-// document.body.addEventListener(
-//     "dark-mode:toggle",
-//     (event) => {
-//         const page = event.currentTarget;
-//         page.classList.toggle("dark-mode");
-//     }
-// );
