@@ -32,12 +32,12 @@ export class RolesViewElement extends View<Model, Msg> {
             <tr>
                 <td>
                     <span>
-                    ${role.title}
+                    ${role.priority}
                     </span>
                 </td>
                 <td>
                     <span>
-                    ${role.priority}
+                    ${role.title}
                     </span>
                 </td>
                 <td>
@@ -67,8 +67,8 @@ export class RolesViewElement extends View<Model, Msg> {
                 <table>
                     <thead>
                         <tr>
-                            <th>Role</th>
                             <th>Priority</th>
+                            <th>Role</th>
                             <th>Can Lead</th>
                             <th>Can Clean</th>
                         </tr>
@@ -88,10 +88,7 @@ export class RolesViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            div.page main {
-                background-color: var(--background-color-accent);
-                border-radius: var(--border-size-radius);
-            }
+            
         `
     ];
 }

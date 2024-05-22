@@ -5,7 +5,6 @@ import { Model, init } from "./model";
 import update from "./update";
 import { SidebarElement } from "./components/side-bar";
 import { LoginFormElement } from "./components/login-form";
-import { LandingViewElement } from "./views/landing-view";
 import { StaffViewElement } from "./views/staff-view";
 import { AppointmentsViewElement } from "./views/appointments-view";
 import { RolesViewElement } from "./views/roles-view";
@@ -38,9 +37,7 @@ const routes = [
   },
   {
     path: "/app",
-    view: () => html`
-      <landing-view></landing-view>
-    `
+    redirect: "/app/appointments"
   },
   {
     path: "/",
@@ -67,7 +64,6 @@ define({
   "side-bar": SidebarElement,
   "login-form": LoginFormElement,
   "restful-form": Rest.FormElement,
-  "landing-view": LandingViewElement,
   "staff-view": StaffViewElement,
   "appointments-view": AppointmentsViewElement,
   "roles-view": RolesViewElement,

@@ -27,6 +27,14 @@ export class PropertiesViewElement extends View<Model, Msg> {
     }
 
     render(): TemplateResult {
+    const renderDoubleUnit = (unit_ref: number) => {
+        return html`
+            <li>
+                <span>${unit_ref}</span>
+            </li>
+        `;
+        };
+
     const renderProperty = (property: Property) => {
         return html`
             <tr>
@@ -46,9 +54,9 @@ export class PropertiesViewElement extends View<Model, Msg> {
                     </span>
                 </td>
                 <td>
-                    <span>
-                    ${property.double_unit}
-                    </span>
+                    <ul>
+                    ${property.double_unit?.map((d) => {return renderDoubleUnit(d)})}
+                    </ul>
                 </td>
                 <td>
                     <span>
@@ -94,9 +102,17 @@ export class PropertiesViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            div.page main {
-                background-color: var(--background-color-accent);
+           ul {
+                list-style-type: none;
+                display: flex;
+            }
+
+            ul li {
+                width: max-content;
+                background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
+                margin-right: var(--spacing-size-xsmall);
+                padding: 0 var(--spacing-size-small);
             }
         `
     ];

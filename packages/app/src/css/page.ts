@@ -1,34 +1,18 @@
 import { css } from "lit"
 
 export default css`
-.page {
-    --page-grid-columns: 8;
-    display: grid;
-    grid-template-columns: [start] repeat(var(--page-grid-columns), 1fr) [end];
-    transition: all 0.5s ease;
+.page main {
+    padding: var(--spacing-size-large) var(--spacing-size-xxlarge);
 }
 
 .page header:first-of-type {
-    grid-template-columns: subgrid;
-    grid-column: start / end;
+    height: var(--page-header-height);
 }
 
 .page main:first-of-type {
-    grid-template-columns: subgrid;
-    grid-column-start: 2;
-    grid-column-end: span 6;
-}
-
-.page > .page-split-left {
-    grid-template-columns: subgrid;
-    grid-column-start: start;
-    grid-column-end: span 4;
-}
-
-.page > .page-split-right {
-    grid-template-columns: subgrid;
-    grid-column-start: 5;
-    grid-column-end: span 4;
+    border-radius: var(--border-size-radius);
+    height: calc(100vh - var(--page-header-height));
+    overflow: scroll;
 }
 
 .dark-mode-only {
@@ -54,18 +38,18 @@ header {
     justify-content: space-around;
     background-color: var(--background-color-header);
     line-height: 1;
-    padding: var(--spacing-size-medium);
+    padding: var(--spacing-size-small);
 }
 
 header img {
     width: auto;
     height: auto;
-    max-width: calc(var(--text-font-size-xxxlarge) + 1rem);
-    max-height: calc(var(--text-font-size-xxxlarge) + 1rem);
+    max-width: calc(var(--text-font-size-xxlarge) + 1rem);
+    max-height: calc(var(--text-font-size-xxlarge) + 1rem);
 }
 
 h1 { 
-    font-size: var(--text-font-size-xxxlarge);
+    font-size: var(--text-font-size-xxlarge);
     font-family: var(--text-font-family-display);
     font-optical-sizing: auto;
     font-weight: 400;
@@ -100,21 +84,23 @@ table {
     /* margin: var(--spacing-size-medium); */
     width: 100%;
     border-collapse: collapse;
-    border: 2px solid;
-    border-color: var(--accent-color);
+    background-color: var(--background-color-accent);
+    /* border: 2px solid; 
+    border-color: var(--accent-color); */
     border-radius: var(--border-size-radius);
 }
 
 th, td {
-    /* border: 1px solid rgb(160 160 160); */
-    border: 1px solid;
-    border-color: var(--accent-color);
+    border: 1px solid var(--background-color);
+    /* border: 1px solid; */
+    /* border-color: var(--accent-color); */
     padding: 4px 16px;
 }
 
 th {
     font-weight: var(--text-font-weight-bold);
 }
+
 
 dl {
     margin-left: var(--spacing-size-medium);

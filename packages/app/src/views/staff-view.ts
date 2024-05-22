@@ -88,10 +88,7 @@ export class StaffViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            div.page main {
-                background-color: var(--background-color-accent);
-                border-radius: var(--border-size-radius);
-            }
+            
         `
     ];
 }

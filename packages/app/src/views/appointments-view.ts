@@ -60,7 +60,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 </td>
                 <td>
                     <ul>
-                        ${app.staff?.map((s) => { renderStaff(s.staff_info) })}
+                        ${app.staff?.map((s) => { return renderStaff(s.staff_info) })}
                     </ul>
                 </td>
                 <td>
@@ -100,6 +100,18 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                             <input name="to_service_date" autocomplete="off" value="2024-05-20" type="date" />
                         </label>
                     </li>
+                    <li>
+                        <label>
+                            <span>Show:</span>
+                            <input name="per_page" autocomplete="off" value="50" type="number" />
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <span>Page:</span>
+                            <input name="page" autocomplete="off" value="1" type="number" />
+                        </label>
+                    </li>
                 </menu>
                 <table>
                     <thead>
@@ -127,17 +139,28 @@ export class AppointmentsViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            div.page main {
-                background-color: var(--background-color-accent);
-                border-radius: var(--border-size-radius);
-            }
 
             menu {
+                background-color: var(--background-color-accent);
+                border-radius: var(--border-size-radius);
                 list-style-type: none;
                 display: flex;
-                padding: 0;
-                margin-bottom: 0;
+                justify-content: space-evenly;
+                padding: var(--spacing-size-small);
+                margin-bottom: var(--spacing-size-medium);
                 gap: var(--spacing-size-medium);
+            }
+
+            ul {
+                list-style-type: none;
+            }
+
+            ul li {
+                width: max-content;
+                background-color: var(--background-color);
+                border-radius: var(--border-size-radius);
+                margin-bottom: var(--spacing-size-xsmall);
+                padding: 0 var(--spacing-size-small);
             }
         `
     ];

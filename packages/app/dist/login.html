@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Login | AcornArranger</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/styles/reset.css" />
+        <link rel="stylesheet" href="/styles/tokens.css" />
+        <link rel="stylesheet" href="/styles/page.css" />
+        <link rel="stylesheet" href="/styles/login.css" />
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+      <script type="module" crossorigin src="/assets/login-BnUk-dPH.js"></script>
+      <link rel="modulepreload" crossorigin href="/assets/main-yGYlhSV9.js">
+    </head>
+    <body class="dark-mode">
+        <mu-auth>
+        <article class="page">
+            <a href="/" class="home-btn">
+                <i class='bx bxs-home'></i>
+                <span>Home</span>
+            </a>
+            <main class="login-card">
+                <div class="logo">
+                    <img src="../images/AcornArranger Logo.png" alt="AcornArranger Logo">
+                </div>
+                <nav class="action-selector">
+                    <button id="login-btn" onclick="relayEvent(event,'action-selector:login',{})">
+                        <i class='bx bx-log-in'></i>
+                        <span>Login</span>
+                    </button>
+                    <button id="signup-btn" onclick="relayEvent(event,'action-selector:signup',{})">
+                        <i class='bx bxs-edit'></i>
+                        <span>Signup</span>
+                    </button>
+                </nav>
+                <div class="forms">
+                    <login-form id="login">
+                        <label>
+                            <span>Email:</span>
+                            <input type="email" name="email" autocomplete="off" placeholder="you@example.com" required="true" />
+                        </label>
+                        <label>
+                            <span>Password:</span>
+                            <input type="password" name="password" placeholder="••••••••" required="true" />
+                        </label>
+                    </login-form>
+                    <restful-form id="signup" new src="/auth/signup">
+                        <label>
+                            <span>First Name:</span>
+                            <input name="first_name" autocomplete="off" placeholder="First Name" />
+                        </label>
+                        <label>
+                            <span>Last Name:</span>
+                            <input name="last_name" autocomplete="off" placeholder="Last Name" />
+                        </label>
+                        <label>
+                            <span>Email:</span>
+                            <input type="email" name="email" autocomplete="off" placeholder="you@example.com" required="true" />
+                        </label>
+                        <label>
+                            <span>Password:</span>
+                            <input type="password" name="password" placeholder="••••••••" required="true" />
+                        </label>
+                    </restful-form>
+                </div>
+            </main>
+            <a href="#" class="dark-mode-btn" id="theme-btn" onclick="relayEvent(event,'dark-mode:toggle',{})" >
+                <i class='bx bxs-sun dark-mode-only'></i>
+                <i class='bx bxs-moon light-mode-only'></i>
+                <span>Theme</span>
+            </a>
+        </article>
+        </mu-auth>
+    </body>
+</html>
