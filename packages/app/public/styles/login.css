@@ -1,5 +1,5 @@
 .page {
-    --page-grid-columns: 8;
+    --page-grid-columns: 7;
     display: grid;
     grid-template-columns: [start] repeat(var(--page-grid-columns), 1fr) [end];
     transition: all 0.5s ease;
@@ -15,20 +15,8 @@
 
 .page main:first-of-type {
     grid-template-columns: subgrid;
-    grid-column-start: 2;
-    grid-column-end: span 6;
-}
-
-.page > .page-split-left {
-    grid-template-columns: subgrid;
-    grid-column-start: start;
-    grid-column-end: span 4;
-}
-
-.page > .page-split-right {
-    grid-template-columns: subgrid;
-    grid-column-start: 5;
-    grid-column-end: span 4;
+    grid-column-start: 3;
+    grid-column-end: span 3;
 }
 
 .dark-mode-btn {
@@ -48,7 +36,6 @@
     flex-direction: column;
     justify-content: space-around;
     align-self: center;
-    grid-column: 3 / span 4;
     background-color: var(--background-color);
     border-radius: var(--border-size-radius);
     box-shadow: 0 0.5rem 0.8rem var(--background-color-dark);

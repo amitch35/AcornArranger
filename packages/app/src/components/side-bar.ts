@@ -309,7 +309,6 @@ export class SidebarElement extends LitElement {
         border-radius: var(--border-size-radius);
         background-color: var(--background-color-accent);
         padding: var(--spacing-size-small) var(--spacing-size-medium);
-        /* z-index: 20; */
         opacity: 0;
         visibility: hidden;
     }
