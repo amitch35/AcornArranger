@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import path from "path";
+import fs from "node:fs/promises";
 import properties from './routes/properties';
 import staff from './routes/staff';
 import roles from './routes/roles';
@@ -50,6 +51,14 @@ app.use('/api/appointments', supabaseMiddleware, appointments);
 app.use('/api/plans', supabaseMiddleware, plans);
 
 app.use('/api/services', supabaseMiddleware, services);
+
+// SPA Routes: /app/...
+app.use("/app", (req: Request, res: Response) => {
+  const indexHtml = path.resolve(staticDir, "index.html");
+  fs.readFile(indexHtml, { encoding: "utf8" }).then((html) =>
+    res.send(html)
+  );
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

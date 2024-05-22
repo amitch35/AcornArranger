@@ -23,6 +23,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 ));
 var import_express = __toESM(require("express"));
 var import_path = __toESM(require("path"));
+var import_promises = __toESM(require("node:fs/promises"));
 var import_properties = __toESM(require("./routes/properties"));
 var import_staff = __toESM(require("./routes/staff"));
 var import_roles = __toESM(require("./routes/roles"));
@@ -59,6 +60,12 @@ app.use("/api/roles", import_auth.supabaseMiddleware, import_roles.default);
 app.use("/api/appointments", import_auth.supabaseMiddleware, import_appointments.default);
 app.use("/api/plans", import_auth.supabaseMiddleware, import_plans.default);
 app.use("/api/services", import_auth.supabaseMiddleware, import_services.default);
+app.use("/app", (req, res) => {
+  const indexHtml = import_path.default.resolve(staticDir, "index.html");
+  import_promises.default.readFile(indexHtml, { encoding: "utf8" }).then(
+    (html) => res.send(html)
+  );
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
