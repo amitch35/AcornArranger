@@ -82,7 +82,8 @@ export class LandingViewElement extends View<Model, Msg> {
             nav {
                 display: flex;
                 align-items: center;
-                justify-content: space-between
+                justify-content: space-between;
+                width: 100%;
             }
 
             h2 {
@@ -103,10 +104,15 @@ export class LandingViewElement extends View<Model, Msg> {
             h2 + a:hover {
                 background-color: var(--background-color-dark);
             }
+            
+            h2 + a i {
+                pointer-events: none;
+            }
 
             h2 +  a span{
                 padding-left: var(--spacing-size-small);
-                font-size: var(--text-font-size-xlarge); 
+                font-size: var(--text-font-size-large); 
+                pointer-events: none;
             }
 
             i.bx {
@@ -118,6 +124,7 @@ export class LandingViewElement extends View<Model, Msg> {
                 border-radius: var(--border-size-radius);
                 margin-bottom: var(--spacing-size-medium);
                 padding: var(--spacing-size-medium);
+                width: 100%;
             }
 
             h4 {

@@ -1,6 +1,6 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { Role } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
@@ -9,9 +9,18 @@ import page from "../css/page";
 
 export class RolesViewElement extends View<Model, Msg> {
 
-    @property()
+    @state()
     get roles(): Array<Role> | undefined {
         return this.model.roles;
+    }
+
+    @state()
+    get showing_total(): number {
+        if (this.roles) {
+            return this.roles.length;
+        } else {
+            return 0;
+        }
     }
 
     constructor() {
@@ -30,7 +39,7 @@ export class RolesViewElement extends View<Model, Msg> {
     const renderRole = (role: Role) => {
         return html`
             <tr>
-                <td>
+                <td class="center">
                     <span>
                     ${role.priority}
                     </span>
@@ -40,12 +49,12 @@ export class RolesViewElement extends View<Model, Msg> {
                     ${role.title}
                     </span>
                 </td>
-                <td>
+                <td class="center">
                     <span>
                     ${role.can_lead_team}
                     </span>
                 </td>
-                <td>
+                <td class="center">
                     <span>
                     ${role.can_clean}
                     </span>
@@ -64,6 +73,9 @@ export class RolesViewElement extends View<Model, Msg> {
                 </h1>
             </header>
             <main>
+                <section class="showing">
+                    <p>Showing: </p><p class="in-bubble">${this.showing_total}</p>
+                </section>
                 <table>
                     <thead>
                         <tr>

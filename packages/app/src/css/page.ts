@@ -1,8 +1,18 @@
 import { css } from "lit"
 
 export default css`
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .page main {
     padding: var(--spacing-size-large) var(--spacing-size-xxlarge);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
 }
 
 .page header:first-of-type {
@@ -39,6 +49,7 @@ header {
     background-color: var(--background-color-header);
     line-height: 1;
     padding: var(--spacing-size-small);
+    width: 100%;
 }
 
 header img {
@@ -80,6 +91,29 @@ a {
     color: var(--text-color-link);
 }
 
+section.showing {
+    display: flex;
+    align-items: baseline;
+    background-color: var(--background-color-accent);
+    border-radius: var(--border-size-radius);
+    padding: var(--spacing-size-small);
+    margin-bottom: var(--spacing-size-medium);
+    width: 100%;
+}
+
+section.showing p {
+    margin-left: var(--spacing-size-small);
+}
+
+.in-bubble {
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    line-height: 1;
+    padding: var(--spacing-size-xsmall);
+    font-size: var(--text-font-size-small);
+    color: var(--text-color-header);
+}
+
 table {
     /* margin: var(--spacing-size-medium); */
     width: 100%;
@@ -92,15 +126,16 @@ table {
 
 th, td {
     border: 1px solid var(--background-color);
-    /* border: 1px solid; */
-    /* border-color: var(--accent-color); */
-    padding: 4px 16px;
+    padding: var(--spacing-size-small) var(--spacing-size-medium);
 }
 
 th {
     font-weight: var(--text-font-weight-bold);
 }
 
+td.center {
+    text-align: center;
+}
 
 dl {
     margin-left: var(--spacing-size-medium);

@@ -1,6 +1,6 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { Appointment, Staff } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
@@ -9,9 +9,18 @@ import page from "../css/page";
 
 export class AppointmentsViewElement extends View<Model, Msg> {
 
-    @property()
+    @state()
     get appointments(): Array<Appointment> | undefined {
         return this.model.appointments;
+    }
+
+    @state()
+    get showing_total(): number {
+        if (this.appointments) {
+            return this.appointments.length;
+        } else {
+            return 0;
+        }
     }
 
     constructor() {
@@ -43,7 +52,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     const renderAppointment = (app: Appointment) => {
         return html`
             <tr>
-                <td>
+                <td class="center">
                     <span>
                     ${app.appointment_id}
                     </span>
@@ -113,6 +122,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                         </label>
                     </li>
                 </menu>
+                <section class="showing">
+                    <p>Showing: </p><p class="in-bubble">${this.showing_total}</p>
+                </section>
                 <table>
                     <thead>
                         <tr>
@@ -149,6 +161,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 padding: var(--spacing-size-small);
                 margin-bottom: var(--spacing-size-medium);
                 gap: var(--spacing-size-medium);
+                width: 100%;
             }
 
             ul {

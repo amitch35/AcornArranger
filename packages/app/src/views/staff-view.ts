@@ -1,6 +1,6 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { Staff } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
@@ -9,9 +9,18 @@ import page from "../css/page";
 
 export class StaffViewElement extends View<Model, Msg> {
 
-    @property()
+    @state()
     get staff(): Array<Staff> | undefined {
         return this.model.staff;
+    }
+
+    @state()
+    get showing_total(): number {
+        if (this.staff) {
+            return this.staff.length;
+        } else {
+            return 0;
+        }
     }
 
     constructor() {
@@ -30,7 +39,7 @@ export class StaffViewElement extends View<Model, Msg> {
     const renderStaff = (staff: Staff) => {
         return html`
             <tr>
-                <td>
+                <td class="center">
                     <span>
                     ${staff.user_id}
                     </span>
@@ -45,7 +54,7 @@ export class StaffViewElement extends View<Model, Msg> {
                     ${staff.role?.title}
                     </span>
                 </td>
-                <td>
+                <td class="center">
                     <span>
                     ${staff.status?.status}
                     </span>
@@ -64,6 +73,9 @@ export class StaffViewElement extends View<Model, Msg> {
                 </h1>
             </header>
             <main>
+                <section class="showing">
+                    <p>Showing: </p><p class="in-bubble">${this.showing_total}</p>
+                </section>
                 <table>
                     <thead>
                         <tr>

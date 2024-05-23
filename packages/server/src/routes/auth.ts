@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { supabaseClient } from "../utils/supabase/client";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { TokenJSON } from "@/models";
 
 dotenv.config({ path: ['.env.local', '.env'] });
 
@@ -93,7 +94,8 @@ export async function supabaseMiddleware (req: Request, res: Response, next: Nex
       jwt.verify(token, TOKEN_SECRET, (error, decoded) => {
         if (error) res.send(error).end()
         else if (decoded) {
-          if (decoded.user_role && decoded.user_role === 'authorized_user') {
+          const token_json = decoded as TokenJSON;
+          if (token_json.user_role && token_json.user_role === 'authorized_user') {
             next();
           } else {
             res.status(403).json({'error': 'User not Authorized, contact administrator for authorization'}).end()

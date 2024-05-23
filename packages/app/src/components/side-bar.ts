@@ -1,6 +1,8 @@
 import { LitElement, css, html } from "lit";
+import { jwtDecode } from "jwt-decode";
 import { Auth, Observer, Events } from "@calpoly/mustang";
 import { property } from "lit/decorators.js";
+import { TokenJSON } from "server/models";
 
 export class SidebarElement extends LitElement {
 
@@ -8,7 +10,7 @@ export class SidebarElement extends LitElement {
     display_name: string = 'Status: 401';
 
     displayNameTemplate() {
-        if (this.display_name === 'Status: 401') {
+        if (this.display_name === 'Status: 401' || this.display_name === 'Status: 403') {
             return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>`;
         } else if (this.display_name === '') {
             return html`<span>Hello, user</span>`;
@@ -22,26 +24,12 @@ export class SidebarElement extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this._authObserver.observe(({ user }) => {
-            if (user) {
-                fetch('/auth/user', {
-                    headers: Auth.headers(user)
-                })
-                .then((response) => {
-                    if (response.status !== 200) {
-                    throw `Status: ${response.status}`;
-                    }
-                    return response.json();
-                })
-                .then((json) => {
-                    if (json && json.user_metadata && json.user_metadata.display_name) {
-                        this.display_name = json.user_metadata.display_name;
-                    } else {
-                        this.display_name = '';
-                    }
-                })
-                .catch((error) =>
-                    this.display_name = `${error}`
-                );
+            const authenticated_user = user as Auth.AuthenticatedUser;
+            if (authenticated_user && authenticated_user.token) {
+                const token = jwtDecode(authenticated_user.token) as TokenJSON;
+                if (token) {
+                    this.display_name = token.user_metadata.display_name || '';
+                }
             }
         });
     }
@@ -138,6 +126,14 @@ export class SidebarElement extends LitElement {
 
     img {
         max-width: 100%;
+    }
+
+    a i {
+        pointer-events: none;
+    }
+
+    a span {
+        pointer-events: none;
     }
 
     .sidebar {

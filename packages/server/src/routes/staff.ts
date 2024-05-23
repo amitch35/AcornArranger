@@ -50,7 +50,7 @@ router.get('/', async (req: Request, res: Response) => {
 
       // Convert each element to a number
       filter_status_ids = filterStatusIdsStringArray.map(id => Number(id)).filter(id => !isNaN(id));
-  }
+    }
 
     const {data, error, status} = await supabase
         .from('rc_staff')

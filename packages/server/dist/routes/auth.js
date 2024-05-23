@@ -133,7 +133,8 @@ function supabaseMiddleware(req, res, next) {
           if (error)
             res.send(error).end();
           else if (decoded) {
-            if (decoded.user_role && decoded.user_role === "authorized_user") {
+            const token_json = decoded;
+            if (token_json.user_role && token_json.user_role === "authorized_user") {
               next();
             } else {
               res.status(403).json({ "error": "User not Authorized, contact administrator for authorization" }).end();
