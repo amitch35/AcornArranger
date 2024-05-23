@@ -126,11 +126,15 @@ table {
 
 th, td {
     border: 1px solid var(--background-color);
-    padding: var(--spacing-size-small) var(--spacing-size-medium);
 }
 
 th {
     font-weight: var(--text-font-weight-bold);
+    padding: var(--spacing-size-small) var(--spacing-size-medium);
+}
+
+td {
+    padding: var(--spacing-size-small) var(--spacing-size-small);
 }
 
 td.center {

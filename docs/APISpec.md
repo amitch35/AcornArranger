@@ -4,6 +4,9 @@ Base URL: `~/api`
 ### 1.1 Show Properties `/properties` - GET
 Allows users to see all properties available on the database
 
+Query Parameters:
+- `filter_status_id`: number from 1 to 2 - indicates which status_id's should be returned (parameter can be repeated to form array of desired status_ids)
+
 Returns: 
 ```commandline
 [
@@ -209,6 +212,7 @@ Query Parameters:
 - `page`: number from 0 - indicates which page of results to return
 - `from_service_date`: date YYYY-MM-DD - filters out any appointments with service date before this value
 - `to_service_date`: date YYYY-MM-DD - filters out any appointments with service date after this value
+- `filter_status_id`: number from 1 to 5 - indicates which status_id's should be returned (parameter can be repeated to form array of desired status_ids)
 
 Returns:
 ```commandline

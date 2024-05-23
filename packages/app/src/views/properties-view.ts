@@ -7,6 +7,17 @@ import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 
+function formatCleaningTime(minutes: number): string {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (!hours && !minutes) return ``;
+    else if (!hours) return `${mins} Minutes`;
+    else if (mins && hours === 1) return `${hours} Hour ${mins} Minutes`;
+    else if (mins) return `${hours} Hours ${mins} Minutes`;
+    else if (hours === 1) return `${hours} Hour`;
+    else return `${hours} Hours`;
+  }
+
 export class PropertiesViewElement extends View<Model, Msg> {
 
     @state()
@@ -59,7 +70,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
                 </td>
                 <td>
                     <span>
-                    ${property.estimated_cleaning_mins}
+                    ${formatCleaningTime(property.estimated_cleaning_mins!)}
                     </span>
                 </td>
                 <td>

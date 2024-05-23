@@ -6,6 +6,7 @@ import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
+import { formatDateTime } from "../utils/dates";
 
 export class AppointmentsViewElement extends View<Model, Msg> {
 
@@ -59,7 +60,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 </td>
                 <td>
                     <span>
-                    ${app.service_time}
+                    ${formatDateTime(app.service_time)}
                     </span>
                 </td>
                 <td>
@@ -71,6 +72,16 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                     <ul>
                         ${app.staff?.map((s) => { return renderStaff(s.staff_info) })}
                     </ul>
+                </td>
+                <td class="center">
+                    <span>
+                    ${app.turn_around}
+                    </span>
+                </td>
+                <td>
+                    <span>
+                    ${formatDateTime(app.next_arrival_time)}
+                    </span>
                 </td>
                 <td>
                     <span>
@@ -132,6 +143,8 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                             <th>Service Time</th>
                             <th>Property</th>
                             <th>Staff</th>
+                            <th>Turn Around</th>
+                            <th>Next Arrival Time</th>
                             <th>Service</th>
                             <th>Status</th>
                         </tr>

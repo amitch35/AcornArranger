@@ -20,7 +20,7 @@ export default function update(
       );
       break;
     case "properties/":
-      selectProperties(user).then((properties) =>
+      selectProperties(message[1], user).then((properties) =>
         apply((model) => ({ ...model, properties }))
       );
       break;
@@ -176,9 +176,19 @@ function selectProperty(
 }
 
 function selectProperties(
+  msg: { filter_status_ids?: Array<number> },
   user: Auth.User
 ) {
-  return fetch(`/api/properties`, {
+  // Base URL
+  let url = `/api/properties`;
+
+  // Add query parameters if filter_status_ids is defined and not empty
+  if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
+    const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
+    url += `?${queryParams}`;
+  }
+
+  return fetch(url, {
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
@@ -287,7 +297,8 @@ function selectAppointments(
     from_service_date: string; 
     to_service_date: string; 
     per_page?: number; 
-    page?: number; },
+    page?: number;
+    filter_status_ids?: Array<number>; },
   user: Auth.User
 ) {
   // Base URL
@@ -299,6 +310,12 @@ function selectAppointments(
   }
   if (msg.page) {
     url += `&${msg.page}`;
+  }
+
+  // Add query parameters if filter_status_ids is defined and not empty
+  if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
+    const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
+    url += `${queryParams}`;
   }
 
   return fetch(url, {

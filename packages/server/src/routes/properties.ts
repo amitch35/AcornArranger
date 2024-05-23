@@ -25,9 +25,22 @@ status:property_status_key (
 
 // Properties
 router.get('/', async (req: Request, res: Response) => {
+  var filter_status_ids = [1];
+
+  if (req.query.filter_status_id) {
+    // Convert query parameters to a number array
+    const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id)
+        ? req.query.filter_status_id
+        : [req.query.filter_status_id];
+
+    // Convert each element to a number
+    filter_status_ids = filterStatusIdsStringArray.map(id => Number(id)).filter(id => !isNaN(id));
+  }
+
   const {data, error, status} = await supabase
     .from('rc_properties')
     .select(selectProperties)
+    .in('status_id', filter_status_ids)
     .order('status_id', { ascending: true })
     .order('property_name', { ascending: true })
   res.status(status);

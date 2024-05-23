@@ -86,6 +86,11 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   const per_page = req.query.per_page || 50;
   const page = req.query.page || 0;
   const offset = per_page * page;
+  var filter_status_ids = [1, 2, 3, 4];
+  if (req.query.filter_status_id) {
+    const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
+    filter_status_ids = filterStatusIdsStringArray.map((id) => Number(id)).filter((id) => !isNaN(id));
+  }
   let query = supabase.from("rc_appointments").select(selectAppointments);
   if (req.query.from_service_date) {
     query = query.gte("departure_time", req.query.from_service_date);
@@ -93,7 +98,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   if (req.query.to_service_date) {
     query = query.lte("departure_time", `${req.query.to_service_date}  23:59:59+00`);
   }
-  query = query.range(offset, offset + per_page - 1).order("departure_time", { ascending: false }).order("property_name", { referencedTable: "rc_properties", ascending: true }).order("appointment_id", { ascending: true });
+  query = query.in("app_status_id", filter_status_ids).range(offset, offset + per_page - 1).order("departure_time", { ascending: false }).order("property_name", { referencedTable: "rc_properties", ascending: true }).order("appointment_id", { ascending: true });
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {

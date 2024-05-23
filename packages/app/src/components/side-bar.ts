@@ -106,7 +106,7 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">Theme</span>
                 </li>
                 <li>
-                    <a href="../login.html?next=/" @click=${signOutUser}>
+                    <a href="../login.html?next=${window.location.href}" @click=${signOutUser}>
                         <i class='bx bx-log-out'></i>
                         <span class="nav-item">Logout</span>
                     </a>
