@@ -96,7 +96,9 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   const page = req.query.page || 0;
   const offset = per_page * page;
   let query = supabase.from("schedule_plans").select(selectPlans).eq("valid", true).filter("plan_appointments.valid", "eq", true).filter("plan_staff.valid", "eq", true);
-  if (req.query.from_plan_date) {
+  if (req.query.from_plan_date && !req.query.to_plan_date) {
+    query = query.gte("plan_date", req.query.from_plan_date).lte("plan_date", req.query.from_plan_date);
+  } else if (req.query.from_plan_date) {
     query = query.gte("plan_date", req.query.from_plan_date);
   }
   if (req.query.to_plan_date) {

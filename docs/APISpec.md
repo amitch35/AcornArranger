@@ -291,7 +291,7 @@ Allows users to see all valid plans available on the database
 Query Parameters:
 - `per_page`: number from 1 to 1000 - indicates maximum number of appointment records to return
 - `page`: number from 0 - indicates which page of results to return
-- `from_plan_date`: date YYYY-MM-DD - filters out any plans with service date before this value
+- `from_plan_date`: date YYYY-MM-DD - filters out any plans with service date before this value (Can be supplied on its own to set both from and to)
 - `to_plan_date`: date YYYY-MM-DD - filters out any plans with service date after this value
 
 Returns:

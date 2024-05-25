@@ -55,7 +55,8 @@ router.get('/', async (req: Request, res: Response) => {
         .filter('plan_appointments.valid', 'eq', true)
         .filter('plan_staff.valid', 'eq', true)
   
-    if (req.query.from_plan_date)  { query = query.gte('plan_date', req.query.from_plan_date) }
+    if (req.query.from_plan_date && !(req.query.to_plan_date))  { query = query.gte('plan_date', req.query.from_plan_date).lte('plan_date', req.query.from_plan_date) }
+    else if (req.query.from_plan_date)  { query = query.gte('plan_date', req.query.from_plan_date) }
     if (req.query.to_plan_date)  { query = query.lte('plan_date', req.query.to_plan_date) }
   
     query = query.range(offset, (offset + per_page - 1))

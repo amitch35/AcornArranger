@@ -31,7 +31,7 @@ export class StaffViewElement extends View<Model, Msg> {
         super.connectedCallback();
         this.dispatchMessage([
             "staff/",
-            { }
+            { filter_status_ids: [1,3]}
           ]);
     }
 

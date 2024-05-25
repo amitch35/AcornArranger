@@ -11,6 +11,7 @@ import { StaffViewElement } from "./views/staff-view";
 import { AppointmentsViewElement } from "./views/appointments-view";
 import { RolesViewElement } from "./views/roles-view";
 import { PropertiesViewElement } from "./views/properties-view";
+import { PlansViewElement } from "./views/plans-view";
 
 const routes = [
   {
@@ -35,6 +36,12 @@ const routes = [
     path: "/app/properties",
     view: () => html`
       <properties-view></properties-view>
+    `
+  },
+  {
+    path: "/app/schedule",
+    view: () => html`
+      <plans-view></plans-view>
     `
   },
   {
@@ -73,5 +80,6 @@ define({
   "staff-view": StaffViewElement,
   "appointments-view": AppointmentsViewElement,
   "roles-view": RolesViewElement,
-  "properties-view": PropertiesViewElement
+  "properties-view": PropertiesViewElement,
+  "plans-view": PlansViewElement
 });

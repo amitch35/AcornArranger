@@ -306,16 +306,16 @@ function selectAppointments(
 
   // Add query parameters if present
   if (msg.per_page) {
-    url += `&${msg.per_page}`;
+    url += `&per_page=${msg.per_page}`;
   }
   if (msg.page) {
-    url += `&${msg.page}`;
+    url += `&page=${msg.page}`;
   }
 
   // Add query parameters if filter_status_ids is defined and not empty
   if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
     const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
-    url += `${queryParams}`;
+    url += `&${queryParams}`;
   }
 
   return fetch(url, {
@@ -359,20 +359,23 @@ function selectPlan(
 function selectPlans(
   msg: { 
     from_plan_date: string; 
-    to_plan_date: string; 
+    to_plan_date?: string; 
     per_page?: number; 
     page?: number; },
   user: Auth.User
 ) {
   // Base URL
-  let url = `/api/plans?from_service_date=${msg.from_plan_date}&to_service_date=${msg.to_plan_date}`;
+  let url = `/api/plans?from_plan_date=${msg.from_plan_date}`;
 
   // Add query parameters if present
+  if (msg.to_plan_date) {
+    url += `&to_plan_date=${msg.to_plan_date}`;
+  }
   if (msg.per_page) {
-    url += `&${msg.per_page}`;
+    url += `&per_page=${msg.per_page}`;
   }
   if (msg.page) {
-    url += `&${msg.page}`;
+    url += `&page=${msg.page}`;
   }
 
   return fetch(url, {

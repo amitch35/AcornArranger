@@ -13,6 +13,7 @@ export default css`
     flex-direction: column;
     align-items: center;
     width: fit-content;
+    gap: var(--spacing-size-medium);
 }
 
 .page header:first-of-type {
@@ -94,15 +95,49 @@ a {
 section.showing {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
     background-color: var(--background-color-accent);
     border-radius: var(--border-size-radius);
-    padding: var(--spacing-size-small);
-    margin-bottom: var(--spacing-size-medium);
+    padding: var(--spacing-size-small) var(--spacing-size-medium);
     width: 100%;
 }
 
-section.showing p {
-    margin-left: var(--spacing-size-small);
+section.showing div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-evenly;
+    gap: var(--spacing-size-medium);
+}
+
+section.showing .page-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: var(--spacing-size-small);
+}
+
+section.showing .page-selector * {
+    border-radius: var(--border-size-radius);
+    width: var(--icon-size);
+    height: var(--icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+section.showing .page-selector .highlight {
+    background-color: var(--background-color);
+    cursor: default;
+}
+
+section.showing .page-selector i.bx {
+    font-size: var(--text-font-size-medium);
+}
+
+section.showing div label {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-size-small);
 }
 
 .in-bubble {
@@ -155,20 +190,26 @@ dd {
 }
 
 button {
-    color: currentColor;
-    border-color: currentColor;
-    border-style: solid;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-size-small);
     border-radius: var(--border-size-radius);
-    background-color: inherit;
-    height: fit-content;
+    background-color: var(--background-color-accent);
+    color: var(--text-color-body);
+    border: none;
+    font-size: var(--text-font-size-body);
 }
 
 button:hover {
-    background-color: var(--background-color-accent); 
+    background-color: var(--background-color); 
 }
 
 button * {
     padding: 0;
+}
+
+i.bx {
+    font-size: var(--icon-size);
 }
 
 strong {

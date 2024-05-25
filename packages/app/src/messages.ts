@@ -10,7 +10,7 @@ export type Msg =
   | ["appointments/select", { appointment_id: number; }]
   | ["appointments/", { from_service_date: string; to_service_date: string; per_page?: number; page?: number; filter_status_ids?: Array<number>; }]
   | ["plans/select", { plan_id: number; }]
-  | ["plans/", { from_plan_date: string; to_plan_date: string; per_page?: number; page?: number; }]
+  | ["plans/", { from_plan_date: string; to_plan_date?: string; per_page?: number; page?: number; }]
   | ["plans/staff/add", { plan_id: number; user_id: number; }]
   | ["plans/staff/remove", { plan_id: number; user_id: number; }]
   | ["plans/appointment/add", { plan_id: number; appointment_id: number; }]

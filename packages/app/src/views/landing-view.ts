@@ -115,9 +115,6 @@ export class LandingViewElement extends View<Model, Msg> {
                 pointer-events: none;
             }
 
-            i.bx {
-                font-size: var(--icon-size);
-            }
 
             section {
                 background-color: var(--background-color-accent);

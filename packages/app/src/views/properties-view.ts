@@ -42,7 +42,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
         super.connectedCallback();
         this.dispatchMessage([
             "properties/",
-            { }
+            { filter_status_ids: [1] }
           ]);
     }
 
@@ -128,13 +128,15 @@ export class PropertiesViewElement extends View<Model, Msg> {
            ul {
                 list-style-type: none;
                 display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-size-xsmall);
+                max-width: calc(var(--spacing-size-medium) * 16);
             }
 
             ul li {
                 width: max-content;
                 background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
-                margin-right: var(--spacing-size-xsmall);
                 padding: 0 var(--spacing-size-small);
             }
         `
