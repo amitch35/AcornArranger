@@ -298,7 +298,8 @@ function selectAppointments(
     to_service_date: string; 
     per_page?: number; 
     page?: number;
-    filter_status_ids?: Array<number>; },
+    filter_status_ids?: Array<number>;
+    filter_service_ids?: Array<number>; },
   user: Auth.User
 ) {
   // Base URL
@@ -315,6 +316,12 @@ function selectAppointments(
   // Add query parameters if filter_status_ids is defined and not empty
   if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
     const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
+    url += `&${queryParams}`;
+  }
+
+  // Add query parameters if filter_service_ids is defined and not empty
+  if (msg.filter_service_ids && msg.filter_service_ids.length > 0) {
+    const queryParams = msg.filter_service_ids.map(id => `filter_service_id=${id}`).join('&');
     url += `&${queryParams}`;
   }
 

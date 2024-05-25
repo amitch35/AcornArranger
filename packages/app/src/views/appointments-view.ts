@@ -1,12 +1,30 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
 import { property, state } from "lit/decorators.js";
-import { Appointment, Staff } from "server/models";
+import { Appointment, Service, Staff } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 import { formatDateTime, toISOLocal } from "../utils/dates";
+
+interface StatusOption {
+    id: number;
+    label: string;
+}
+
+interface ServiceOption {
+    id: number;
+    label: string;
+}
+
+const STATUS_OPTIONS: Array<StatusOption> = [
+    { id: 1, label: 'Unconfirmed' },
+    { id: 2, label: 'Confirmed' },
+    { id: 3, label: 'Completed' },
+    { id: 4, label: 'Completed (Invoiced)'},
+    { id: 5, label: 'Cancelled'}
+  ];
 
 export class AppointmentsViewElement extends View<Model, Msg> {
 
@@ -16,12 +34,25 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     @state()
+    get services(): Array<Service> | undefined {
+        return this.model.services;
+    }
+
+    @state()
     get showing_total(): number {
         if (this.appointments) {
             return this.appointments.length;
         } else {
             return 0;
         }
+    }
+
+    @state()
+    get service_options(): Array<ServiceOption> {
+        return this.services ? this.services.map(service => ({
+        id: service.service_id,
+        label: service.service_name
+        })) : [];
     }
 
     @property({ type: String })
@@ -36,12 +67,24 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     @property({ type: Number })
     page: number = 1;
 
+    @property({ type: Array<Number> })
+    filter_status_ids: number[] = [1, 2, 3, 4];
+
+    @property({ type: Array<Number> })
+    filter_service_ids: number[] = [21942, 23044];
+
     constructor() {
         super("acorn:model");
     }
 
     connectedCallback() {
         super.connectedCallback();
+        this.dispatchMessage([
+            "services/", 
+            { 
+                
+            }
+          ]);
         this.updateAppointments();
     }
 
@@ -63,7 +106,8 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 to_service_date: this.to_service_date, 
                 per_page: this.per_page,
                 page: (this.page - 1),
-                filter_status_ids: [1,2,3,4]
+                filter_status_ids: this.filter_status_ids,
+                filter_service_ids: this.filter_service_ids
             }
           ]);
     }
@@ -74,10 +118,40 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     handleInputChange(event: Event) {
+        console.log("*** Handling input change: ", event);
         const input = event.target as HTMLInputElement | HTMLSelectElement;
-        const { name, value } = input;
-        (this as any)[name] = value;
+        const { name, value, type } = input;
+        if (type === "checkbox") {
+            console.log("*** Handling checkbox change: ", name, value, type);
+            this.handleCheckboxChange(event);
+        }
+        else (this as any)[name] = value;
     }
+
+    handleCheckboxChange(event: Event) {
+        const checkbox = event.target as HTMLInputElement;
+        const { name } = checkbox;
+        const value = parseInt(checkbox.value);
+        switch(name) {
+            case "app_status":
+                if (checkbox.checked) {
+                    // Add the value to the filter_status_ids array if checked
+                    this.filter_status_ids = [...this.filter_status_ids, value];
+                  } else {
+                    // Remove the value from the filter_status_ids array if unchecked
+                    this.filter_status_ids = this.filter_status_ids.filter(id => id !== value);
+                  }
+                break;
+            case "app_service":
+                if (checkbox.checked) {
+                    // Add the value to the filter_status_ids array if checked
+                    this.filter_service_ids = [...this.filter_service_ids, value];
+                  } else {
+                    // Remove the value from the filter_status_ids array if unchecked
+                    this.filter_service_ids = this.filter_service_ids.filter(id => id !== value);
+                  }
+        }
+      }
 
     previousPage() {
         if (this.page > 1) {
@@ -92,6 +166,32 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     render(): TemplateResult {
+    const renderStatusOption = (option: StatusOption | ServiceOption, opt_name: string) => {
+        var reflect_array: Array<number>;
+        switch (opt_name) {
+            case "app_status":
+                reflect_array = this.filter_status_ids;
+                break;
+            case "app_service":
+                reflect_array = this.filter_service_ids;
+                break;
+            default:
+                reflect_array = [];
+        }
+        return html`
+            <label>
+            <input
+                name=${opt_name}
+                type="checkbox"
+                .value=${option.id.toString()}
+                @change=${this.handleTableOptionChange}
+                ?checked=${reflect_array.includes(option.id)}
+            />
+            ${option.label}
+            </label>
+        `
+    }
+    
     const renderStaff = (staff: Staff) => {
         return html`
             <li>
@@ -158,19 +258,31 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 </h1>
             </header>
             <main>
-                <menu>
-                    <li>
+                <menu class="table-menu">
+                    <div>
                         <label>
                             <span>From Date:</span>
                             <input name="from_service_date" autocomplete="off" .value=${this.from_service_date} type="date" @input=${this.handleTableOptionChange} />
                         </label>
-                    </li>
-                    <li>
+                    </div>
+                    <div>
                         <label>
                             <span>To Date:</span>
                             <input name="to_service_date" autocomplete="off" .value=${this.to_service_date} type="date" @input=${this.handleTableOptionChange} />
                         </label>
-                    </li>
+                    </div>
+                    <div>
+                        <span>Status:</span>
+                        <div class="filters">
+                            ${STATUS_OPTIONS.map((opt) => { return renderStatusOption(opt, "app_status")})}
+                        </div>
+                    </div>
+                    <div>
+                        <span>Services:</span>
+                        <div class="filters">
+                            ${this.service_options.map((opt) => { return renderStatusOption(opt, "app_service")})}
+                        </div>
+                    </div>
                 </menu>
                 <section class="showing">
                     <div><p>Showing: </p><p class="in-bubble">${this.showing_total}</p></div>
@@ -220,18 +332,6 @@ export class AppointmentsViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-
-            menu {
-                background-color: var(--background-color-accent);
-                border-radius: var(--border-size-radius);
-                list-style-type: none;
-                display: flex;
-                justify-content: space-evenly;
-                padding: var(--spacing-size-small);
-                gap: var(--spacing-size-medium);
-                width: 100%;
-            }
-
             ul.staff {
                 list-style-type: none;
             }

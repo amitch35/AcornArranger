@@ -102,13 +102,13 @@ export class PlansViewElement extends View<Model, Msg> {
                 </h1>
             </header>
             <main>
-                <menu>
-                    <li>
+                <menu class="table-menu">
+                    <div>
                         <label>
                             <span>Schedule Date:</span>
                             <input name="from_plan_date" autocomplete="off" .value=${this.from_plan_date} type="date" @input=${this.handleTableOptionChange} />
                         </label>
-                    </li>
+                    </div>
                 </menu>
                 <section class="showing">
                     <div><p>Showing: </p><p class="in-bubble">${this.showing_total}</p></div>

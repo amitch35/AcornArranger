@@ -39,7 +39,9 @@ router.get('/', async (req: Request, res: Response) => {
     const page = req.query.page || 0;
     const offset = (per_page * page);
 
-    var filter_status_ids = [1,2,3,4];
+    var filter_status_ids: Array<number> = [1,2,3,4];
+
+    var filter_service_ids: Array<number> = [];
 
     if (req.query.filter_status_id) {
       // Convert query parameters to a number array
@@ -50,6 +52,16 @@ router.get('/', async (req: Request, res: Response) => {
       // Convert each element to a number
       filter_status_ids = filterStatusIdsStringArray.map(id => Number(id)).filter(id => !isNaN(id));
     }
+
+    if (req.query.filter_service_id) {
+      // Convert query parameters to a number array
+      const filterServiceIdsStringArray = Array.isArray(req.query.filter_service_id)
+          ? req.query.filter_service_id
+          : [req.query.filter_service_id];
+
+      // Convert each element to a number
+      filter_service_ids = filterServiceIdsStringArray.map(id => Number(id)).filter(id => !isNaN(id));
+    }
   
     let query = supabase
         .from('rc_appointments')
@@ -57,6 +69,8 @@ router.get('/', async (req: Request, res: Response) => {
   
     if (req.query.from_service_date)  { query = query.gte('departure_time', req.query.from_service_date) }
     if (req.query.to_service_date)  { query = query.lte('departure_time', `${req.query.to_service_date}  23:59:59+00`) }
+
+    if (filter_service_ids.length !== 0) { query = query.in('service', filter_service_ids) }
   
     query = query.in('app_status_id', filter_status_ids)
       .range(offset, (offset + per_page - 1))

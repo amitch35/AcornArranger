@@ -92,6 +92,48 @@ a {
     color: var(--text-color-link);
 }
 
+menu.table-menu {
+    background-color: var(--background-color-accent);
+    border-radius: var(--border-size-radius);
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: var(--spacing-size-small) var(--spacing-size-medium);
+    gap: var(--spacing-size-medium);
+    width: 100%;
+}
+
+menu.table-menu > div > label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.table-menu .filters {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: space-between;
+    justify-content: flex-start;
+    overflow-y: auto;
+    max-height: calc(var(--text-font-size-large) * 5.5);
+    min-width: calc(var(--text-font-size-large) * 7);
+    background-color: var(--background-color);
+    padding: var(--spacing-size-xsmall) var(--spacing-size-small);
+}
+
+.table-menu .filters::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.table-menu .filters::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+}
+
 section.showing {
     display: flex;
     align-items: baseline;
@@ -100,6 +142,7 @@ section.showing {
     border-radius: var(--border-size-radius);
     padding: var(--spacing-size-small) var(--spacing-size-medium);
     width: 100%;
+    gap: var(--spacing-size-medium);
 }
 
 section.showing div {

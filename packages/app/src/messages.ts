@@ -8,7 +8,7 @@ export type Msg =
   | ["roles/select", { role_id: number; }]
   | ["roles/", { }]
   | ["appointments/select", { appointment_id: number; }]
-  | ["appointments/", { from_service_date: string; to_service_date: string; per_page?: number; page?: number; filter_status_ids?: Array<number>; }]
+  | ["appointments/", { from_service_date: string; to_service_date: string; per_page?: number; page?: number; filter_status_ids?: Array<number>; filter_service_ids?: Array<number>; }]
   | ["plans/select", { plan_id: number; }]
   | ["plans/", { from_plan_date: string; to_plan_date?: string; per_page?: number; page?: number; }]
   | ["plans/staff/add", { plan_id: number; user_id: number; }]

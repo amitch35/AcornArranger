@@ -57,7 +57,7 @@ const router = import_express.default.Router();
 const supabase = import_server.supabaseClient;
 const selectServices = `
     service_id, 
-    name
+    service_name:name
   `;
 router.get("/", (req, res) => __async(void 0, null, function* () {
   const { data, error, status } = yield supabase.from("service_key").select(selectServices).order("name", { ascending: true });

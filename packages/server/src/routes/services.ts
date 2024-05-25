@@ -7,7 +7,7 @@ const supabase = supabaseClient;
 
 const selectServices = `
     service_id, 
-    name
+    service_name:name
   `
 
 // Services

@@ -197,7 +197,7 @@ Returns all appointment services available
 [
     {
         "service_id": <id>,
-        "name": <string>
+        "service_name": <string>
     }
 ]
 ```
@@ -213,6 +213,7 @@ Query Parameters:
 - `from_service_date`: date YYYY-MM-DD - filters out any appointments with service date before this value
 - `to_service_date`: date YYYY-MM-DD - filters out any appointments with service date after this value
 - `filter_status_id`: number from 1 to 5 - indicates which status_id's should be returned (parameter can be repeated to form array of desired status_ids)
+- `filter_service_id`: service_id - indicates which services should be returned (parameter can be repeated to form array of desired service_ids)
 
 Returns:
 ```commandline
