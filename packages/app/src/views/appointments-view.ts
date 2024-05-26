@@ -1,6 +1,6 @@
 import { View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
-import { property, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { Appointment, Service, Staff } from "server/models";
 import { Msg } from "../messages";
 import { Model } from "../model";
@@ -25,6 +25,8 @@ const STATUS_OPTIONS: Array<StatusOption> = [
     { id: 4, label: 'Completed (Invoiced)'},
     { id: 5, label: 'Cancelled'}
   ];
+
+type CheckboxField = "app_status" | "app_service";
 
 export class AppointmentsViewElement extends View<Model, Msg> {
 
@@ -55,22 +57,22 @@ export class AppointmentsViewElement extends View<Model, Msg> {
         })) : [];
     }
 
-    @property({ type: String })
+    @state()
     from_service_date: string = toISOLocal(new Date()).split('T')[0];
 
-    @property({ type: String })
+    @state()
     to_service_date: string = toISOLocal(new Date()).split('T')[0];
 
-    @property({ type: Number })
+    @state()
     per_page: number = 50;
 
-    @property({ type: Number })
+    @state()
     page: number = 1;
 
-    @property({ type: Array<Number> })
+    @state()
     filter_status_ids: number[] = [1, 2, 3, 4];
 
-    @property({ type: Array<Number> })
+    @state()
     filter_service_ids: number[] = [21942, 23044];
 
     constructor() {
@@ -118,11 +120,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     handleInputChange(event: Event) {
-        console.log("*** Handling input change: ", event);
         const input = event.target as HTMLInputElement | HTMLSelectElement;
         const { name, value, type } = input;
         if (type === "checkbox") {
-            console.log("*** Handling checkbox change: ", name, value, type);
             this.handleCheckboxChange(event);
         }
         else (this as any)[name] = value;
@@ -131,8 +131,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     handleCheckboxChange(event: Event) {
         const checkbox = event.target as HTMLInputElement;
         const { name } = checkbox;
+        const box_field = name as CheckboxField;
         const value = parseInt(checkbox.value);
-        switch(name) {
+        switch(box_field) {
             case "app_status":
                 if (checkbox.checked) {
                     // Add the value to the filter_status_ids array if checked
@@ -144,12 +145,14 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 break;
             case "app_service":
                 if (checkbox.checked) {
-                    // Add the value to the filter_status_ids array if checked
                     this.filter_service_ids = [...this.filter_service_ids, value];
                   } else {
-                    // Remove the value from the filter_status_ids array if unchecked
                     this.filter_service_ids = this.filter_service_ids.filter(id => id !== value);
                   }
+                break
+            default:
+                const unhandled: never = box_field;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
         }
       }
 
@@ -166,7 +169,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     render(): TemplateResult {
-    const renderStatusOption = (option: StatusOption | ServiceOption, opt_name: string) => {
+    const renderStatusOption = (option: StatusOption | ServiceOption, opt_name: CheckboxField) => {
         var reflect_array: Array<number>;
         switch (opt_name) {
             case "app_status":
@@ -176,7 +179,8 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 reflect_array = this.filter_service_ids;
                 break;
             default:
-                reflect_array = [];
+                const unhandled: never = opt_name;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
         }
         return html`
             <label>
