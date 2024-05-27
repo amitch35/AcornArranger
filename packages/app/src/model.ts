@@ -1,4 +1,4 @@
-import { Property, Role, Staff, Appointment, Plan, Service } from "server/models";
+import { Property, Role, Staff, Appointment, Plan, Service, ErrorResponse } from "server/models";
 
 export interface Model {
   role?: Role;
@@ -12,6 +12,7 @@ export interface Model {
   plan?: Plan;
   plans?: Array<Plan>;
   services?: Array<Service>;
+  build_error?: ErrorResponse;
 }
 
 export const init: Model = {};

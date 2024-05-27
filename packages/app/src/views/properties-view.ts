@@ -137,9 +137,11 @@ export class PropertiesViewElement extends View<Model, Msg> {
         return html`
             <tr>
                 <td class="center">
-                    <span>
-                    ${property.properties_id}
-                    </span>
+                    <a href="/app/property/${property.properties_id}">
+                        <span>
+                        ${property.properties_id}
+                        </span>
+                    </a>
                 </td>
                 <td>
                     <span>
@@ -161,6 +163,11 @@ export class PropertiesViewElement extends View<Model, Msg> {
                     ${property.status?.status}
                     </span>
                 </td>
+                <td>
+                    <a href="/app/property/${property.properties_id}/edit">
+                        <i class='bx bxs-edit-alt'></i>
+                    </a>
+                </td>
             </tr>
         `;
         };
@@ -168,6 +175,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
     const properties_list = this.properties || [];
 
     return html`
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -194,6 +202,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
                             <th>Estimated Cleaning Time</th>
                             <th>Double Unit References</th>
                             <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -224,6 +233,11 @@ export class PropertiesViewElement extends View<Model, Msg> {
                 background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
                 padding: 0 var(--spacing-size-small);
+            }
+
+            i.bx {
+                font-size: var(--text-font-size-large);
+                color: var(--text-color-body);
             }
         `
     ];

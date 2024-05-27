@@ -106,7 +106,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   if (filter_service_ids.length !== 0) {
     query = query.in("service", filter_service_ids);
   }
-  query = query.in("app_status_id", filter_status_ids).range(offset, offset + per_page - 1).order("departure_time", { ascending: false }).order("property_name", { referencedTable: "rc_properties", ascending: true }).order("appointment_id", { ascending: true });
+  query = query.in("app_status_id", filter_status_ids).range(offset, offset + per_page - 1).order("departure_time", { ascending: true }).order("property_name", { referencedTable: "rc_properties", ascending: true }).order("appointment_id", { ascending: true });
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {

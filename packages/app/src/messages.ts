@@ -1,7 +1,7 @@
 import { Property, Role, PlanBuildOptions } from "server/models";
 
 export type Msg =
-  | ["properties/save", { properties_id: number; property: Property; }]
+  | ["properties/save", { properties_id: number; property: Property; onSuccess?: () => void; onFailure?: (err: Error) => void; }]
   | ["properties/select", { properties_id: number; }]
   | ["properties/", { filter_status_ids?: Array<number> }]
   | ["roles/save", { role_id: number; role: Role; }]
@@ -15,7 +15,7 @@ export type Msg =
   | ["plans/staff/remove", { plan_id: number; user_id: number; }]
   | ["plans/appointment/add", { plan_id: number; appointment_id: number; }]
   | ["plans/appointment/remove", { plan_id: number; appointment_id: number; }]
-  | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; }]
+  | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; per_page?: number; page?: number; }]
   | ["plans/send", { plan_date: string; }]
   | ["plans/add", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]

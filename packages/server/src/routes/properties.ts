@@ -64,6 +64,9 @@ router.get('/:property_id', async (req: Request, res: Response) => {
   if (error) {
     res.send(error);
   } else if (data) {
+    if (!data.double_unit) {
+      data.double_unit = [];
+    }
     res.send(data);
   } else {
     res.status(404)

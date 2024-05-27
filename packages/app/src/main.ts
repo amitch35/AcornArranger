@@ -12,6 +12,7 @@ import { AppointmentsViewElement } from "./views/appointments-view";
 import { RolesViewElement } from "./views/roles-view";
 import { PropertiesViewElement } from "./views/properties-view";
 import { PlansViewElement } from "./views/plans-view";
+import { PropertyViewElement } from "./views/property-view";
 
 const routes = [
   {
@@ -36,6 +37,18 @@ const routes = [
     path: "/app/properties",
     view: () => html`
       <properties-view></properties-view>
+    `
+  },
+  {
+    path: "/app/property/:id/edit",
+    view: (params: Switch.Params) => html`
+      <property-view edit properties-id=${params.id}></property-view>
+    `
+  },
+  {
+    path: "/app/property/:id",
+    view: (params: Switch.Params) => html`
+      <property-view properties-id=${params.id}></property-view>
     `
   },
   {
@@ -81,5 +94,6 @@ define({
   "appointments-view": AppointmentsViewElement,
   "roles-view": RolesViewElement,
   "properties-view": PropertiesViewElement,
-  "plans-view": PlansViewElement
+  "plans-view": PlansViewElement,
+  "property-view": PropertyViewElement
 });

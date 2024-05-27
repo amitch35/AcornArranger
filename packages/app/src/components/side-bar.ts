@@ -11,7 +11,7 @@ export class SidebarElement extends LitElement {
 
     displayNameTemplate() {
         if (this.display_name === 'Status: 401' || this.display_name === 'Status: 403') {
-            return html`<span>Please <a href="../login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>`;
+            return html`<span>Please <a href="/login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>`;
         } else if (this.display_name === '') {
             return html`<span>Hello, user</span>`;
         } else {
@@ -51,7 +51,7 @@ export class SidebarElement extends LitElement {
             </i>
             <div class="top">
                 <div class="logo">
-                    <img src="../images/AcornArranger Logo.png" alt="AcornArranger Logo">
+                    <img src="/images/AcornArranger Logo.png" alt="AcornArranger Logo">
                     <span>AcornArranger</span>
                 </div>
             </div>
@@ -106,7 +106,7 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">Theme</span>
                 </li>
                 <li>
-                    <a href="../login.html?next=${window.location.href}" @click=${signOutUser}>
+                    <a href="/login.html?next=${window.location.href}" @click=${signOutUser}>
                         <i class='bx bx-log-out'></i>
                         <span class="nav-item">Logout</span>
                     </a>

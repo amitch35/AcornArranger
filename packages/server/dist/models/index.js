@@ -22,6 +22,7 @@ __reExport(models_exports, require("./plan"), module.exports);
 __reExport(models_exports, require("./staff"), module.exports);
 __reExport(models_exports, require("./service"), module.exports);
 __reExport(models_exports, require("./token"), module.exports);
+__reExport(models_exports, require("./error"), module.exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ...require("./property"),
@@ -30,5 +31,6 @@ __reExport(models_exports, require("./token"), module.exports);
   ...require("./plan"),
   ...require("./staff"),
   ...require("./service"),
-  ...require("./token")
+  ...require("./token"),
+  ...require("./error")
 });

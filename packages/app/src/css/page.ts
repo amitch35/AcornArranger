@@ -85,7 +85,6 @@ h2, h3, h4, h5, h6 {
     font-optical-sizing: auto;
     font-weight: var(--text-font-weight-light);
     font-style: normal;
-    padding: var(--spacing-size-medium);
 }
 
 a {
@@ -132,6 +131,7 @@ menu.table-menu > div > label {
 .table-menu .filters::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 1px var(--background-color-accent);
 }
 
 section.showing {
@@ -219,17 +219,21 @@ td.center {
     text-align: center;
 }
 
-dl {
+/* dl {
     margin-left: var(--spacing-size-medium);
-}
+} */
 
 dt {
+    color: var(--accent-color);
     margin-bottom: var(--spacing-size-xsmall);
 }
 
 dd {
     margin-bottom: var(--spacing-size-medium);
-    margin-left: var(--spacing-size-small);
+    margin-left: var(--spacing-size-xxlarge);
+    margin-right: var(--spacing-size-xxlarge);
+    padding-left: var(--spacing-size-small);
+    border-left: 1px solid var(--accent-color);
 }
 
 button {

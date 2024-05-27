@@ -95,6 +95,9 @@ router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
   if (error) {
     res.send(error);
   } else if (data) {
+    if (!data.double_unit) {
+      data.double_unit = [];
+    }
     res.send(data);
   } else {
     res.status(404);

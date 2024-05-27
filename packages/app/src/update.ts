@@ -2,6 +2,17 @@ import { Auth, Update } from "@calpoly/mustang";
 import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions, Service } from "server/models";
 import { Msg } from "./messages";
 import { Model } from "./model";
+import { ErrorResponse } from "server/models";
+
+// Type guard to check if the value is an array of plans
+function isPlanArray(item: any): item is Array<Plan> {
+  return Array.isArray(item) && 'plan_id' in item[0];
+}
+
+// Type guard to check if the value is an error response
+function isErrorResponse(item: any): item is ErrorResponse {
+  return item && 'details' in item;
+}
 
 export default function update(
   message: Msg,
@@ -10,9 +21,17 @@ export default function update(
 ) {
   switch (message[0]) {
     case "properties/save":
-      saveProperty(message[1], user).then((property) =>
-        apply((model) => ({ ...model, property }))
-      );
+      saveProperty(message[1], user)
+        .then((property) =>
+          apply((model) => ({ ...model, property }))
+        ).then(() => {
+          const { onSuccess } = message[1];
+          if (onSuccess) onSuccess();
+        })
+        .catch((error: Error) => {
+          const { onFailure } = message[1];
+          if (onFailure) onFailure(error);
+        });
       break;
     case "properties/select":
       selectProperty(message[1], user).then((property) =>
@@ -90,9 +109,13 @@ export default function update(
       break;
     case "plans/build":
       buildPlan(message[1], user).then(
-      (plans: Array<Plan> | undefined) =>
-        apply((model) => ({ ...model, plans }))
-      );
+      (plans: Array<Plan> | ErrorResponse | undefined) => {
+        if (plans === undefined || isPlanArray(plans)) {
+          apply((model) => ({ ...model, plans }))
+        } else if (isErrorResponse(plans)) {
+          apply((model) => ({ ...model, build_error: plans }))
+        }
+      });
       break;
     case "plans/send":
       sendPlan(message[1], user).then(
@@ -402,13 +425,6 @@ function selectPlans(
     });
 }
 
-interface ErrorResponse {
-  code?: string;
-  details?: string;
-  hint?: string;
-  message?: string;
-}
-
 function addPlanStaff(
   msg: { plan_id: number; user_id: number; },
   user: Auth.User
@@ -484,7 +500,7 @@ function removePlanAppointment(
 }
 
 function buildPlan(
-  msg: { plan_date: string; build_options: PlanBuildOptions; },
+  msg: { plan_date: string; build_options: PlanBuildOptions; per_page?: number; page?: number; },
   user: Auth.User
 ) {
   return fetch(`/api/plans/build/${msg.plan_date}`, {
@@ -498,10 +514,22 @@ function buildPlan(
     .then((response: Response) => {
       if (response.status === 204) return selectPlans({ 
         from_plan_date: msg.plan_date, 
-        to_plan_date: msg.plan_date }, 
+        to_plan_date: msg.plan_date,
+        per_page: msg.per_page,
+        page: msg.page }, 
         user );
-      return undefined;
-    });
+        else if (response.status === 400) return response.json();
+        else return undefined;
+      })
+      .then((json: unknown) => {
+        if (json) {
+          const error_json = json as ErrorResponse;
+          if (error_json.details) {
+            return error_json;
+          }
+          return undefined;
+        }
+      });
 }
 
 function sendPlan(

@@ -74,7 +74,7 @@ router.get('/', async (req: Request, res: Response) => {
   
     query = query.in('app_status_id', filter_status_ids)
       .range(offset, (offset + per_page - 1))
-      .order('departure_time', { ascending: false })
+      .order('departure_time', { ascending: true })
       .order('property_name', { referencedTable: 'rc_properties', ascending: true })
       .order('appointment_id', { ascending: true })
   

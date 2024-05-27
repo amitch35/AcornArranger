@@ -29,43 +29,75 @@ export class RolesViewElement extends View<Model, Msg> {
 
     connectedCallback() {
         super.connectedCallback();
+        this.updateRoles();
+    }
+
+    updateRoles() {
         this.dispatchMessage([
             "roles/",
             { }
           ]);
     }
 
+    handleInputChange(event: Event, role: Role, field: keyof Role) {
+        const input = event.target as HTMLInputElement;
+        if (field === 'priority') {
+            if (input.value) {
+                role[field] = parseInt(input.value);
+            } else {
+                return;
+            }
+        } else if (field === 'can_lead_team' || field === 'can_clean') {
+          role[field] = input.checked;
+        } else if (field === 'role_id') {
+            return;
+        } else {
+          role[field] = input.value;
+        }
+        this.dispatchMessage([
+            "roles/save",
+            { role_id: role.role_id, role: role }
+          ]);
+      }
+
     render(): TemplateResult {
     const renderRole = (role: Role) => {
         return html`
             <tr>
                 <td class="center">
-                    <span>
-                    ${role.priority}
-                    </span>
+                    <input
+                    type="number"
+                    .value=${role.priority.toString()}
+                    @input=${(e: Event) => this.handleInputChange(e, role, 'priority')}
+                    />
                 </td>
                 <td>
                     <span>
-                    ${role.title}
+                        ${role.title}
                     </span>
                 </td>
                 <td class="center">
-                    <span>
-                    ${role.can_lead_team}
-                    </span>
+                    <input
+                    type="checkbox"
+                    .checked=${role.can_lead_team}
+                    @change=${(e: Event) => this.handleInputChange(e, role, 'can_lead_team')}
+                    />
                 </td>
                 <td class="center">
-                    <span>
-                    ${role.can_clean}
-                    </span>
+                    <input
+                    type="checkbox"
+                    .checked=${role.can_clean}
+                    @change=${(e: Event) => this.handleInputChange(e, role, 'can_clean')}
+                    />
                 </td>
             </tr>
-        `;
-        };
+        `
+    };
 
     const roles_list = this.roles || [];
 
     return html`
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -79,16 +111,26 @@ export class RolesViewElement extends View<Model, Msg> {
                 <table>
                     <thead>
                         <tr>
-                            <th>Priority</th>
+                            <th>
+                                <label>
+                                    <button @click=${this.updateRoles} alt="Sync Prorities">
+                                        <i class='bx bx-sync'></i>
+                                    </button>
+                                    <span>
+                                        Priority
+                                    </span>
+                                    <div class="not-shown">
+                                    <i class='bx bx-sync'></i>
+                                    </div>
+                                </label>
+                            </th>
                             <th>Role</th>
                             <th>Can Lead</th>
                             <th>Can Clean</th>
                         </tr>
                     </thead>
                     <tbody>
-                    ${roles_list.map((r) => {
-                        return renderRole(r);
-                    })}
+                        ${roles_list.map((r) => renderRole(r))}
                     </tbody>
                 </table>
             </main>
@@ -100,7 +142,25 @@ export class RolesViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-            
+            th label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: var(--spacing-size-medium);
+            }
+
+            th button {
+                display: inline;
+                margin: 0;
+            }
+
+            .not-shown {
+                visibility: hidden;
+            }
+
+            i.bx {
+                font-size: var(--text-font-size-large);
+            }
         `
     ];
 }
