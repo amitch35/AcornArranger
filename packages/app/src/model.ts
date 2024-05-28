@@ -13,6 +13,8 @@ export interface Model {
   plans?: Array<Plan>;
   services?: Array<Service>;
   build_error?: ErrorResponse;
+  available?: Array<number>;
+  omissions?: Array<number>;
 }
 
 export const init: Model = {};

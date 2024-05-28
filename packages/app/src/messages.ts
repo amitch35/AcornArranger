@@ -15,9 +15,11 @@ export type Msg =
   | ["plans/staff/remove", { plan_id: number; user_id: number; }]
   | ["plans/appointment/add", { plan_id: number; appointment_id: number; }]
   | ["plans/appointment/remove", { plan_id: number; appointment_id: number; }]
-  | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; per_page?: number; page?: number; }]
+  | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; }]
   | ["plans/send", { plan_date: string; }]
   | ["plans/add", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]
-  | ["staff/", { filter_status_ids?: Array<number> }]
-  | ["services/", { }];
+  | ["staff/", { filter_status_ids?: Array<number>; filter_can_clean?: boolean; }]
+  | ["services/", { }]
+  | ["available/save", { available: Array<number> }]
+  | ["omissions/save", { omissions: Array<number> }];

@@ -520,7 +520,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: number
-          priority: number | null
+          priority: number
           title: string | null
         }
         Insert: {
@@ -529,7 +529,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
-          priority?: number | null
+          priority?: number
           title?: string | null
         }
         Update: {
@@ -538,7 +538,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: number
-          priority?: number | null
+          priority?: number
           title?: string | null
         }
         Relationships: []

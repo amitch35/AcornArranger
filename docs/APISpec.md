@@ -90,6 +90,7 @@ linked from Homebase
 
 Query Parameters:
 - `filter_status_id`: number from 1 to 3 - indicates which status_id's should be returned (parameter can be repeated to form array of desired status_ids)
+- `filter_can_clean`: boolean - indicates whether to filter for only those with roles that can clean
 
 Returns:
 ```commandline

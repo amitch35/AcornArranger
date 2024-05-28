@@ -219,10 +219,6 @@ td.center {
     text-align: center;
 }
 
-/* dl {
-    margin-left: var(--spacing-size-medium);
-} */
-
 dt {
     color: var(--accent-color);
     margin-bottom: var(--spacing-size-xsmall);

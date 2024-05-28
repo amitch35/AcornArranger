@@ -220,7 +220,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
         reset,
         page,
         css`
-           ul {
+            ul {
                 list-style-type: none;
                 display: flex;
                 flex-wrap: wrap;

@@ -4,15 +4,15 @@ import { Msg } from "./messages";
 import { Model } from "./model";
 import { ErrorResponse } from "server/models";
 
-// Type guard to check if the value is an array of plans
-function isPlanArray(item: any): item is Array<Plan> {
-  return Array.isArray(item) && 'plan_id' in item[0];
-}
+// // Type guard to check if the value is an array of plans
+// function isPlanArray(item: any): item is Array<Plan> {
+//   return Array.isArray(item) && 'plan_id' in item[0];
+// }
 
-// Type guard to check if the value is an error response
-function isErrorResponse(item: any): item is ErrorResponse {
-  return item && 'details' in item;
-}
+// // Type guard to check if the value is an error response
+// function isErrorResponse(item: any): item is ErrorResponse {
+//   return item && 'details' in item;
+// }
 
 export default function update(
   message: Msg,
@@ -109,12 +109,8 @@ export default function update(
       break;
     case "plans/build":
       buildPlan(message[1], user).then(
-      (plans: Array<Plan> | ErrorResponse | undefined) => {
-        if (plans === undefined || isPlanArray(plans)) {
-          apply((model) => ({ ...model, plans }))
-        } else if (isErrorResponse(plans)) {
-          apply((model) => ({ ...model, build_error: plans }))
-        }
+      (error: ErrorResponse | undefined) => {
+          apply((model) => ({ ...model, build_error: error }))
       });
       break;
     case "plans/send":
@@ -145,6 +141,12 @@ export default function update(
       selectServices(user).then((services) =>
         apply((model) => ({ ...model, services }))
       );
+      break;
+    case "available/save":
+      apply((model) => ({ ...model, available: message[1].available }));
+      break;
+    case "omissions/save":
+      apply((model) => ({ ...model, omissions: message[1].omissions }));
       break;
     default:
       const unhandled: never = message[0];
@@ -500,7 +502,7 @@ function removePlanAppointment(
 }
 
 function buildPlan(
-  msg: { plan_date: string; build_options: PlanBuildOptions; per_page?: number; page?: number; },
+  msg: { plan_date: string; build_options: PlanBuildOptions; },
   user: Auth.User
 ) {
   return fetch(`/api/plans/build/${msg.plan_date}`, {
@@ -512,13 +514,7 @@ function buildPlan(
     body: JSON.stringify(msg.build_options)
   })
     .then((response: Response) => {
-      if (response.status === 204) return selectPlans({ 
-        from_plan_date: msg.plan_date, 
-        to_plan_date: msg.plan_date,
-        per_page: msg.per_page,
-        page: msg.page }, 
-        user );
-        else if (response.status === 400) return response.json();
+        if (response.status === 400) return response.json();
         else return undefined;
       })
       .then((json: unknown) => {
@@ -588,7 +584,7 @@ function selectStaffMember(
 }
 
 function selectStaff(
-  msg: { filter_status_ids?: Array<number> },
+  msg: { filter_status_ids?: Array<number>; filter_can_clean?: boolean; },
   user: Auth.User
 ) {
   // Base URL
@@ -598,6 +594,11 @@ function selectStaff(
   if (msg.filter_status_ids && msg.filter_status_ids.length > 0) {
     const queryParams = msg.filter_status_ids.map(id => `filter_status_id=${id}`).join('&');
     url += `?${queryParams}`;
+    if (msg.filter_can_clean) {
+      url += `&filter_can_clean=true`
+    }
+  } else if (msg.filter_can_clean) {
+    url += `?filter_can_clean=true`
   }
 
   return fetch(url, {

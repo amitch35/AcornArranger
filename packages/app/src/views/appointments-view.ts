@@ -169,7 +169,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     }
 
     render(): TemplateResult {
-    const renderStatusOption = (option: StatusOption | ServiceOption, opt_name: CheckboxField) => {
+    const renderCheckboxOption = (option: StatusOption | ServiceOption, opt_name: CheckboxField) => {
         var reflect_array: Array<number>;
         switch (opt_name) {
             case "app_status":
@@ -229,7 +229,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 </td>
                 <td class="center">
                     <span>
-                    ${app.turn_around}
+                        ${app.turn_around ? html`<i class='bx bx-revision'></i>` : html``}
                     </span>
                 </td>
                 <td>
@@ -278,13 +278,13 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                     <div>
                         <span>Status:</span>
                         <div class="filters">
-                            ${STATUS_OPTIONS.map((opt) => { return renderStatusOption(opt, "app_status")})}
+                            ${STATUS_OPTIONS.map((opt) => { return renderCheckboxOption(opt, "app_status")})}
                         </div>
                     </div>
                     <div>
                         <span>Services:</span>
                         <div class="filters">
-                            ${this.service_options.map((opt) => { return renderStatusOption(opt, "app_service")})}
+                            ${this.service_options.map((opt) => { return renderCheckboxOption(opt, "app_service")})}
                         </div>
                     </div>
                 </menu>
@@ -315,7 +315,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                             <th>Service Time</th>
                             <th>Property</th>
                             <th>Staff</th>
-                            <th>Turn Around</th>
+                            <th>T/A</th>
                             <th>Next Arrival Time</th>
                             <th>Service</th>
                             <th>Status</th>
@@ -346,6 +346,10 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 border-radius: var(--border-size-radius);
                 margin-bottom: var(--spacing-size-xsmall);
                 padding: 0 var(--spacing-size-small);
+            }
+
+            i.bx {
+                font-size: var(--text-font-size-large);
             }
         `
     ];

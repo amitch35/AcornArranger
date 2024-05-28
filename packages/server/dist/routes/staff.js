@@ -69,6 +69,20 @@ const selectStaffBasic = `
       status
     )
   `;
+const selectStaffBasicInner = `
+  user_id,
+  name,
+  first_name,
+  last_name,
+  role:roles!inner (
+    role_id:id, 
+    title
+  ),
+  status:staff_status_key (
+    status_id,
+    status
+  )
+`;
 const selectStaffFull = `
     user_id,
     name,
@@ -93,7 +107,11 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
     filter_status_ids = filterStatusIdsStringArray.map((id) => Number(id)).filter((id) => !isNaN(id));
   }
-  const { data, error, status } = yield supabase.from("rc_staff").select(selectStaffBasic).in("status_id", filter_status_ids).order("status_id", { ascending: true }).order("name", { ascending: true });
+  let query = supabase.from("rc_staff").select(selectStaffBasic);
+  if (req.query.filter_can_clean) {
+    query = supabase.from("rc_staff").select(selectStaffBasicInner).eq("roles.can_clean", req.query.filter_can_clean);
+  }
+  const { data, error, status } = yield query.in("status_id", filter_status_ids).order("status_id", { ascending: true }).order("name", { ascending: true });
   res.status(status);
   if (error) {
     res.send(error);
