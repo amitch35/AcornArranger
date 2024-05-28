@@ -12,6 +12,7 @@ import reset from "../css/reset";
 import page from "../css/page";
 import { Msg } from "../messages";
 import { Model } from "../model";
+import 'boxicons';
   
 const propertyStyles = css`
 div.detail-header {
@@ -66,10 +67,6 @@ a {
 a:hover {
     background-color: var(--background-color-dark);
 }
-
-i.bx {
-    font-size: var(--text-font-size-large);
-}
 `
 
 class PropertyViewer extends LitElement {
@@ -78,7 +75,6 @@ property?: number;
 
 render() {
     return html`
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <div class="page">
         <header>
             <h1>
@@ -117,7 +113,7 @@ render() {
                 <h4>Options</h4>
                 <nav>
                     <a href="/app/property/${this.property}/edit" class="edit">
-                        <i class='bx bxs-edit-alt'></i>
+                        <box-icon name='edit-alt' type='solid' color="var(--text-color-body)" ></box-icon>
                         <span>Edit</span>
                     </a>
                 </nav>
@@ -164,7 +160,6 @@ init?: Property;
 
 render() {
     return html`
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <div class="page">
         <header>
             <h1>
@@ -203,7 +198,7 @@ render() {
                 <h4>Options</h4>
                 <nav>
                     <a href="/app/property/${this.property}" class="close">
-                        <i class='bx bx-x'></i>
+                        <box-icon name='x' color="var(--text-color-body)" ></box-icon>
                         <span>Close</span>
                     </a>
                 </nav>

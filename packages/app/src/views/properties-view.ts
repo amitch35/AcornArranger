@@ -6,6 +6,7 @@ import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
+import 'boxicons';
 
 interface StatusOption {
     id: number;
@@ -165,7 +166,7 @@ export class PropertiesViewElement extends View<Model, Msg> {
                 </td>
                 <td>
                     <a href="/app/property/${property.properties_id}/edit">
-                        <i class='bx bxs-edit-alt'></i>
+                        <box-icon name='edit-alt' type='solid' color="var(--text-color-body)" ></box-icon>
                     </a>
                 </td>
             </tr>
@@ -175,7 +176,6 @@ export class PropertiesViewElement extends View<Model, Msg> {
     const properties_list = this.properties || [];
 
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -233,11 +233,6 @@ export class PropertiesViewElement extends View<Model, Msg> {
                 background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
                 padding: 0 var(--spacing-size-small);
-            }
-
-            i.bx {
-                font-size: var(--text-font-size-large);
-                color: var(--text-color-body);
             }
         `
     ];

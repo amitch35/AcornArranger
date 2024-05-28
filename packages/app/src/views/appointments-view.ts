@@ -7,6 +7,7 @@ import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 import { formatDateTime, toISOLocal } from "../utils/dates";
+import 'boxicons';
 
 interface StatusOption {
     id: number;
@@ -229,7 +230,7 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 </td>
                 <td class="center">
                     <span>
-                        ${app.turn_around ? html`<i class='bx bx-revision'></i>` : html``}
+                        ${app.turn_around ? html`<box-icon name='revision' color="var(--text-color-body)" ></box-icon>` : html``}
                     </span>
                 </td>
                 <td>
@@ -254,7 +255,6 @@ export class AppointmentsViewElement extends View<Model, Msg> {
     const appointment_list = this.appointments || [];
 
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -302,9 +302,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                         </label>
                         <div class="page-selector">
                             <span>Page:</span>
-                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><i class='bx bxs-chevron-left' ></i></button>
+                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' color="var(--text-color-body)"></box-icon></button>
                             <span class="highlight">${this.page}</span>
-                            <button @click=${this.nextPage}><i class='bx bxs-chevron-right' ></i></button>
+                            <button @click=${this.nextPage}><box-icon name='chevron-right' color="var(--text-color-body)"></box-icon></button>
                         </div>
                     </div>
                 </section>
@@ -346,10 +346,6 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                 border-radius: var(--border-size-radius);
                 margin-bottom: var(--spacing-size-xsmall);
                 padding: 0 var(--spacing-size-small);
-            }
-
-            i.bx {
-                font-size: var(--text-font-size-large);
             }
         `
     ];

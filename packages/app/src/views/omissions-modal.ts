@@ -6,6 +6,7 @@ import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
+import 'boxicons';
 
 interface OmissionOption {
     id: number;
@@ -163,7 +164,7 @@ export class OmissionsModal extends View<Model, Msg> {
     return html`
         <div>
         <button @click=${this.showModal}>
-            <i class='bx bx-select-multiple'></i>
+            <box-icon name='select-multiple' color='var(--text-color-body)'></box-icon>
             <span>Select Omissions</span>
         </button>
         <ul class="appointments">
@@ -205,10 +206,6 @@ export class OmissionsModal extends View<Model, Msg> {
                 background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
                 padding: 0 var(--spacing-size-small);
-            }
-
-            i.bx {
-                font-size: var(--text-font-size-large);
             }
         `
     ];

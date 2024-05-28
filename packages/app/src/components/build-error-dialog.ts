@@ -3,6 +3,7 @@ import { property } from "lit/decorators.js";
 import { ErrorResponse } from "server/models";
 import reset from "../css/reset";
 import page from "../css/page";
+import 'boxicons';
 
 
 export class BuildErrorDialog extends LitElement {
@@ -70,10 +71,9 @@ export class BuildErrorDialog extends LitElement {
     };
 
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div>
         <button @click=${this.show}>
-            <i class='bx bx-error-alt' ></i>
+            <box-icon name='error-alt' color="var(--text-color-body)" size="calc(var(--text-font-size-large) + var(--spacing-size-xsmall))"></box-icon>
         </button>
         </div>
         <dialog>
@@ -89,10 +89,6 @@ export class BuildErrorDialog extends LitElement {
         reset,
         page,
         css`
-
-            i.bx {
-                font-size: var(--text-font-size-large);
-            }
         `
     ];
 }

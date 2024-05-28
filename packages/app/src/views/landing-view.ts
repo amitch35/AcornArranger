@@ -4,6 +4,7 @@ import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
+import 'boxicons';
 
 export class LandingViewElement extends View<Model, Msg> {
 
@@ -13,7 +14,6 @@ export class LandingViewElement extends View<Model, Msg> {
 
     render(): TemplateResult {
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -29,7 +29,7 @@ export class LandingViewElement extends View<Model, Msg> {
                     Welcome!
                     </h2>
                     <a href="/login.html?next=/app/appointments" @click=${signOutUser}>
-                        <i class='bx bx-log-in'></i>
+                        <box-icon name='log-in' color="var(--text-color-body)" ></box-icon>
                         <span>Login</span>
                     </a>
                 </nav>

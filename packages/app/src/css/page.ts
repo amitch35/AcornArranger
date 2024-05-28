@@ -173,10 +173,6 @@ section.showing .page-selector .highlight {
     cursor: default;
 }
 
-section.showing .page-selector i.bx {
-    font-size: var(--text-font-size-medium);
-}
-
 section.showing div label {
     display: flex;
     align-items: baseline;
@@ -249,10 +245,6 @@ button:hover {
 
 button * {
     padding: 0;
-}
-
-i.bx {
-    font-size: var(--icon-size);
 }
 
 strong {

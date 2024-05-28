@@ -11,6 +11,7 @@ import { toISOLocal } from "../utils/dates";
 import { AvailableStaffModal } from "./available-modal";
 import { OmissionsModal } from "./omissions-modal";
 import { BuildErrorDialog } from "../components/build-error-dialog";
+import 'boxicons';
 
 interface ServiceOption {
     id: number;
@@ -218,7 +219,6 @@ export class PlansViewElement extends View<Model, Msg> {
     const plans_list = this.plans || [];
 
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -270,7 +270,7 @@ export class PlansViewElement extends View<Model, Msg> {
                     </div>
                 </menu>
                 <button @click=${this.buildSchedule}>
-                    <i class='bx bxs-wrench'></i>
+                    <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                     <span>Build Plan</span>
                 </button>
                 <section class="showing">
@@ -286,9 +286,9 @@ export class PlansViewElement extends View<Model, Msg> {
                         </label>
                         <div class="page-selector">
                             <span>Page:</span>
-                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><i class='bx bxs-chevron-left' ></i></button>
+                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' color="var(--text-color-body)"></box-icon></button>
                             <span class="highlight">${this.page}</span>
-                            <button @click=${this.nextPage}><i class='bx bxs-chevron-right' ></i></button>
+                            <button @click=${this.nextPage}><box-icon name='chevron-right' color="var(--text-color-body)"></box-icon></button>
                         </div>
                     </div>
                 </section>

@@ -45,10 +45,8 @@ export class SidebarElement extends LitElement {
 
     render() {
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <nav class="sidebar">
-            <i id="sidebar-btn" class='bx bx-menu' @click=${this.toggleActive}>
-            </i>
+            <box-icon id="sidebar-btn" name='menu' color="var(--text-color-header)" size="var(--icon-size)" @click=${this.toggleActive} ></box-icon>
             <div class="top">
                 <div class="logo">
                     <img src="/images/AcornArranger Logo.png" alt="AcornArranger Logo">
@@ -56,41 +54,41 @@ export class SidebarElement extends LitElement {
                 </div>
             </div>
             <div class="user">
-                <i class='bx bxs-user-circle' ></i>
+                <box-icon name='user-circle' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                 ${this.displayNameTemplate()}
             </div>
             <ul class="menu-items">
                 <li>
                     <a href="/app/appointments">
-                        <i class='bx bx-calendar-alt'></i>
+                        <box-icon name='calendar-alt' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">View Appointments</span>
                     </a>
                     <span class="tooltip">View Appointments</span>
                 </li>
                 <li>
                     <a href="/app/schedule">
-                        <i class='bx bxs-book-bookmark'></i>
+                        <box-icon name='book-bookmark' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Schedule</span>
                     </a>
                     <span class="tooltip">Schedule</span>
                 </li>
                 <li>
                     <a href="/app/properties">
-                        <i class='bx bxs-edit-location' ></i>
+                        <box-icon name='edit-location' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Properties</span>
                     </a>
                     <span class="tooltip">Properties</span>
                 </li>
                 <li>
                     <a href="/app/staff">
-                        <i class='bx bx-male'></i>
+                        <box-icon name='male' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Staff</span>
                     </a>
                     <span class="tooltip">Staff</span>
                 </li>
                 <li>
                     <a href="/app/roles">
-                        <i class='bx bxs-hard-hat'></i>
+                        <box-icon name='hard-hat' type='solid' class="dark-mode-only" color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Staff Roles</span>
                     </a>
                     <span class="tooltip">Staff Roles</span>
@@ -99,15 +97,15 @@ export class SidebarElement extends LitElement {
             <ul class="bottom">
                 <li>
                     <a href="#" @click=${this.toggleDarkMode} >
-                        <i class='bx bxs-sun dark-mode-only'></i>
-                        <i class='bx bxs-moon light-mode-only'></i>
+                        <box-icon name='sun' type='solid' class="dark-mode-only" color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
+                        <box-icon name='moon' type='solid' class="light-mode-only" color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Theme</span>
                     </a>
                     <span class="tooltip">Theme</span>
                 </li>
                 <li>
                     <a href="/login.html?next=${window.location.href}" @click=${signOutUser}>
-                        <i class='bx bx-log-out'></i>
+                        <box-icon name='log-out' color="var(--text-color-header)" size="var(--icon-size)"></box-icon>
                         <span class="nav-item">Logout</span>
                     </a>
                     <span class="tooltip">Logout</span>
@@ -126,10 +124,6 @@ export class SidebarElement extends LitElement {
 
     img {
         max-width: 100%;
-    }
-
-    a i {
-        pointer-events: none;
     }
 
     a span {
@@ -268,13 +262,8 @@ export class SidebarElement extends LitElement {
         background-color: var(--background-color-accent);
     }
 
-    i.bx {
-        font-size: var(--icon-size);
-    }
-
-    .sidebar i:not(#sidebar-btn) {
-        min-width: calc(var(--icon-size) + 1rem);
-        text-align: center;
+    .sidebar box-icon:not(#sidebar-btn) {
+        padding: 0 var(--spacing-size-small);
     }
 
     .sidebar .nav-item {
@@ -347,12 +336,12 @@ export class SidebarElement extends LitElement {
 
     :host(.dark-mode) .dark-mode-only {
         opacity: 1;
-        display: inline-block;
+        display: initial;
     }
 
     :host .light-mode-only {
         opacity: 1;
-        display: inline-block;
+        display: initial;
     }
 
     :host(.dark-mode) .light-mode-only {

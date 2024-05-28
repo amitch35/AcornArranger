@@ -97,7 +97,6 @@ export class RolesViewElement extends View<Model, Msg> {
     const roles_list = this.roles || [];
 
     return html`
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <div class="page">
             <header>
                 <h1>
@@ -114,13 +113,13 @@ export class RolesViewElement extends View<Model, Msg> {
                             <th>
                                 <label>
                                     <button @click=${this.updateRoles} alt="Sync Prorities">
-                                        <i class='bx bx-sync'></i>
+                                        <box-icon name='sync' color="var(--text-color-body)" ></box-icon>
                                     </button>
                                     <span>
                                         Priority
                                     </span>
                                     <div class="not-shown">
-                                    <i class='bx bx-sync'></i>
+                                        <box-icon name='sync' color="var(--text-color-body)" ></box-icon>
                                     </div>
                                 </label>
                             </th>
@@ -156,10 +155,6 @@ export class RolesViewElement extends View<Model, Msg> {
 
             .not-shown {
                 visibility: hidden;
-            }
-
-            i.bx {
-                font-size: var(--text-font-size-large);
             }
         `
     ];
