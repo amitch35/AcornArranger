@@ -302,9 +302,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                         </label>
                         <div class="page-selector">
                             <span>Page:</span>
-                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' color="var(--text-color-body)"></box-icon></button>
+                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' type='solid' color="var(--text-color-body)"></box-icon></button>
                             <span class="highlight">${this.page}</span>
-                            <button @click=${this.nextPage}><box-icon name='chevron-right' color="var(--text-color-body)"></box-icon></button>
+                            <button @click=${this.nextPage}><box-icon name='chevron-right' type='solid' color="var(--text-color-body)"></box-icon></button>
                         </div>
                     </div>
                 </section>

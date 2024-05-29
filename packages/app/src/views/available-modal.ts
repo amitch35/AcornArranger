@@ -142,7 +142,7 @@ export class AvailableStaffModal extends View<Model, Msg> {
     const staff_list = this.staff || [];
 
     return html`
-        <div>
+        <div class="multi-select">
         <button @click=${this.showModal}>
             <box-icon name='select-multiple' color='var(--text-color-body)'></box-icon>
             <span>Select Available Staff</span>
@@ -173,20 +173,6 @@ export class AvailableStaffModal extends View<Model, Msg> {
         reset,
         page,
         css`
-            ul {
-                list-style-type: none;
-                display: flex;
-                flex-wrap: wrap;
-                gap: var(--spacing-size-xsmall);
-                max-width: calc(var(--spacing-size-medium) * 16);
-            }
-
-            ul li {
-                width: max-content;
-                background-color: var(--background-color);
-                border-radius: var(--border-size-radius);
-                padding: 0 var(--spacing-size-small);
-            }
         `
     ];
 }

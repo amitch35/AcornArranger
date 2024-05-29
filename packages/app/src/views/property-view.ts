@@ -16,10 +16,7 @@ import 'boxicons';
   
 const propertyStyles = css`
 div.detail-header {
-    display: flex;
-    justify-content: flex-start;
     padding-left: var(--spacing-size-small);
-    width: 100%;
 }
 
 section.property-details {
@@ -34,11 +31,7 @@ section.property-details {
 }
 
 div.options-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding-left: var(--spacing-size-small);
-    width: 100%;
 }
 
 section.property-options {
@@ -82,7 +75,7 @@ render() {
             </h1>
         </header>
         <main>
-            <div class="detail-header"><h4>Details</h4></div>
+            <div class="detail-header align-left"><h4>Details</h4></div>
             <section class="property-details">
                 <dl>
                     <dt>Property ID:</dt>
@@ -109,7 +102,7 @@ render() {
                     <dd><slot name="country"></slot></dd>
                 </dl>
             </section>
-            <div class="options-header">
+            <div class="options-header spread-apart">
                 <h4>Options</h4>
                 <nav>
                     <a href="/app/property/${this.property}/edit" class="edit">
@@ -167,7 +160,7 @@ render() {
             </h1>
         </header>
         <main>
-        <div class="detail-header"><h4>Details</h4></div>
+        <div class="detail-header align-left"><h4>Details</h4></div>
             <section class="property-details">
                 <dl>
                     <dt>Property ID:</dt>
@@ -194,7 +187,7 @@ render() {
                     <dd><slot name="country"></slot></dd>
                 </dl>
             </section>
-            <div class="options-header">
+            <div class="options-header spread-apart">
                 <h4>Options</h4>
                 <nav>
                     <a href="/app/property/${this.property}" class="close">

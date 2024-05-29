@@ -137,6 +137,16 @@ export class PlansViewElement extends View<Model, Msg> {
           ]);
     }
 
+    sendSchedule() {
+        this.build_count++;
+        this.dispatchMessage([
+            "plans/send", 
+            { 
+                plan_date: this.from_plan_date
+            }
+          ]);
+    }
+
     handleTableOptionChange(event: Event) {
         this.handleInputChange(event);
         const input = event.target as HTMLInputElement | HTMLSelectElement;
@@ -184,6 +194,15 @@ export class PlansViewElement extends View<Model, Msg> {
         this.updatePlans();
     }
 
+    closeSendModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.send-modal') as HTMLDialogElement;
+        dialog.close();
+    }
+
+    showSendModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.send-modal') as HTMLDialogElement;
+        dialog.showModal();
+    } 
 
     render(): TemplateResult {
     const renderCheckboxOption = (option:  ServiceOption, opt_name: CheckboxField) => {
@@ -226,8 +245,10 @@ export class PlansViewElement extends View<Model, Msg> {
                 </h1>
             </header>
             <main>
-                <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
-                <menu class="table-menu">
+                <div class="align-left">
+                    <h4>Parameters</h4>
+                </div>
+                <menu class="parameter-menu">
                     <div>
                         <label>
                             <span>Schedule Date:</span>
@@ -236,6 +257,9 @@ export class PlansViewElement extends View<Model, Msg> {
                     </div>
                     <available-modal></available-modal>
                 </menu>
+                <div class="align-left">
+                    <h4>Options</h4>
+                </div>
                 <menu class="table-menu">
                     <div>
                         <span>Services:</span>
@@ -269,10 +293,32 @@ export class PlansViewElement extends View<Model, Msg> {
                         </label>
                     </div>
                 </menu>
-                <button @click=${this.buildSchedule}>
-                    <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
-                    <span>Build Plan</span>
-                </button>
+                <div class="spread-apart">
+                    <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
+                    <button @click=${this.buildSchedule}>
+                        <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
+                        <span>Build</span>
+                    </button>
+                    <button @click=${this.showSendModal}>
+                        <box-icon name='upload' color="var(--text-color-body)"></box-icon>
+                        <span>Send</span>
+                    </button>
+                </div>
+                <dialog class="send-modal">
+                    <div class="modal-content">
+                        <div>
+                            <h4>Confirm Send</h4>
+                            <button @click=${this.closeSendModal}>Close</button>
+                        </div>
+                        <div>
+                            <h6>Are you sure you want to send this plan to ResortCleaning?</h6>
+                        </div>
+                        <div>
+                            <button @click=${this.closeSendModal}>Cancel</button>
+                            <button @click=${this.sendSchedule}>Send</button>
+                        </div>
+                    </div>
+                </dialog>
                 <section class="showing">
                     <div><p>Showing: </p><p class="in-bubble">${this.showing_total}</p></div>
                     <div>
@@ -286,9 +332,9 @@ export class PlansViewElement extends View<Model, Msg> {
                         </label>
                         <div class="page-selector">
                             <span>Page:</span>
-                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' color="var(--text-color-body)"></box-icon></button>
+                            <button @click=${this.previousPage} ?disabled=${this.page === 1}><box-icon name='chevron-left' type='solid' color="var(--text-color-body)"></box-icon></button>
                             <span class="highlight">${this.page}</span>
-                            <button @click=${this.nextPage}><box-icon name='chevron-right' color="var(--text-color-body)"></box-icon></button>
+                            <button @click=${this.nextPage}><box-icon name='chevron-right' type='solid' color="var(--text-color-body)"></box-icon></button>
                         </div>
                     </div>
                 </section>
@@ -305,15 +351,21 @@ export class PlansViewElement extends View<Model, Msg> {
         page,
         css`
 
-            menu {
+            menu.parameter-menu {
                 background-color: var(--background-color-accent);
                 border-radius: var(--border-size-radius);
-                list-style-type: none;
                 display: flex;
+                flex-direction: column;
+                align-items: center;
                 justify-content: space-evenly;
-                padding: var(--spacing-size-small);
+                padding: var(--spacing-size-medium) var(--spacing-size-medium);
                 gap: var(--spacing-size-medium);
                 width: 100%;
+            }
+
+            menu.parameter-menu > div > label {
+                display: flex;
+                gap: var(--spacing-size-small);
             }
 
             ul {

@@ -73,7 +73,7 @@ export class BuildErrorDialog extends LitElement {
     return html`
         <div>
         <button @click=${this.show}>
-            <box-icon name='error-alt' color="var(--text-color-body)" size="calc(var(--text-font-size-large) + var(--spacing-size-xsmall))"></box-icon>
+            <box-icon name='error-alt' color="var(--text-color-body)" size="var(--text-font-size-large)"></box-icon>
         </button>
         </div>
         <dialog>

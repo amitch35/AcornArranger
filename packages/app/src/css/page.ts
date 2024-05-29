@@ -91,6 +91,44 @@ a {
     color: var(--text-color-link);
 }
 
+.spread-apart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.align-left {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.multi-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-size-small);
+}
+
+.multi-select ul {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-size-xsmall);
+    padding-top: var(--spacing-size-small);
+    border-top: 1px solid currentColor;
+    width: 100%;
+}
+
+.multi-select ul li {
+    width: max-content;
+    background-color: var(--background-color);
+    border-radius: var(--border-size-radius);
+    padding: 0 var(--spacing-size-small);
+}
+
 menu.table-menu {
     background-color: var(--background-color-accent);
     border-radius: var(--border-size-radius);
@@ -179,6 +217,14 @@ section.showing div label {
     gap: var(--spacing-size-small);
 }
 
+section.showing button {
+    background-color: var(--background-color-accent);
+}
+
+section.showing button:hover {
+    background-color: var(--background-color); 
+}
+
 .in-bubble {
     background-color: var(--accent-color);
     border-radius: 50%;
@@ -237,10 +283,12 @@ button {
     color: var(--text-color-body);
     border: none;
     font-size: var(--text-font-size-body);
+    padding: var(--spacing-size-small);
 }
 
 button:hover {
-    background-color: var(--background-color); 
+    background-color: var(--background-color-dark); 
+    cursor: pointer;
 }
 
 button * {

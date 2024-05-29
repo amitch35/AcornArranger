@@ -115,15 +115,15 @@ export default function update(
       break;
     case "plans/send":
       sendPlan(message[1], user).then(
-      (plans: Array<Plan> | undefined) =>
-        apply((model) => ({ ...model, plans }))
-      );
+      (error: ErrorResponse | undefined) => {
+          apply((model) => ({ ...model, build_error: error }))
+      });
       break;
     case "plans/add":
       addPlan(message[1], user).then(
-      (plans: Array<Plan> | undefined) =>
-        apply((model) => ({ ...model, plans }))
-      );
+      (error: ErrorResponse | undefined) => {
+          apply((model) => ({ ...model, build_error: error }))
+      });
       break;
     case "staff/select":
       selectStaffMember(message[1], user).then(
@@ -537,11 +537,17 @@ function sendPlan(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 204) return selectPlans({ 
-        from_plan_date: msg.plan_date, 
-        to_plan_date: msg.plan_date }, 
-        user );
-      return undefined;
+      if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details) {
+          return error_json;
+        }
+        return undefined;
+      }
     });
 }
 
@@ -554,11 +560,17 @@ function addPlan(
     headers: Auth.headers(user)
   })
     .then((response: Response) => {
-      if (response.status === 200) return selectPlans({ 
-        from_plan_date: msg.plan_date, 
-        to_plan_date: msg.plan_date }, 
-        user );
-      return undefined;
+      if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details) {
+          return error_json;
+        }
+        return undefined;
+      }
     });
 }
 
