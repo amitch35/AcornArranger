@@ -71,7 +71,7 @@ export class OmissionsModal extends View<Model, Msg> {
                 to_service_date: this.date!,
                 per_page: 100,
                 page: 0,
-                filter_status_ids: [1,2,3,4],
+                filter_status_ids: [1,2], // Only show appointments that are not complete and not canceled
                 filter_service_ids: this.services
             }
           ]);
@@ -171,17 +171,19 @@ export class OmissionsModal extends View<Model, Msg> {
             ${appointment_list.map((a) => { return renderAppointment(a) })}
         </ul>
         </div>
-        <dialog>
+        <dialog class="modal">
             <div class="modal-content">
-                <div>
+                <div class="spread-apart modal-header">
                     <h4>Select Appointments to Omit</h4>
-                    <button @click=${this.closeDialog}>Close</button>
+                    <button @click=${this.closeDialog} class="close">
+                        <box-icon name='x' color="var(--text-color-body)" ></box-icon>
+                    </button>
                 </div>
-                <div>
+                <div class="spread-apart clear-select">
                     <button @click=${this.clearSelection}>Clear Selection</button>
                     <button @click=${this.selectAll}>Select All</button>
                 </div>
-                <div>
+                <div class="filters checkboxes">
                     ${this.appointment_options.map((opt) => { return renderCheckboxOption(opt, "app_omissions")})}
                 </div>
             </div>
@@ -193,6 +195,15 @@ export class OmissionsModal extends View<Model, Msg> {
         reset,
         page,
         css`
+
+            .appointments {
+                max-width: calc(var(--spacing-size-medium) * 22);
+            }
+
+            .checkboxes {
+                max-height: calc(var(--text-font-size-large) * 9.5);
+                min-width: calc(var(--text-font-size-large) * 12);
+            }
         `
     ];
 }

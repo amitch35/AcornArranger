@@ -151,17 +151,19 @@ export class AvailableStaffModal extends View<Model, Msg> {
             ${staff_list.map((s) => { return renderStaff(s) })}
         </ul>
         </div>
-        <dialog>
+        <dialog class="modal">
             <div class="modal-content">
-            <div>
+            <div class="spread-apart modal-header">
                 <h4>Select Available Staff</h4>
-                <button @click=${this.closeDialog}>Close</button>
+                <button @click=${this.closeDialog} class="close">
+                    <box-icon name='x' color="var(--text-color-body)" ></box-icon>
+                </button>
             </div>
-            <div>
+            <div class="spread-apart clear-select">
                 <button @click=${this.clearSelection}>Clear Selection</button>
                 <button @click=${this.selectAll}>Select All</button>
             </div>
-            <div>
+            <div class="filters checkboxes">
                 ${this.staff_options.map((opt) => { return renderCheckboxOption(opt, "available_staff")})}
             </div>
             </div>
@@ -173,6 +175,15 @@ export class AvailableStaffModal extends View<Model, Msg> {
         reset,
         page,
         css`
+
+            .staff {
+                max-width: calc(var(--text-font-size-large) * 36);
+            }
+
+            .checkboxes {
+                max-height: calc(var(--text-font-size-large) * 19.5);
+                min-width: calc(var(--text-font-size-large) * 10);
+            }
         `
     ];
 }

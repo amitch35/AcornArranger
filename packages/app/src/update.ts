@@ -437,16 +437,7 @@ function addPlanStaff(
   })
     .then((response: Response) => {
       if (response.status === 204) return selectPlan(msg, user);
-      else if (response.status === 400) return response.json();
-      else return undefined;
-    })
-    .then((json: unknown) => {
-      if (json) {
-        const error_json = json as ErrorResponse;
-        if (error_json.details && (error_json.details === 'REPEATED_ACTION' || error_json.details === 'IMMUTABLE')) {
-          return selectPlan(msg, user);
-        } else return undefined;
-      }
+      return undefined;
     });
 }
 
@@ -474,16 +465,7 @@ function addPlanAppointment(
   })
     .then((response: Response) => {
       if (response.status === 204) return selectPlan(msg, user);
-      else if (response.status === 400) return response.json();
-      else return undefined;
-    })
-    .then((json: unknown) => {
-      if (json) {
-        const error_json = json as ErrorResponse;
-        if (error_json.details && (error_json.details === 'REPEATED_ACTION' || error_json.details === 'IMMUTABLE')) {
-          return selectPlan(msg, user);
-        } else return undefined;
-      }
+      return undefined;
     });
 }
 

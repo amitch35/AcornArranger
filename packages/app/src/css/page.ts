@@ -104,6 +104,12 @@ a {
     width: 100%;
 }
 
+.align-center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .multi-select {
     display: flex;
     flex-direction: column;
@@ -129,6 +135,52 @@ a {
     padding: 0 var(--spacing-size-small);
 }
 
+dialog {
+    box-shadow: 0 0.5rem 0.8rem var(--background-color-dark);
+    background-color: var(--background-color);
+    border: none;
+    border-radius: var(--border-size-radius);
+    color: var(--text-color-body);
+    padding: var(--spacing-size-medium) var(--spacing-size-large);
+}
+
+dialog button {
+    background-color: var(--background-color-dark);
+}
+
+dialog button:hover {
+    background-color: var(--background-color-accent); 
+}
+
+.modal {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -ms-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
+::backdrop {
+  background-color: var(--background-color-dark);
+  opacity: 0.55;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-size-medium);
+}
+
+.modal-header {
+    gap: var(--spacing-size-xlarge);
+}
+
+.modal .clear-select {
+    max-width: calc(var(--spacing-size-medium) * 16);
+}
+
 menu.table-menu {
     background-color: var(--background-color-accent);
     border-radius: var(--border-size-radius);
@@ -148,7 +200,7 @@ menu.table-menu > div > label {
     align-items: flex-start;
 }
 
-.table-menu .filters {
+.filters {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -161,12 +213,12 @@ menu.table-menu > div > label {
     padding: var(--spacing-size-xsmall) var(--spacing-size-small);
 }
 
-.table-menu .filters::-webkit-scrollbar {
+.filters::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 7px;
 }
 
-.table-menu .filters::-webkit-scrollbar-thumb {
+.filters::-webkit-scrollbar-thumb {
     border-radius: 4px;
     background-color: rgba(0, 0, 0, .5);
     box-shadow: 0 0 1px var(--background-color-accent);
@@ -293,6 +345,10 @@ button:hover {
 
 button * {
     padding: 0;
+}
+
+button box-icon {
+    pointer-events: none;
 }
 
 strong {

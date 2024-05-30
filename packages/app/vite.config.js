@@ -13,15 +13,4 @@ export default {
         "/auth": "http://localhost:3000"
       }
     }
-    // build: {
-    //     target: "ESNext",
-    // },
-    // esbuild: {
-    //     target: "ESNext",
-    // },
-    // optimizeDeps:{
-    //     esbuildOptions: {
-    //         target: "ESNext",
-    //     }
-    // }
   };

@@ -145,6 +145,17 @@ export class PlansViewElement extends View<Model, Msg> {
                 plan_date: this.from_plan_date
             }
           ]);
+        this.closeSendModal();
+    }
+
+    addPlan() {
+        this.build_count++;
+        this.dispatchMessage([
+            "plans/add", 
+            { 
+                plan_date: this.from_plan_date
+            }
+          ]);
     }
 
     handleTableOptionChange(event: Event) {
@@ -238,6 +249,20 @@ export class PlansViewElement extends View<Model, Msg> {
     const plans_list = this.plans || [];
 
     return html`
+        <dialog class="send-modal modal">
+            <div class="modal-content">
+                <div class="align-center">
+                    <h4>Confirm Send</h4>
+                </div>
+                <div>
+                    <p>Are you sure you want to send this plan to ResortCleaning?</p>
+                </div>
+                <div class="spread-apart cancel-send">
+                    <button @click=${this.closeSendModal}>Cancel</button>
+                    <button @click=${this.sendSchedule}>Send</button>
+                </div>
+            </div>
+        </dialog>
         <div class="page">
             <header>
                 <h1>
@@ -304,21 +329,6 @@ export class PlansViewElement extends View<Model, Msg> {
                         <span>Send</span>
                     </button>
                 </div>
-                <dialog class="send-modal">
-                    <div class="modal-content">
-                        <div>
-                            <h4>Confirm Send</h4>
-                            <button @click=${this.closeSendModal}>Close</button>
-                        </div>
-                        <div>
-                            <h6>Are you sure you want to send this plan to ResortCleaning?</h6>
-                        </div>
-                        <div>
-                            <button @click=${this.closeSendModal}>Cancel</button>
-                            <button @click=${this.sendSchedule}>Send</button>
-                        </div>
-                    </div>
-                </dialog>
                 <section class="showing">
                     <div><p>Showing: </p><p class="in-bubble">${this.showing_total}</p></div>
                     <div>
@@ -340,6 +350,11 @@ export class PlansViewElement extends View<Model, Msg> {
                 </section>
                 <div class="plans">
                     ${plans_list.map((p) => renderPlan(p))}
+                    <div class="add-one">
+                        <button @click=${this.addPlan}> 
+                            <box-icon name='plus' size="var(--text-font-size-xlarge)" color="var(--text-color-body)"></box-icon>
+                        </button>
+                    </div>
                 </div>
             </main>
         </div>
@@ -385,8 +400,24 @@ export class PlansViewElement extends View<Model, Msg> {
                 width: 100%;
                 flex-wrap: wrap;
                 align-items: flex-start;
-                justify-content: space-evenly;
-                gap: var(--spacing-size-large);
+                justify-content: flex-start;
+                gap: var(--spacing-size-xxlarge);
+            }
+
+            .add-one {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: calc(var(--spacing-size-medium) * 18);
+                min-height: calc(var(--spacing-size-medium) * 14);
+            }
+
+            .add-one button {
+                padding: var(--spacing-size-medium);
+            }
+
+            .cancel-send {
+                max-width: calc(var(--spacing-size-medium) * 10);
             }
         `
     ];

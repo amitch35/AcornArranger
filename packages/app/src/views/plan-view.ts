@@ -1,4 +1,4 @@
-import { View } from "@calpoly/mustang";
+import { define, View } from "@calpoly/mustang";
 import { css, html, TemplateResult } from "lit";
 import { property, state } from "lit/decorators.js";
 import { Appointment, Plan, Staff } from "server/models";
@@ -7,8 +7,17 @@ import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 import { formatDate } from "../utils/dates";
+import 'boxicons';
+import { AddStaffModal } from "./add-staff-modal";
+import { AddAppointmentModal } from "./add-appointment-modal";
 
 export class PlanViewElement extends View<Model, Msg> {
+    static uses = define(
+        {
+            "add-staff-modal": AddStaffModal,
+            "add-appointment-modal": AddAppointmentModal
+        }
+    );
 
     @state()
     get model_plan(): Plan | undefined {
@@ -24,9 +33,37 @@ export class PlanViewElement extends View<Model, Msg> {
 
     updated(changedProperties: Map<string | number | symbol, unknown>) {
         super.updated(changedProperties);
-        const modelPlan = this.model_plan;
+        var modelPlan = this.model_plan;
         if (modelPlan && (!this.plan || modelPlan.plan_id === this.plan.plan_id)) {
           this.plan = modelPlan;
+        }
+    }
+
+    handleStaffRemove(event: Event) {
+        const button = event.target as HTMLButtonElement;
+        const { name } = button;
+        if (name !== undefined) {
+            this.dispatchMessage([
+                "plans/staff/remove", 
+                { 
+                    plan_id: this.plan!.plan_id,
+                    user_id: parseInt(name)
+                }
+              ]);
+        }
+    }
+
+    handleAppointmentRemove(event: Event) {
+        const button = event.target as HTMLButtonElement;
+        const { name } = button;
+        if (name !== undefined) {
+            this.dispatchMessage([
+                "plans/appointment/remove", 
+                { 
+                    plan_id: this.plan!.plan_id,
+                    appointment_id: parseInt(name)
+                }
+              ]);
         }
     }
 
@@ -39,6 +76,9 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`
             <li>
                 <span>${staff.name}</span>
+                <button class="trash" name=${staff.user_id} @click=${this.handleStaffRemove}> 
+                    <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
+                </button>
             </li>
         `;
     };
@@ -47,6 +87,9 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`
             <li>
                 <span>${app.property_info.property_name}</span>
+                <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove}> 
+                    <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
+                </button>
             </li>
         `;
     };
@@ -61,10 +104,12 @@ export class PlanViewElement extends View<Model, Msg> {
             <h5>Staff</h5>
             <ul>
                 ${this.plan.staff.map((s) => renderStaff(s.staff_info))}
+                <add-staff-modal .plan=${this.plan}></add-staff-modal>
             </ul>
             <h5>Appointments</h5>
             <ul>
                 ${this.plan.appointments.map((a) => renderAppointment(a.appointment_info))}
+                <add-appointment-modal .plan=${this.plan}></add-appointment-modal>
             </ul>
         </section>
     `;
@@ -81,17 +126,22 @@ export class PlanViewElement extends View<Model, Msg> {
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
-                min-width: calc(var(--spacing-size-medium) * 20);
+                min-width: calc(var(--spacing-size-medium) * 18);
                 width: fit-content;
             }
 
             ul {
                 list-style-type: none;
                 padding: var(--spacing-size-small);
+                width: 100%;
             }
 
             ul li {
-                width: max-content;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: var(--spacing-size-medium);
+                width: 100%;
                 background-color: var(--background-color);
                 border-radius: var(--border-size-radius);
                 margin-bottom: var(--spacing-size-xsmall);
@@ -123,6 +173,14 @@ export class PlanViewElement extends View<Model, Msg> {
             h5 {
                 border-bottom: 1px solid currentColor;
                 line-height: 1.5;
+            }
+
+            button.trash {
+                background-color: var(--background-color);
+            }
+
+            button.trash:hover {
+                background-color: var(--background-color-accent);
             }
         `
     ];

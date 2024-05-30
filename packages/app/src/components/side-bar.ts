@@ -11,11 +11,20 @@ export class SidebarElement extends LitElement {
 
     displayNameTemplate() {
         if (this.display_name === 'Status: 401' || this.display_name === 'Status: 403') {
-            return html`<span>Please <a href="/login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>`;
+            return html`
+                <box-icon name='user-circle' type='solid' color="var(--accent-color-red)" size="var(--icon-size)" ></box-icon>
+                <span>Please <a href="/login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>
+            `;
         } else if (this.display_name === '') {
-            return html`<span>Hello, user</span>`;
+            return html`
+                <box-icon name='user-circle' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
+                <span>Hello, user</span>
+            `;
         } else {
-            return html`<span>${this.display_name}</span>`;
+            return html`
+                <box-icon name='user-circle' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
+                <span>${this.display_name}</span>
+            `;
         }
     }
 
@@ -28,7 +37,11 @@ export class SidebarElement extends LitElement {
             if (authenticated_user && authenticated_user.token) {
                 const token = jwtDecode(authenticated_user.token) as TokenJSON;
                 if (token) {
-                    this.display_name = token.user_metadata.display_name || '';
+                    if ((token.exp && token.exp < (Math.round(Date.now() / 1000))) || (token.role && token.role === 'anon')) {
+                        this.display_name = 'Status: 403'
+                    } else {
+                        this.display_name = token.user_metadata.display_name || '';
+                    }
                 }
             }
         });
@@ -54,7 +67,6 @@ export class SidebarElement extends LitElement {
                 </div>
             </div>
             <div class="user">
-                <box-icon name='user-circle' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                 ${this.displayNameTemplate()}
             </div>
             <ul class="menu-items">
