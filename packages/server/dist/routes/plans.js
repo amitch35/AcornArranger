@@ -197,7 +197,7 @@ router.post("/build/:plan_date", (req, res) => __async(void 0, null, function* (
       available_staff: req.body.available_staff,
       office_location: req.body.office_location || `0101000020E6100000D2DB44D213E95DC01D12088552AC4240`,
       services: req.body.services || [21942, 23044],
-      omissions: req.body.omissions || null,
+      omissions: req.body.omissions && req.body.omissions.length > 0 ? req.body.omissions : null,
       routing_type: req.body.routing_type,
       cleaning_window: req.body.cleaning_window,
       max_hours: req.body.max_hours,

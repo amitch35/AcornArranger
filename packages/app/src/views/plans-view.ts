@@ -11,6 +11,7 @@ import { toISOLocal } from "../utils/dates";
 import { AvailableStaffModal } from "./available-modal";
 import { OmissionsModal } from "./omissions-modal";
 import { BuildErrorDialog } from "../components/build-error-dialog";
+import { InfoDialog } from "../components/info-dialog";
 import 'boxicons';
 
 interface ServiceOption {
@@ -26,7 +27,8 @@ export class PlansViewElement extends View<Model, Msg> {
             "plan-view": PlanViewElement,
             "available-modal": AvailableStaffModal,
             "omissions-modal": OmissionsModal,
-            "build-error-dialog": BuildErrorDialog
+            "build-error-dialog": BuildErrorDialog,
+            "info-dialog": InfoDialog
         }
     );
 
@@ -285,7 +287,7 @@ export class PlansViewElement extends View<Model, Msg> {
                 <div class="align-left">
                     <h4>Options</h4>
                 </div>
-                <menu class="table-menu">
+                <menu class="table-menu options-menu">
                     <div>
                         <span>Services:</span>
                         <div class="filters">
@@ -293,29 +295,52 @@ export class PlansViewElement extends View<Model, Msg> {
                         </div>
                     </div>
                     <omissions-modal date=${this.from_plan_date} .services=${this.filter_service_ids}></omissions-modal>
-                    <div>
-                        <label>
-                            <span>Routing Type:</span>
-                            <select name="routing_type" .value=${this.routing_type.toString()} @change=${this.handleTableOptionChange} >
-                                <option value="1">Farthest to Office (Recommended)</option>
-                                <option value="2">Farthest to Anywhere</option>
-                                <option value="3">Office to Farthest</option>
-                                <option value="4">Office to Anywhere</option>
-                                <option value="4">Start and end Anywhere</option>
-                            </select>
-                        </label>
-                        <label>
-                            <span>Cleaning Window:</span>
-                            <input name="cleaning_window" autocomplete="off" .value=${this.cleaning_window.toString()} type="number" @input=${this.handleTableOptionChange} />
-                        </label>
-                        <label>
-                            <span>Max Hours:</span>
-                            <input name="max_hours" autocomplete="off" .value=${this.max_hours.toString()} type="number" @input=${this.handleTableOptionChange} />
-                        </label>
-                        <label>
-                            <span>Target Staff Count:</span>
-                            <input name="target_staff_count" autocomplete="off" .value=${this.target_staff_count ? this.target_staff_count.toString() : ''} type="number" @input=${this.handleTableOptionChange} />
-                        </label>
+                    <div class="labeled-options">
+                        <div>
+                            <label>
+                                <info-dialog name="Routing Type">
+                                    <p>Determines start and end nodes used in Traveling Sales Person routing algorithm.</p>
+                                </info-dialog>
+                                <span>Routing Type:</span>
+                                <select name="routing_type" .value=${this.routing_type.toString()} @change=${this.handleTableOptionChange} >
+                                    <option value="1">Farthest to Office (Recommended)</option>
+                                    <option value="2">Farthest to Anywhere</option>
+                                    <option value="3">Office to Farthest</option>
+                                    <option value="4">Office to Anywhere</option>
+                                    <option value="4">Start and end Anywhere</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <info-dialog name="Cleaning Window">
+                                    <p>Assumed Cleaning Window (hours) used for estimating number of cleaners needed for a day.</p>
+                                    <p>Lower this value to schedule more housekeepers</p>
+                                    <p>Increase to be more optimistic and potentially schedule less housekeepers</p>
+                                </info-dialog>
+                                <span>Cleaning Window:</span>
+                                <input name="cleaning_window" autocomplete="off" .value=${this.cleaning_window.toString()} type="number" @input=${this.handleTableOptionChange} />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <info-dialog name="Max Hours">
+                                    <p>Max total field hours before a team times out (does not include travel to/from office).</p>
+                                    <p>Lower this value if teams are getting too much to handle</p>                                </info-dialog>
+                                <span>Max Hours:</span>
+                                <input name="max_hours" autocomplete="off" .value=${this.max_hours.toString()} type="number" @input=${this.handleTableOptionChange} />
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <info-dialog name="Target Staff Count">
+                                    <p>Target number of staff to schedule.</p>
+                                    <p>(Takes effect only if larger than calculated required number of staff)</p>
+                                </info-dialog>
+                                <span>Target Staff Count:</span>
+                                <input name="target_staff_count" autocomplete="off" .value=${this.target_staff_count ? this.target_staff_count.toString() : ''} type="number" @input=${this.handleTableOptionChange} />
+                            </label>
+                        </div>
                     </div>
                 </menu>
                 <div class="spread-apart">
@@ -381,6 +406,29 @@ export class PlansViewElement extends View<Model, Msg> {
             menu.parameter-menu > div > label {
                 display: flex;
                 gap: var(--spacing-size-small);
+            }
+
+            menu.options-menu {
+                gap: var(--spacing-size-xlarge);
+            }
+
+            .labeled-options {
+                flex-grow: 1;
+                max-width: calc(var(--spacing-size-large) * 30);
+                width: 50%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacing-size-large);
+            }
+
+            .labeled-options > div > label {
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-size-xsmall);
+            }
+
+            .labeled-options > div > label > span {
+                margin-right: var(--spacing-size-small);
             }
 
             ul {
