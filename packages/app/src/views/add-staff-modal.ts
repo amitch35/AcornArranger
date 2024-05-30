@@ -50,17 +50,6 @@ export class AddStaffModal extends View<Model, Msg> {
         super("acorn:model");
     }
 
-    connectedCallback() {
-        super.connectedCallback();
-        this.dispatchMessage([
-            "staff/", 
-            { 
-                filter_status_ids: [1],
-                filter_can_clean: true
-            }
-          ]);
-    }
-
     handleInputChange(event: Event) {
         const input = event.target as HTMLInputElement;
         const { name, value } = input;

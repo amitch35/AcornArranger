@@ -45,7 +45,6 @@ export class OmissionsModal extends View<Model, Msg> {
 
     connectedCallback() {
         super.connectedCallback();
-        this.updateAppointments();
     }
 
     attributeChangedCallback(
