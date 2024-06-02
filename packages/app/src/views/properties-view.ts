@@ -20,10 +20,10 @@ const STATUS_OPTIONS: Array<StatusOption> = [
 
 type CheckboxField = "property_status";
 
-function formatCleaningTime(minutes: number): string {
+function formatCleaningTime(minutes: number) {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    if (!hours && !minutes) return ``;
+    if (!hours && !minutes) return html`<box-icon name='error' color="var(--accent-color-red)"></box-icon>`;
     else if (!hours) return `${mins} Minutes`;
     else if (mins && hours === 1) return `${hours} Hour ${mins} Minutes`;
     else if (mins) return `${hours} Hours ${mins} Minutes`;
