@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { jwtDecode } from "jwt-decode";
-import { Auth, Observer, Events } from "@calpoly/mustang";
+import { Auth, Observer, Events, History } from "@calpoly/mustang";
 import { property } from "lit/decorators.js";
 import { TokenJSON } from "server/models";
 
@@ -9,11 +9,14 @@ export class SidebarElement extends LitElement {
     @property({attribute: false})
     display_name: string = 'Status: 401';
 
+    @property()
+    curr_href: string = window.location.href;
+
     displayNameTemplate() {
         if (this.display_name === 'Status: 401' || this.display_name === 'Status: 403') {
             return html`
                 <box-icon name='user-circle' type='solid' color="var(--accent-color-red)" size="var(--icon-size)" ></box-icon>
-                <span>Please <a href="/login.html?next=${window.location.href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>
+                <span>Please <a href="/login.html?next=${this.curr_href}" style="color: var(--text-color-link);" @click=${signOutUser}>login</a></span>
             `;
         } else if (this.display_name === '') {
             return html`
@@ -29,6 +32,7 @@ export class SidebarElement extends LitElement {
     }
 
     _authObserver = new Observer<Auth.Model>(this, "acorn:auth");
+    _historyObserver = new Observer<History.Model>(this, "acorn:history");
 
     connectedCallback() {
         super.connectedCallback();
@@ -45,6 +49,10 @@ export class SidebarElement extends LitElement {
                 }
             }
         });
+        this._historyObserver.observe(({ location }) => {
+            console.log("New location", location);
+            if (location) this.curr_href = location.href;
+          });
     }
 
     toggleDarkMode(ev: Event) {
@@ -116,7 +124,7 @@ export class SidebarElement extends LitElement {
                     <span class="tooltip">Theme</span>
                 </li>
                 <li>
-                    <a href="/login.html?next=${window.location.href}" @click=${signOutUser}>
+                    <a href="/login.html?next=${this.curr_href}" @click=${signOutUser}>
                         <box-icon name='log-out' color="var(--text-color-header)" size="var(--icon-size)"></box-icon>
                         <span class="nav-item">Logout</span>
                     </a>

@@ -76,7 +76,7 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`
             <li>
                 <span>${staff.name}</span>
-                <button class="trash" name=${staff.user_id} @click=${this.handleStaffRemove}> 
+                <button class="trash" name=${staff.user_id} @click=${this.handleStaffRemove} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}> 
                     <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
                 </button>
             </li>
@@ -87,7 +87,7 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`
             <li>
                 <span>${app.property_info.property_name}</span>
-                <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove}> 
+                <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}> 
                     <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
                 </button>
             </li>
@@ -98,6 +98,7 @@ export class PlanViewElement extends View<Model, Msg> {
         <section>
             <div>
                 <p>ID: ${this.plan.plan_id}</p>
+                <p>${this.plan.appointments[0] && this.plan.appointments[0].sent_to_rc !== null ? html`<box-icon name='upload' color="var(--text-color-body)" size="var(--text-font-size-body)"></box-icon>` : html``}</p>
                 <p>${formatDate(this.plan.plan_date)}</p>
             </div>
             <h4>Team ${this.plan.team}</h4>
