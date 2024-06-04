@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@calpoly/mustang": "^0.1.9",
+    "@calpoly/mustang": "^0.1.13",
     "http-server": "^14.1.1"
   }
 }

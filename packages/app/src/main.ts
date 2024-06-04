@@ -82,7 +82,7 @@ define({
   "mu-history": History.Provider,
   "mu-switch": class AppSwitch extends Switch.Element {
     constructor() {
-      super(routes, "acorn:history");
+      super(routes, "acorn:history", "acorn:auth");
     }
   },
   "side-bar": SidebarElement,
