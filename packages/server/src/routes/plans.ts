@@ -188,6 +188,22 @@ router.post('/build/:plan_date', async (req: Request, res: Response) => {
       res.send(data);
     }
 });
+
+router.post('/copy/:plan_date', async (req: Request, res: Response) => {
+  const { data, error, status } = await supabase
+    .rpc(
+      'copy_schedule_plan', 
+      {
+        schedule_date: req.params.plan_date
+      }
+    )
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
   
 router.post('/send/:plan_date', async (req: Request, res: Response) => {
     const { data, error, status } = await supabase

@@ -107,11 +107,6 @@ export class BuildErrorDialog extends LitElement {
         reset,
         page,
         css`
-
-            button[disabled] {
-                cursor: default;
-            }
-
             button[disabled]:hover {
                 background-color: var(--background-color-accent);
             }

@@ -427,3 +427,6 @@ Sends all valid plans for the given day to ResortCleaning to be assigned to staf
 
 ### 6.9 Create new Plan for day - `/plans/add/{plan_date}` - POST
 Add a new plan empty, valid plan to the given day
+
+### 6.10 Copy Schedule Plans for day to new mutable Plans - `/plans/copy/{plan_date}` - POST
+Copy each plan for a day to new plans that are mutable and invalidate the old ones

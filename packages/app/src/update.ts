@@ -113,6 +113,12 @@ export default function update(
           apply((model) => ({ ...model, build_error: error }))
       });
       break;
+    case "plans/copy":
+      copyPlan(message[1], user).then(
+      (error: ErrorResponse | undefined) => {
+          apply((model) => ({ ...model, build_error: error }))
+      });
+      break;
     case "plans/send":
       sendPlan(message[1], user).then(
       (error: ErrorResponse | undefined) => {
@@ -508,6 +514,29 @@ function buildPlan(
           return undefined;
         }
       });
+}
+
+function copyPlan(
+  msg: { plan_date: string; },
+  user: Auth.User
+) {
+  return fetch(`/api/plans/copy/${msg.plan_date}`, {
+    method: "POST",
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details) {
+          return error_json;
+        }
+        return undefined;
+      }
+    });
 }
 
 function sendPlan(

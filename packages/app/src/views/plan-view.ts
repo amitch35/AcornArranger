@@ -183,6 +183,10 @@ export class PlanViewElement extends View<Model, Msg> {
             button.trash:hover {
                 background-color: var(--background-color-accent);
             }
+
+            button[disabled].trash:hover {
+                background-color: var(--background-color);
+            }
         `
     ];
 }

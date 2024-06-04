@@ -16,6 +16,7 @@ export type Msg =
   | ["plans/appointment/add", { plan_id: number; appointment_id: number; }]
   | ["plans/appointment/remove", { plan_id: number; appointment_id: number; }]
   | ["plans/build", { plan_date: string; build_options: PlanBuildOptions; }]
+  | ["plans/copy", { plan_date: string; }]
   | ["plans/send", { plan_date: string; }]
   | ["plans/add", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]

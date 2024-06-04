@@ -819,6 +819,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      copy_schedule_plan: {
+        Args: {
+          schedule_date: string
+        }
+        Returns: undefined
+      }
       custom_access_token_hook: {
         Args: {
           event: Json

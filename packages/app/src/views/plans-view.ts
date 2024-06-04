@@ -139,6 +139,16 @@ export class PlansViewElement extends View<Model, Msg> {
           ]);
     }
 
+    copySchedule() {
+        this.build_count++;
+        this.dispatchMessage([
+            "plans/copy", 
+            { 
+                plan_date: this.from_plan_date
+            }
+          ]);
+    }
+
     sendSchedule() {
         this.build_count++;
         this.dispatchMessage([
@@ -349,6 +359,10 @@ export class PlansViewElement extends View<Model, Msg> {
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                         <span>Build</span>
                     </button>
+                    <button class="copy" @click=${this.copySchedule} ?disabled=${!this.plans || this.plans.length < 1}>
+                        <box-icon name='copy' color="var(--text-color-body)"></box-icon>
+                        <span>Copy</span>
+                    </button>
                     <button @click=${this.showSendModal}>
                         <box-icon name='upload' color="var(--text-color-body)"></box-icon>
                         <span>Send</span>
@@ -466,6 +480,10 @@ export class PlansViewElement extends View<Model, Msg> {
 
             .cancel-send {
                 max-width: calc(var(--spacing-size-medium) * 10);
+            }
+
+            button[disabled].copy:hover {
+                background-color: var(--background-color-accent);
             }
         `
     ];

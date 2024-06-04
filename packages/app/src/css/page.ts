@@ -351,6 +351,11 @@ button box-icon {
     pointer-events: none;
 }
 
+button[disabled] {
+    opacity: 0.5;
+    cursor: default;
+}
+
 strong {
     font-weight: var(--text-font-weight-bold);
 }
