@@ -2013,7 +2013,7 @@ svg {
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                         <span>Build</span>
                     </button>
-                    <button class="copy" @click=${this.copySchedule} ?disabled=${!this.plans||this.plans.length<1}>
+                    <button class="copy" @click=${this.copySchedule} ?disabled=${!this.plans||this.plans.length<1||this.plans[0].appointments[0]&&this.plans[0].appointments[0].sent_to_rc===null}>
                         <box-icon name='copy' color="var(--text-color-body)"></box-icon>
                         <span>Copy</span>
                     </button>
