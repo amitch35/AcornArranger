@@ -236,7 +236,7 @@ Expecting `+te.join(", ")+", got '"+(this.terminals_[w]||w)+"'":$e="Parse error 
                 </li>
                 <li>
                     <a href="/app/roles">
-                        <box-icon name='hard-hat' type='solid' class="dark-mode-only" color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
+                        <box-icon name='hard-hat' type='solid' color="var(--text-color-header)" size="var(--icon-size)" ></box-icon>
                         <span class="nav-item">Staff Roles</span>
                     </a>
                     <span class="tooltip">Staff Roles</span>
