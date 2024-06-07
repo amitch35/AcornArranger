@@ -65,8 +65,22 @@ export class AddStaffModal extends View<Model, Msg> {
                     user_id: this.staff_to_add
                 }
               ]);
+            this.requestPlanUpdate();
         }
         this.closeDialog();
+    }
+
+    requestPlanUpdate() {
+        const requestUpdateEvent = new CustomEvent(
+          "plan-view:update",
+          {
+            bubbles: true,
+            composed: true,
+            detail: { }
+          }
+        );
+    
+        this.dispatchEvent(requestUpdateEvent);
     }
 
     closeDialog() {

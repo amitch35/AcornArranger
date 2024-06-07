@@ -65,8 +65,22 @@ export class AddAppointmentModal extends View<Model, Msg> {
                     appointment_id: this.app_to_add
                 }
               ]);
+            this.requestPlanUpdate();
         }
         this.closeDialog();
+    }
+
+    requestPlanUpdate() {
+        const requestUpdateEvent = new CustomEvent(
+          "plan-view:update",
+          {
+            bubbles: true,
+            composed: true,
+            detail: { }
+          }
+        );
+    
+        this.dispatchEvent(requestUpdateEvent);
     }
 
     closeDialog() {

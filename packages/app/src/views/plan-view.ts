@@ -50,6 +50,7 @@ export class PlanViewElement extends View<Model, Msg> {
                     user_id: parseInt(name)
                 }
               ]);
+            this.requestPlanUpdate();
         }
     }
 
@@ -64,7 +65,21 @@ export class PlanViewElement extends View<Model, Msg> {
                     appointment_id: parseInt(name)
                 }
               ]);
+            this.requestPlanUpdate();
         }
+    }
+
+    requestPlanUpdate() {
+        const requestUpdateEvent = new CustomEvent(
+          "plan-view:update",
+          {
+            bubbles: true,
+            composed: true,
+            detail: { }
+          }
+        );
+    
+        this.dispatchEvent(requestUpdateEvent);
     }
 
     render(): TemplateResult {

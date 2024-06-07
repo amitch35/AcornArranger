@@ -62,6 +62,7 @@ router.get('/', async (req: Request, res: Response) => {
     query = query.range(offset, (offset + per_page - 1))
       .order('plan_date', { ascending: false })
       .order('team', { ascending: true })
+      .order('ord', { referencedTable: 'plan_appointments', ascending: true })
   
     const {data, error, status} = await query
     res.status(status);
@@ -83,6 +84,7 @@ router.get('/:plan_id', async (req: Request, res: Response) => {
         .filter('plan_appointments.valid', 'eq', true)
         .filter('plan_staff.valid', 'eq', true)
         .eq('id', req.params.plan_id)
+        .order('ord', { referencedTable: 'plan_appointments', ascending: true })
         .maybeSingle()
   
     const {data, error, status} = await query

@@ -104,7 +104,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   if (req.query.to_plan_date) {
     query = query.lte("plan_date", req.query.to_plan_date);
   }
-  query = query.range(offset, offset + per_page - 1).order("plan_date", { ascending: false }).order("team", { ascending: true });
+  query = query.range(offset, offset + per_page - 1).order("plan_date", { ascending: false }).order("team", { ascending: true }).order("ord", { referencedTable: "plan_appointments", ascending: true });
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {
@@ -117,7 +117,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
   }
 }));
 router.get("/:plan_id", (req, res) => __async(void 0, null, function* () {
-  let query = supabase.from("schedule_plans").select(selectPlans).eq("valid", true).filter("plan_appointments.valid", "eq", true).filter("plan_staff.valid", "eq", true).eq("id", req.params.plan_id).maybeSingle();
+  let query = supabase.from("schedule_plans").select(selectPlans).eq("valid", true).filter("plan_appointments.valid", "eq", true).filter("plan_staff.valid", "eq", true).eq("id", req.params.plan_id).order("ord", { referencedTable: "plan_appointments", ascending: true }).maybeSingle();
   const { data, error, status } = yield query;
   res.status(status);
   if (error) {

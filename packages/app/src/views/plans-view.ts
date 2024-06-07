@@ -96,6 +96,10 @@ export class PlansViewElement extends View<Model, Msg> {
         this.addEventListener("build-error-dialog:no-error", () => {
             this.updatePlans();
           });
+
+        this.addEventListener("plan-view:update", () => {
+            this.updatePlans();
+        });
     }
 
     connectedCallback() {

@@ -109,10 +109,12 @@ export class OmissionsModal extends View<Model, Msg> {
 
     selectAll() {
         this.appointment_omissions = this.appointments!.map(a => a.appointment_id);
+        this.updateOmissions
     }
 
     clearSelection() {
         this.appointment_omissions = [];
+        this.updateOmissions
     }
 
     closeDialog() {
