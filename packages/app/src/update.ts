@@ -154,6 +154,9 @@ export default function update(
     case "omissions/save":
       apply((model) => ({ ...model, omissions: message[1].omissions }));
       break;
+    case "build_error/reset":
+      apply((model) => ({ ...model, build_error: undefined }));
+      break;
     default:
       const unhandled: never = message[0];
       throw new Error(`Unhandled Auth message "${unhandled}"`);

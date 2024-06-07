@@ -23,4 +23,5 @@ export type Msg =
   | ["staff/", { filter_status_ids?: Array<number>; filter_can_clean?: boolean; }]
   | ["services/", { }]
   | ["available/save", { available: Array<number> }]
-  | ["omissions/save", { omissions: Array<number> }];
+  | ["omissions/save", { omissions: Array<number> }]
+  | ["build_error/reset", { }];

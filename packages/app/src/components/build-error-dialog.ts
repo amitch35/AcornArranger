@@ -26,7 +26,7 @@ export class BuildErrorDialog extends LitElement {
           newValue
         ) {
             if (newValue.split(':')[0] === "no-error") {
-                this.requestPlanUpdate();
+                if (oldValue.split(':')[1] !== newValue.split(':')[1]) this.requestPlanUpdate();
             } else {
                 this.show();
             }

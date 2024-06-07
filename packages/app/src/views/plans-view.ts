@@ -121,6 +121,7 @@ export class PlansViewElement extends View<Model, Msg> {
     }
 
     buildSchedule() {
+        if (this.build_error) this.dispatchMessage([ "build_error/reset", { } ]);
         this.build_count++;
         this.dispatchMessage([
             "plans/build", 
