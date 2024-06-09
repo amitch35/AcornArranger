@@ -68,6 +68,7 @@ export class AddStaffModal extends View<Model, Msg> {
             this.requestPlanUpdate();
         }
         this.closeDialog();
+        this.staff_to_add = undefined;
     }
 
     requestPlanUpdate() {

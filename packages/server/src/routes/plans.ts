@@ -210,7 +210,7 @@ router.post('/copy/:plan_date', async (req: Request, res: Response) => {
 router.post('/send/:plan_date', async (req: Request, res: Response) => {
     const { data, error, status } = await supabase
       .rpc(
-        'send_rc_schedule_plans', 
+        'schedule_send_rc_schedule_plans', 
         {
           schedule_date: req.params.plan_date
         }

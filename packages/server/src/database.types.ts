@@ -567,6 +567,30 @@ export type Database = {
         }
         Relationships: []
       }
+      send_schedule_job_queue: {
+        Row: {
+          created_at: string
+          id: number
+          schedule_date: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          schedule_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          schedule_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       service_key: {
         Row: {
           created_at: string
@@ -933,6 +957,16 @@ export type Database = {
         }
         Returns: undefined
       }
+      process_send_schedule_job_queue: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      schedule_send_rc_schedule_plans: {
+        Args: {
+          schedule_date: string
+        }
+        Returns: undefined
+      }
       send_rc_schedule_plans: {
         Args: {
           schedule_date: string
@@ -1008,6 +1042,7 @@ export type Database = {
         | "http_response.select"
         | "http_response.insert"
         | "travel_times.select"
+        | "send_schedule_job_queue.insert"
       app_role: "authenticated" | "authorized_user"
     }
     CompositeTypes: {

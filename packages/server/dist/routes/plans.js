@@ -227,7 +227,7 @@ router.post("/copy/:plan_date", (req, res) => __async(void 0, null, function* ()
 }));
 router.post("/send/:plan_date", (req, res) => __async(void 0, null, function* () {
   const { data, error, status } = yield supabase.rpc(
-    "send_rc_schedule_plans",
+    "schedule_send_rc_schedule_plans",
     {
       schedule_date: req.params.plan_date
     }

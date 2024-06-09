@@ -126,7 +126,6 @@ export class PlansViewElement extends View<Model, Msg> {
 
     buildSchedule() {
         if (this.build_error) this.dispatchMessage([ "build_error/reset", { } ]);
-        this.build_count++;
         this.dispatchMessage([
             "plans/build", 
             { 
@@ -142,37 +141,38 @@ export class PlansViewElement extends View<Model, Msg> {
                  } as PlanBuildOptions
             }
           ]);
+        this.build_count++;
     }
 
     copySchedule() {
-        this.build_count++;
         this.dispatchMessage([
             "plans/copy", 
             { 
                 plan_date: this.from_plan_date
             }
           ]);
+        this.build_count++;
     }
 
     sendSchedule() {
-        this.build_count++;
         this.dispatchMessage([
             "plans/send", 
             { 
                 plan_date: this.from_plan_date
             }
           ]);
+        this.build_count++;
         this.closeSendModal();
     }
 
     addPlan() {
-        this.build_count++;
         this.dispatchMessage([
             "plans/add", 
             { 
                 plan_date: this.from_plan_date
             }
           ]);
+        this.build_count++;
     }
 
     handleTableOptionChange(event: Event) {

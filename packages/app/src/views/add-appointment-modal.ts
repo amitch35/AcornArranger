@@ -68,6 +68,7 @@ export class AddAppointmentModal extends View<Model, Msg> {
             this.requestPlanUpdate();
         }
         this.closeDialog();
+        this.app_to_add = undefined;
     }
 
     requestPlanUpdate() {
