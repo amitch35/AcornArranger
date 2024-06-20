@@ -819,7 +819,7 @@ td {
     padding: var(--spacing-size-small) var(--spacing-size-small);
 }
 
-td.center {
+.center {
     text-align: center;
 }
 
@@ -1199,9 +1199,9 @@ svg {
                     ${r.property_info.property_name}
                     </span>
                 </td>
-                <td>
+                <td class="center">
                     <ul class="staff">
-                        ${(a=r.staff)==null?void 0:a.map(l=>e(l.staff_info))}
+                        ${r.staff&&r.staff.length>0?(a=r.staff)==null?void 0:a.map(l=>e(l.staff_info)):u`<box-icon name='error' color="var(--accent-color-red)"></box-icon>`}
                     </ul>
                 </td>
                 <td class="center">

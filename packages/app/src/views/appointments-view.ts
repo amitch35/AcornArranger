@@ -223,9 +223,9 @@ export class AppointmentsViewElement extends View<Model, Msg> {
                     ${app.property_info.property_name}
                     </span>
                 </td>
-                <td>
+                <td class="center">
                     <ul class="staff">
-                        ${app.staff?.map((s) => { return renderStaff(s.staff_info) })}
+                        ${app.staff && app.staff.length > 0 ? app.staff?.map((s) => { return renderStaff(s.staff_info) }) : html`<box-icon name='error' color="var(--accent-color-red)"></box-icon>`}
                     </ul>
                 </td>
                 <td class="center">

@@ -309,7 +309,7 @@ td {
     padding: var(--spacing-size-small) var(--spacing-size-small);
 }
 
-td.center {
+.center {
     text-align: center;
 }
 
