@@ -26,6 +26,26 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
 var server_exports = {};
 __export(server_exports, {
   supabaseClient: () => supabaseClient
@@ -33,6 +53,7 @@ __export(server_exports, {
 module.exports = __toCommonJS(server_exports);
 var import_supabase_js = require("@supabase/supabase-js");
 var import_dotenv = __toESM(require("dotenv"));
+var import_nodemailer = __toESM(require("nodemailer"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
 const supabase = (0, import_supabase_js.createClient)(
   process.env.SUPABASE_URL,
@@ -50,6 +71,37 @@ supabase.auth.signInWithPassword(
     password: process.env.SUPABASE_SERVER_ACCT_PSWD
   }
 );
+const transporter = import_nodemailer.default.createTransport({
+  host: process.env.SMTP_HOST,
+  port: 465,
+  secure: true,
+  // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USR,
+    pass: process.env.SMTP_PSWD
+  }
+});
+const sendErrorEmail = (errorLog) => __async(void 0, null, function* () {
+  const mailOptions = {
+    from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
+    to: `${process.env.DEV_EMAIL}`,
+    subject: `Error in function: ${errorLog.function_name}`,
+    html: `<p>An error occurred in function <strong>${errorLog.function_name}</strong>:</p><p>${errorLog.error_message}</p>`
+  };
+  try {
+    yield transporter.sendMail(mailOptions);
+    console.log("Error email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+});
+const handleErrorLogInserts = (payload) => __async(void 0, null, function* () {
+  const { new: errorLog } = payload;
+  if (errorLog.function_name !== "build_schedule_plan") {
+    yield sendErrorEmail(errorLog);
+  }
+});
+supabase.channel("error_log").on("postgres_changes", { event: "INSERT", schema: "public", table: "error_log" }, handleErrorLogInserts).subscribe();
 const supabaseClient = supabase;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
