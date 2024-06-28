@@ -71,17 +71,17 @@ supabase.auth.signInWithPassword(
     password: process.env.SUPABASE_SERVER_ACCT_PSWD
   }
 );
-const transporter = import_nodemailer.default.createTransport({
-  host: process.env.SMTP_HOST,
-  port: 465,
-  secure: true,
-  // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USR,
-    pass: process.env.SMTP_PSWD
-  }
-});
-const sendErrorEmail = (errorLog) => __async(void 0, null, function* () {
+const sendErrorEmail = (errorLog, retryCount = 3) => __async(void 0, null, function* () {
+  const transporter = import_nodemailer.default.createTransport({
+    host: process.env.SMTP_HOST,
+    port: 465,
+    secure: true,
+    // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USR,
+      pass: process.env.SMTP_PSWD
+    }
+  });
   const mailOptions = {
     from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
     to: `${process.env.DEV_EMAIL}`,
@@ -90,9 +90,14 @@ const sendErrorEmail = (errorLog) => __async(void 0, null, function* () {
   };
   try {
     yield transporter.sendMail(mailOptions);
-    console.log("Error email sent successfully");
+    console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
+    if (retryCount > 0) {
+      console.log(`Retrying... Attempts left: ${retryCount}`);
+      yield new Promise((resolve) => setTimeout(resolve, 5e3));
+      return sendErrorEmail(errorLog, retryCount - 1);
+    }
   }
 });
 const handleErrorLogInserts = (payload) => __async(void 0, null, function* () {

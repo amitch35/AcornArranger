@@ -23,17 +23,6 @@ supabase.auth.signInWithPassword(
   }
 );
 
-// Create a reusable transporter object using the default SMTP transport
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: 465, 
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: process.env.SMTP_USR,
-    pass: process.env.SMTP_PSWD, 
-  },
-});
-
 type ErrorLogRecord = {
   created_at: string;
   error_message: string;
@@ -42,7 +31,18 @@ type ErrorLogRecord = {
 };
 
 // Define a function to send an email
-const sendErrorEmail = async (errorLog: ErrorLogRecord) => {
+const sendErrorEmail = async (errorLog: ErrorLogRecord, retryCount = 3): Promise<void> => {
+  // Create a transporter object using the default SMTP transport
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: 465, 
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USR,
+      pass: process.env.SMTP_PSWD, 
+    },
+  });
+
   const mailOptions = {
     from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
     to: `${process.env.DEV_EMAIL}`,
@@ -52,9 +52,14 @@ const sendErrorEmail = async (errorLog: ErrorLogRecord) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Error email sent successfully');
+    console.log('Email sent successfully');
   } catch (error) {
     console.error('Error sending email:', error);
+    if (retryCount > 0) {
+      console.log(`Retrying... Attempts left: ${retryCount}`);
+      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds before retrying
+      return sendErrorEmail(errorLog, retryCount - 1);
+    }
   }
 };
 
