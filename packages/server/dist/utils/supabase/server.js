@@ -73,8 +73,7 @@ supabase.auth.signInWithPassword(
 );
 function sendErrorEmail(errorLog, retryCount = 3) {
   return __async(this, null, function* () {
-    console.log("Sending Error Email");
-    const transporter = import_nodemailer.default.createTransport({
+    var transporter = import_nodemailer.default.createTransport({
       host: process.env.SMTP_HOST,
       port: 465,
       secure: true,
@@ -82,18 +81,6 @@ function sendErrorEmail(errorLog, retryCount = 3) {
       auth: {
         user: process.env.SMTP_USR,
         pass: process.env.SMTP_PSWD
-      },
-      tls: {
-        servername: process.env.SMTP_HOST
-      },
-      debug: true,
-      logger: true
-    });
-    transporter.verify(function(error, success) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Server is ready to take our messages");
       }
     });
     const mailOptions = {
@@ -118,14 +105,13 @@ function sendErrorEmail(errorLog, retryCount = 3) {
 ;
 function handleErrorLogInserts(payload) {
   return __async(this, null, function* () {
-    console.log("Change received!", payload);
     const { new: errorLog } = payload;
     if (errorLog.function_name !== "build_schedule_plan") {
       yield sendErrorEmail(errorLog);
     }
   });
 }
-sendErrorEmail({ created_at: "1234", error_message: "This is a test email", function_name: "anything_function", id: 336 }, 1);
+supabase.channel("error_log").on("postgres_changes", { event: "INSERT", schema: "public", table: "error_log" }, handleErrorLogInserts).subscribe();
 const supabaseClient = supabase;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
