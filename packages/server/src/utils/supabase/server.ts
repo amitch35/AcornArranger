@@ -47,7 +47,7 @@ async function sendErrorEmail(errorLog: ErrorLogRecord, retryCount: number = 3):
   const mailOptions = {
     from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
     to: `${process.env.DEV_EMAIL}`,
-    subject: `Error in function: ${errorLog.function_name}`,
+    subject: `Error ${errorLog.id} in function: ${errorLog.function_name}`,
     html: `<p>An error occurred in function <strong>${errorLog.function_name}</strong>:</p><p>${errorLog.error_message}</p>`
   };
 
