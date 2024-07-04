@@ -33,6 +33,7 @@ type ErrorLogRecord = {
 // Define a function to send an email
 async function sendErrorEmail(errorLog: ErrorLogRecord, retryCount: number = 3): Promise<void> {
   // Create a transporter object using the default SMTP transport
+  console.log("Sending Error Email")
   var transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: 465, 
@@ -41,6 +42,17 @@ async function sendErrorEmail(errorLog: ErrorLogRecord, retryCount: number = 3):
       user: process.env.SMTP_USR,
       pass: process.env.SMTP_PSWD, 
     },
+    debug: true,
+    logger: true,
+  });
+
+  // verify connection configuration
+  transporter.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
   });
 
   const mailOptions = {
@@ -63,7 +75,7 @@ async function sendErrorEmail(errorLog: ErrorLogRecord, retryCount: number = 3):
   }
 };
 
-const handleErrorLogInserts = async (payload: RealtimePostgresInsertPayload<ErrorLogRecord>) => {
+async function handleErrorLogInserts(payload: RealtimePostgresInsertPayload<ErrorLogRecord>) {
   // console.log('Change received!', payload)
   const { new: errorLog } = payload;
   
@@ -72,10 +84,12 @@ const handleErrorLogInserts = async (payload: RealtimePostgresInsertPayload<Erro
   }
 }
 
+sendErrorEmail({ created_at: '1234', error_message: 'This is a test email', function_name: 'anything_function', id: 336}, 1);
+
 // Listen to inserts
-supabase
-  .channel('error_log')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'error_log' }, handleErrorLogInserts)
-  .subscribe()
+// supabase
+//   .channel('error_log')
+//   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'error_log' }, handleErrorLogInserts)
+//   .subscribe()
 
 export const supabaseClient = supabase;
