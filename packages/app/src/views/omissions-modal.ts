@@ -17,7 +17,7 @@ type CheckboxField = "app_omissions";
 
 export class OmissionsModal extends View<Model, Msg> {
 
-    @property({ attribute: false })
+    @property({ attribute: true, reflect: true })
     services?: Array<number>;
 
     @property()
@@ -54,9 +54,9 @@ export class OmissionsModal extends View<Model, Msg> {
       ) {
         super.attributeChangedCallback(name, oldValue, newValue);
         if (
-          name === "date" &&
-          oldValue !== newValue &&
-          newValue
+            (name === "date" || name === "services") &&
+            oldValue !== newValue &&
+            newValue
         ) {
             this.updateAppointments();
         }
