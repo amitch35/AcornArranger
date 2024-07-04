@@ -71,35 +71,38 @@ supabase.auth.signInWithPassword(
     password: process.env.SUPABASE_SERVER_ACCT_PSWD
   }
 );
-const sendErrorEmail = (errorLog, retryCount = 3) => __async(void 0, null, function* () {
-  const transporter = import_nodemailer.default.createTransport({
-    host: process.env.SMTP_HOST,
-    port: 465,
-    secure: true,
-    // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USR,
-      pass: process.env.SMTP_PSWD
+function sendErrorEmail(errorLog, retryCount = 3) {
+  return __async(this, null, function* () {
+    var transporter = import_nodemailer.default.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 465,
+      secure: true,
+      // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_USR,
+        pass: process.env.SMTP_PSWD
+      }
+    });
+    const mailOptions = {
+      from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
+      to: `${process.env.DEV_EMAIL}`,
+      subject: `Error in function: ${errorLog.function_name}`,
+      html: `<p>An error occurred in function <strong>${errorLog.function_name}</strong>:</p><p>${errorLog.error_message}</p>`
+    };
+    try {
+      yield transporter.sendMail(mailOptions);
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      if (retryCount > 0) {
+        console.log(`Retrying... Attempts left: ${retryCount}`);
+        yield new Promise((resolve) => setTimeout(resolve, 5e3));
+        return sendErrorEmail(errorLog, retryCount - 1);
+      }
     }
   });
-  const mailOptions = {
-    from: `"AcornArranger" <${process.env.SMTP_EMAIL}>`,
-    to: `${process.env.DEV_EMAIL}`,
-    subject: `Error in function: ${errorLog.function_name}`,
-    html: `<p>An error occurred in function <strong>${errorLog.function_name}</strong>:</p><p>${errorLog.error_message}</p>`
-  };
-  try {
-    yield transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-  } catch (error) {
-    console.error("Error sending email:", error);
-    if (retryCount > 0) {
-      console.log(`Retrying... Attempts left: ${retryCount}`);
-      yield new Promise((resolve) => setTimeout(resolve, 5e3));
-      return sendErrorEmail(errorLog, retryCount - 1);
-    }
-  }
-});
+}
+;
 const handleErrorLogInserts = (payload) => __async(void 0, null, function* () {
   const { new: errorLog } = payload;
   if (errorLog.function_name !== "build_schedule_plan") {

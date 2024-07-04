@@ -31,9 +31,9 @@ type ErrorLogRecord = {
 };
 
 // Define a function to send an email
-const sendErrorEmail = async (errorLog: ErrorLogRecord, retryCount = 3): Promise<void> => {
+async function sendErrorEmail(errorLog: ErrorLogRecord, retryCount: number = 3): Promise<void> {
   // Create a transporter object using the default SMTP transport
-  const transporter = nodemailer.createTransport({
+  var transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: 465, 
     secure: true, // true for 465, false for other ports
