@@ -163,6 +163,12 @@ export class PlansViewElement extends View<Model, Msg> {
           ]);
         this.build_count++;
         this.closeSendModal();
+        setTimeout(() => {
+            this.showConfirmationDialog()
+            setTimeout(() => {
+                this.closeConfirmationDialog();
+            }, 1500); // wait 2 seconds before closing
+        }, 500);
     }
 
     addPlan() {
@@ -232,6 +238,16 @@ export class PlansViewElement extends View<Model, Msg> {
         dialog.showModal();
     } 
 
+    closeConfirmationDialog() {
+        const dialog = this.shadowRoot!.querySelector('dialog.confirmation-dialog') as HTMLDialogElement;
+        dialog.close();
+    }
+
+    showConfirmationDialog() {
+        const dialog = this.shadowRoot!.querySelector('dialog.confirmation-dialog') as HTMLDialogElement;
+        dialog.show();
+    } 
+
     render(): TemplateResult {
     const renderCheckboxOption = (option:  ServiceOption, opt_name: CheckboxField) => {
         var reflect_array: Array<number>;
@@ -266,6 +282,16 @@ export class PlansViewElement extends View<Model, Msg> {
     const plans_list = this.plans || [];
 
     return html`
+        <dialog class="confirmation-dialog modal">
+            <div class="modal-content">
+                <div>
+                    <box-icon name='check' color="var(--text-color-body)" size="calc(var(--icon-size) * 2)"></box-icon>
+                </div>
+                <div class="align-center">
+                    <h4>Plan Sent</h4>
+                </div>
+            </div>
+        </dialog>
         <dialog class="send-modal modal">
             <div class="modal-content">
                 <div class="align-center">
