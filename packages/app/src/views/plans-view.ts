@@ -85,7 +85,7 @@ export class PlansViewElement extends View<Model, Msg> {
     cleaning_window: number = 6.0;
 
     @state()
-    max_hours: number = 8.0;
+    max_hours: number = 6.5;
 
     @state()
     target_staff_count?: number;
