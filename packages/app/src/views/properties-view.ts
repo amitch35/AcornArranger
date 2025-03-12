@@ -192,7 +192,13 @@ export class PropertiesViewElement extends View<Model, Msg> {
                     </div>
                 </menu>
                 <section class="showing">
-                    <p>Showing: </p><p class="in-bubble">${this.showing_total}</p>
+                    <div>
+                        <p>Showing: </p>
+                        <div class="bubble-container">
+                            <box-icon name='circle' type='solid' color="var(--accent-color)" size="var(--text-font-size-large)"></box-icon>
+                            <p class="in-bubble">${this.showing_total}</p>
+                        </div>
+                    </div>
                 </section>
                 <table>
                     <thead>

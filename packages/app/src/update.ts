@@ -71,6 +71,12 @@ export default function update(
         apply((model) => ({ ...model, appointments }))
       );
       break;
+    case "appointments/select-unscheduled":
+      selectAppointments(message[1], user).then(
+      (unscheduled: Array<Appointment> | undefined) =>
+        apply((model) => ({ ...model, unscheduled }))
+      );
+      break;
     case "plans/select":
       selectPlan(message[1], user).then(
       (plan: Plan | undefined) =>
@@ -333,7 +339,8 @@ function selectAppointments(
     per_page?: number; 
     page?: number;
     filter_status_ids?: Array<number>;
-    filter_service_ids?: Array<number>; },
+    filter_service_ids?: Array<number>;
+    show_unscheduled?: boolean; },
   user: Auth.User
 ) {
   // Base URL
@@ -345,6 +352,9 @@ function selectAppointments(
   }
   if (msg.page) {
     url += `&page=${msg.page}`;
+  }
+  if (msg.show_unscheduled) {
+    url += `&show_unscheduled=${msg.show_unscheduled}`;
   }
 
   // Add query parameters if filter_status_ids is defined and not empty

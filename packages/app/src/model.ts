@@ -15,6 +15,7 @@ export interface Model {
   build_error?: ErrorResponse;
   available?: Array<number>;
   omissions?: Array<number>;
+  unscheduled?: Array<Appointment>;
 }
 
 export const init: Model = {};

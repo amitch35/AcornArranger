@@ -277,13 +277,24 @@ section.showing button:hover {
     background-color: var(--background-color); 
 }
 
+.bubble-container {
+    position: relative;
+    align-self: end;
+    max-width: var(--text-font-size-large);
+    max-height: var(--text-font-size-large);
+}
+
 .in-bubble {
-    background-color: var(--accent-color);
-    border-radius: 50%;
-    line-height: 1;
-    padding: var(--spacing-size-xsmall);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-width: var(--text-font-size-large);
+    max-height: var(--text-font-size-large);
+    display: flex;
+    align-items: center; /** Y-axis align **/
+    justify-content: center; /** X-axis align **/
     font-size: var(--text-font-size-small);
-    color: var(--text-color-header);
 }
 
 table {

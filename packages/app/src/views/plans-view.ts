@@ -12,6 +12,7 @@ import { AvailableStaffModal } from "./available-modal";
 import { OmissionsModal } from "./omissions-modal";
 import { BuildErrorDialog } from "../components/build-error-dialog";
 import { InfoDialog } from "../components/info-dialog";
+import { UnscheduledModal } from "./unscheduled-modal";
 import 'boxicons';
 
 interface ServiceOption {
@@ -28,7 +29,8 @@ export class PlansViewElement extends View<Model, Msg> {
             "available-modal": AvailableStaffModal,
             "omissions-modal": OmissionsModal,
             "build-error-dialog": BuildErrorDialog,
-            "info-dialog": InfoDialog
+            "info-dialog": InfoDialog,
+            "unscheduled-modal": UnscheduledModal
         }
     );
 
@@ -385,7 +387,10 @@ export class PlansViewElement extends View<Model, Msg> {
                     </div>
                 </menu>
                 <div class="spread-apart">
-                    <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
+                    <div class="modal-buttons">
+                        <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
+                        <unscheduled-modal date=${this.from_plan_date}></unscheduled-modal>
+                    </div>
                     <button @click=${this.buildSchedule}>
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                         <span>Build</span>
@@ -400,7 +405,13 @@ export class PlansViewElement extends View<Model, Msg> {
                     </button>
                 </div>
                 <section class="showing">
-                    <div><p>Showing: </p><p class="in-bubble">${this.showing_total}</p></div>
+                    <div>
+                        <p>Showing: </p>
+                        <div class="bubble-container">
+                            <box-icon name='circle' type='solid' color="var(--accent-color)" size="var(--text-font-size-large)"></box-icon>
+                            <p class="in-bubble">${this.showing_total}</p>
+                        </div>
+                    </div>
                     <div>
                         <label>
                             <span>Show:</span>
@@ -515,6 +526,12 @@ export class PlansViewElement extends View<Model, Msg> {
 
             button[disabled].copy:hover {
                 background-color: var(--background-color-accent);
+            }
+
+            .modal-buttons {
+                display: flex;
+                justify-content: flex-start;
+                gap: var(--spacing-size-small);
             }
         `
     ];

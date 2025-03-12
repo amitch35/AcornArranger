@@ -71,6 +71,8 @@ router.get('/', async (req: Request, res: Response) => {
     if (req.query.to_service_date)  { query = query.lte('departure_time', `${req.query.to_service_date}  23:59:59+00`) }
 
     if (filter_service_ids.length !== 0) { query = query.in('service', filter_service_ids) }
+
+    if (req.query.show_unscheduled) { query = query.is('staff', null)} // Show only appointments with no staff TODO: add to update function and make element
   
     query = query.in('app_status_id', filter_status_ids)
       .range(offset, (offset + per_page - 1))
