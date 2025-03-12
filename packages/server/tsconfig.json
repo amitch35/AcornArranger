@@ -1,4 +1,4 @@
-{
+{ // ps -efx then kill pid
     "compilerOptions": {
       "target": "es6",
       "module": "NodeNext",
