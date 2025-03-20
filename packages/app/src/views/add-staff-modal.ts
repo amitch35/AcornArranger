@@ -13,6 +13,8 @@ interface StaffOption {
     label: string;
 }
 
+type CheckboxField = "staff_additions";
+
 export class AddStaffModal extends View<Model, Msg> {
 
     @state()
@@ -44,31 +46,27 @@ export class AddStaffModal extends View<Model, Msg> {
     }
 
     @state()
-    staff_to_add?: number;
+    staff_additions: number[] = [];
 
     constructor() {
         super("acorn:model");
     }
 
-    handleInputChange(event: Event) {
-        const input = event.target as HTMLInputElement;
-        const { name, value } = input;
-        (this as any)[name] = value;
-    }
-
     addPlanStaff() {
-        if (this.plan && this.staff_to_add) {
-            this.dispatchMessage([
-                "plans/staff/add", 
-                { 
-                    plan_id: this.plan.plan_id,
-                    user_id: this.staff_to_add
-                }
-              ]);
+        if (this.plan && this.staff_additions.length) {
+            this.staff_additions.map( (staff_id) => {
+                this.dispatchMessage([
+                    "plans/staff/add", 
+                    { 
+                        plan_id: this.plan!.plan_id,
+                        user_id: staff_id
+                    }
+                ]);
+            })
             this.requestPlanUpdate();
         }
         this.closeDialog();
-        this.staff_to_add = undefined;
+        this.staff_additions = [];
     }
 
     requestPlanUpdate() {
@@ -84,6 +82,35 @@ export class AddStaffModal extends View<Model, Msg> {
         this.dispatchEvent(requestUpdateEvent);
     }
 
+    handleCheckboxChange(event: Event) {
+        const checkbox = event.target as HTMLInputElement;
+        const { name } = checkbox;
+        const box_field = name as CheckboxField;
+        const value = parseInt(checkbox.value);
+        switch(box_field) {
+            case "staff_additions":
+                if (checkbox.checked) {
+                    // Add the value to the staff_additions array if checked
+                    this.staff_additions = [...this.staff_additions, value];
+                  } else {
+                    // Remove the value from the staff_additions array if unchecked
+                    this.staff_additions = this.staff_additions.filter(id => id !== value);
+                  }
+                break;
+            default:
+                const unhandled: never = box_field;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
+        }
+    }
+
+    selectAll() {
+        this.staff_additions = this.staff_options!.map(a => a.id);
+    }
+
+    clearSelection() {
+        this.staff_additions = [];
+    }
+
     closeDialog() {
         const dialog = this.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
         dialog.close();
@@ -95,15 +122,33 @@ export class AddStaffModal extends View<Model, Msg> {
     }    
 
     render(): TemplateResult {
-    const renderStaffOption = (option: StaffOption) => {
+    const renderCheckboxOption = (option: StaffOption, opt_name: CheckboxField) => {
+        var reflect_array: Array<number>;
+        switch (opt_name) {
+            case "staff_additions":
+                reflect_array = this.staff_additions;
+                break;
+            default:
+                const unhandled: never = opt_name;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
+        }
         return html`
-            <option value=${option.id}>${option.label}</option>
+            <label>
+            <input
+                name=${opt_name}
+                type="checkbox"
+                .value=${option.id.toString()}
+                @change=${this.handleCheckboxChange}
+                ?checked=${reflect_array.includes(option.id)}
+            />
+            ${option.label}
+            </label>
         `
     }
 
     return html`
         <div class="add-one">
-            <button @click=${this.showModal}>
+            <button @click=${this.showModal} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}>
                 <box-icon name='plus' color='var(--text-color-body)'></box-icon>
                 <span>Add Staff</span>
             </button>
@@ -116,14 +161,12 @@ export class AddStaffModal extends View<Model, Msg> {
                         <box-icon name='x' color="var(--text-color-body)" ></box-icon>
                     </button>
                 </div>
-                <div>
-                    <label>
-                        <span>Add: </span>
-                        <select name="staff_to_add" .value=${this.staff_to_add ? this.staff_to_add.toString() : '0'} @change=${this.handleInputChange} >
-                            <option value='0'></option>
-                            ${this.staff_options.map((opt) => { return renderStaffOption(opt)})}
-                        </select>
-                    </label>
+                <div class="spread-apart clear-select">
+                    <button @click=${this.clearSelection}>Clear Selection</button>
+                    <button @click=${this.selectAll}>Select All</button>
+                </div>
+                <div class="filters checkboxes">
+                    ${this.staff_options.map((opt) => { return renderCheckboxOption(opt, "staff_additions")})}
                 </div>
                 <div>
                     <button @click=${this.addPlanStaff}>
@@ -150,6 +193,11 @@ export class AddStaffModal extends View<Model, Msg> {
 
             .add-one button:hover {
                 background-color: var(--background-color);
+            }
+
+            .checkboxes {
+                max-height: calc(var(--text-font-size-large) * 20);
+                min-width: calc(var(--text-font-size-large) * 12);
             }
         `
     ];

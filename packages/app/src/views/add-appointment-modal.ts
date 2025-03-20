@@ -13,6 +13,8 @@ interface AppointmentOption {
     label: string;
 }
 
+type CheckboxField = "app_additions";
+
 export class AddAppointmentModal extends View<Model, Msg> {
 
     @state()
@@ -44,31 +46,27 @@ export class AddAppointmentModal extends View<Model, Msg> {
     }
 
     @state()
-    app_to_add?: number;
+    appointment_additions: number[] = [];
 
     constructor() {
         super("acorn:model");
     }
 
-    handleInputChange(event: Event) {
-        const input = event.target as HTMLInputElement;
-        const { name, value } = input;
-        (this as any)[name] = value;
-    }
-
-    addPlanAppointment() {
-        if (this.plan && this.app_to_add) {
-            this.dispatchMessage([
-                "plans/appointment/add", 
-                { 
-                    plan_id: this.plan.plan_id,
-                    appointment_id: this.app_to_add
-                }
-              ]);
+    addPlanAppointments() {
+        if (this.plan && this.appointment_additions.length) {
+            this.appointment_additions.map( (app_id) => {
+                this.dispatchMessage([
+                    "plans/appointment/add", 
+                    { 
+                        plan_id: this.plan!.plan_id,
+                        appointment_id: app_id
+                    }
+                ]);
+            })
             this.requestPlanUpdate();
         }
         this.closeDialog();
-        this.app_to_add = undefined;
+        this.appointment_additions = [];
     }
 
     requestPlanUpdate() {
@@ -84,6 +82,35 @@ export class AddAppointmentModal extends View<Model, Msg> {
         this.dispatchEvent(requestUpdateEvent);
     }
 
+    handleCheckboxChange(event: Event) {
+        const checkbox = event.target as HTMLInputElement;
+        const { name } = checkbox;
+        const box_field = name as CheckboxField;
+        const value = parseInt(checkbox.value);
+        switch(box_field) {
+            case "app_additions":
+                if (checkbox.checked) {
+                    // Add the value to the appointment_additions array if checked
+                    this.appointment_additions = [...this.appointment_additions, value];
+                  } else {
+                    // Remove the value from the appointment_additions array if unchecked
+                    this.appointment_additions = this.appointment_additions.filter(id => id !== value);
+                  }
+                break;
+            default:
+                const unhandled: never = box_field;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
+        }
+    }
+
+    selectAll() {
+        this.appointment_additions = this.appointment_options!.map(a => a.id);
+    }
+
+    clearSelection() {
+        this.appointment_additions = [];
+    }
+
     closeDialog() {
         const dialog = this.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
         dialog.close();
@@ -95,15 +122,33 @@ export class AddAppointmentModal extends View<Model, Msg> {
     }    
 
     render(): TemplateResult {
-    const renderAppointmentOption = (option: AppointmentOption) => {
+    const renderCheckboxOption = (option: AppointmentOption, opt_name: CheckboxField) => {
+        var reflect_array: Array<number>;
+        switch (opt_name) {
+            case "app_additions":
+                reflect_array = this.appointment_additions;
+                break;
+            default:
+                const unhandled: never = opt_name;
+                throw new Error(`Unhandled Auth message "${unhandled}"`);
+        }
         return html`
-            <option value=${option.id}>${option.label}</option>
+            <label>
+            <input
+                name=${opt_name}
+                type="checkbox"
+                .value=${option.id.toString()}
+                @change=${this.handleCheckboxChange}
+                ?checked=${reflect_array.includes(option.id)}
+            />
+            ${option.label}
+            </label>
         `
     }
 
     return html`
         <div class="add-one">
-            <button @click=${this.showModal}>
+            <button @click=${this.showModal} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}>
                 <box-icon name='plus' color='var(--text-color-body)'></box-icon>
                 <span>Add Appointment</span>
             </button>
@@ -116,17 +161,15 @@ export class AddAppointmentModal extends View<Model, Msg> {
                         <box-icon name='x' color="var(--text-color-body)" ></box-icon>
                     </button>
                 </div>
-                <div>
-                    <label>
-                        <span>Add: </span>
-                        <select name="app_to_add" .value=${this.app_to_add ? this.app_to_add.toString() : '0'} @change=${this.handleInputChange} >
-                            <option value='0'></option>
-                            ${this.appointment_options.map((opt) => { return renderAppointmentOption(opt)})}
-                        </select>
-                    </label>
+                <div class="spread-apart clear-select">
+                    <button @click=${this.clearSelection}>Clear Selection</button>
+                    <button @click=${this.selectAll}>Select All</button>
+                </div>
+                <div class="filters checkboxes">
+                    ${this.appointment_options.map((opt) => { return renderCheckboxOption(opt, "app_additions")})}
                 </div>
                 <div>
-                    <button @click=${this.addPlanAppointment}>
+                    <button @click=${this.addPlanAppointments}>
                         <span>Confirm</span>
                     </button>
                 </div>
@@ -150,6 +193,11 @@ export class AddAppointmentModal extends View<Model, Msg> {
 
             .add-one button:hover {
                 background-color: var(--background-color);
+            }
+
+            .checkboxes {
+                max-height: calc(var(--text-font-size-large) * 20);
+                min-width: calc(var(--text-font-size-large) * 12);
             }
         `
     ];
