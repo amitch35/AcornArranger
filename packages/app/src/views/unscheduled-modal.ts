@@ -18,7 +18,13 @@ export class UnscheduledModal extends View<Model, Msg> {
 
     @state()
     get unscheduled(): Array<Appointment> | undefined {
-        return this.model.unscheduled;
+        if (this.model.plans) { // Will also only show those that are not currently slated in a plan for the day as unscheduled
+            const scheduledIds = new Set(
+                this.model.plans.flatMap(plan => plan.appointments.map(a => a.appointment_id)) // Currently planned appiontments
+              );
+            return this.model.unscheduled?.filter(app => !scheduledIds.has(app.appointment_id)); // Only unplanned and unscheduled
+        }
+        return this.model.unscheduled
     }
 
     constructor() {

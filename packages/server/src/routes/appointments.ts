@@ -72,7 +72,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     if (filter_service_ids.length !== 0) { query = query.in('service', filter_service_ids) }
 
-    if (req.query.show_unscheduled) { query = query.is('staff', null)} // Show only appointments with no staff TODO: add to update function and make element
+    if (req.query.show_unscheduled) { query = query.is('staff', null)} // Show only appointments with no staff 
   
     query = query.in('app_status_id', filter_status_ids)
       .range(offset, (offset + per_page - 1))
