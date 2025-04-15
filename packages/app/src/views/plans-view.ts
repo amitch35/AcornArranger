@@ -389,7 +389,7 @@ export class PlansViewElement extends View<Model, Msg> {
                 <div class="spread-apart">
                     <div class="modal-buttons">
                         <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
-                        <unscheduled-modal date=${this.from_plan_date}></unscheduled-modal>
+                        <unscheduled-modal date=${this.from_plan_date} .services=${this.filter_service_ids}></unscheduled-modal>
                     </div>
                     <button @click=${this.buildSchedule}>
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
