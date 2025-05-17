@@ -91,6 +91,134 @@ export class PlansViewElement extends View<Model, Msg> {
 
     @state()
     target_staff_count?: number;
+    
+    // @state()
+    // duplicate_appointment_ids: Set<number> = new Set();
+
+    // updated(changedProperties: Map<string, unknown>) {
+    //     super.updated(changedProperties);
+    //     console.log("############################################### updated Function Ran: ",changedProperties);
+    //     if (changedProperties.has("model")) {
+    //         console.log("############################################### Detected Model Change");
+    //         this.updateDuplicateAppointments();
+    //     }
+    // }
+
+    // private updateDuplicateAppointments() {
+    //     const plans = this.model?.plans;
+    //     const seen = new Map<number, number>();
+    //     const duplicates = new Set<number>();
+
+    //     plans?.forEach(plan => {
+    //         plan.appointments.forEach(app => {
+    //         if (seen.has(app.appointment_id)) {
+    //             duplicates.add(app.appointment_id);
+    //         } else {
+    //             seen.set(app.appointment_id, plan.plan_id);
+    //         }
+    //         });
+    //     });
+
+    //     this.duplicate_appointment_ids = duplicates;
+    // }
+
+    @state()
+    get duplicate_appointment_ids(): Array<number> {
+        if (this.plans) {
+            const seen = new Set<number>();
+            const duplicates: number[] = [];
+
+            this.model.plans?.forEach(plan => {
+                plan.appointments.forEach(app => {
+                const id = app.appointment_id;
+                if (seen.has(id)) {
+                    // only add once
+                    if (!duplicates.includes(id)) {
+                        duplicates.push(id);
+                    }
+                } else {
+                    seen.add(id);
+                }
+                });
+            });
+            
+            return duplicates;
+        } else {
+            return [];
+        }
+    }
+
+
+    // @state()
+    // get duplicate_appointment_ids(): Set<number> {
+    //     if (this.plans) {
+    //         // console.log("############################################### Performed duplicate check");
+    //         const seen = new Map<number, number>(); // appointmentId -> planId
+    //         const duplicates = new Set<number>();
+
+    //         this.plans?.forEach(plan => {
+    //             plan.appointments.forEach(app => {
+    //             if (seen.has(app.appointment_id)) {
+    //                 duplicates.add(app.appointment_id);
+    //             } else {
+    //                 seen.set(app.appointment_id, plan.plan_id);
+    //             }
+    //             });
+    //         });
+    //         return duplicates;
+    //     } else {
+    //         return new Set();
+    //     }
+    // }
+
+    // updated(changedProperties: Map<string | number | symbol, unknown>) {
+    //     super.updated(changedProperties);
+    //     this.detectDuplicateAppointments();
+    // }
+
+    // @state()
+    // duplicate_appointment_ids: Set<number> = new Set();
+
+    // attributeChangedCallback(
+    //     name: string,
+    //     oldValue: string,
+    //     newValue: string
+    //   ) {
+    //     super.attributeChangedCallback(name, oldValue, newValue);
+    //     if (
+    //       name === "plans" && oldValue &&
+    //       oldValue !== newValue &&
+    //       newValue
+    //     ) {
+    //        this.detectDuplicateAppointments();
+    //     }
+    //   }
+
+    // updated(changedProperties: Map<string | number | symbol, unknown>) {
+    //     super.updated(changedProperties);
+    //     console.log("Changed properties of PlansView", changedProperties);
+    //     if (changedProperties.has("model")) {
+    //         this.detectDuplicateAppointments();
+    //     }
+    // }
+
+    // checkDuplicateAppointments() {
+    // const seen = new Map<number, number>(); // appointmentId -> planId
+    // const duplicates = new Set<number>();
+
+    // this.plans?.forEach(plan => {
+    //     plan.appointments.forEach(app => {
+    //     if (seen.has(app.appointment_id)) {
+    //         duplicates.add(app.appointment_id);
+    //     } else {
+    //         seen.set(app.appointment_id, plan.plan_id);
+    //     }
+    //     });
+    // });
+
+    // this.duplicate_appointment_ids = duplicates;
+    // console.log("############################################### Performed duplicate check");
+    // }
 
     constructor() {
         super("acorn:model");
@@ -102,6 +230,9 @@ export class PlansViewElement extends View<Model, Msg> {
         this.addEventListener("plan-view:update", () => {
             this.updatePlans();
         });
+        // this.addEventListener("plan-view:check-duplicates", () => {
+        //     this.checkDuplicateAppointments();
+        // });
     }
 
     connectedCallback() {
@@ -277,11 +408,52 @@ export class PlansViewElement extends View<Model, Msg> {
 
     const renderPlan = (plan: Plan) => {
         return html`
-            <plan-view .plan=${plan}></plan-view>
+            <plan-view .plan=${plan} .duplicates=${this.duplicate_appointment_ids}></plan-view>
         `;
     };
 
     const plans_list = this.plans || [];
+
+    // const seen = new Set<number>();
+    // const duplicates: number[] = [];
+
+    // plans_list.forEach(plan => {
+    //     plan.appointments.forEach(app => {
+    //     const id = app.appointment_id;
+    //     if (seen.has(id)) {
+    //         // only add once
+    //         if (!duplicates.includes(id)) {
+    //             duplicates.push(id);
+    //         }
+    //     } else {
+    //         seen.add(id);
+    //     }
+    //     });
+    // });
+    // console.log("************************************** Duplicates Checked");
+
+    // Build a Set of duplicate appointment IDs
+    // const seen = new Set<number>();
+    // const duplicates = new Set<number>();
+    // for (const plan of plans_list) {
+    //     for (const app of plan.appointments) {
+    //       if (seen.has(app.appointment_id)) {
+    //         duplicates.add(app.appointment_id);
+    //       } else {
+    //         seen.add(app.appointment_id);
+    //       }
+    //     }
+    //   }
+    // console.log("************************************** Duplicates Checked");
+    // plans_list.forEach(plan => {
+    //     plan.appointments.forEach(app => {
+    //       if (seen.has(app.appointment_id)) {
+    //         duplicates.add(app.appointment_id);
+    //       } else {
+    //         seen.add(app.appointment_id);
+    //       }
+    //     });
+    //   });
 
     return html`
         <dialog class="confirmation-dialog modal">

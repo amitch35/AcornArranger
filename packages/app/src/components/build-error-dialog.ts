@@ -21,7 +21,7 @@ export class BuildErrorDialog extends LitElement {
       ) {
         super.attributeChangedCallback(name, oldValue, newValue);
         if (
-          name === "code" &&
+          name === "code" && oldValue &&
           oldValue !== newValue &&
           newValue
         ) {
