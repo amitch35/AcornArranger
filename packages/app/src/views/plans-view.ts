@@ -92,32 +92,6 @@ export class PlansViewElement extends View<Model, Msg> {
     @state()
     target_staff_count?: number;
 
-    @state()
-    get duplicate_appointment_ids(): Array<number> {
-        if (this.plans) {
-            const seen = new Set<number>();
-            const duplicates: number[] = [];
-
-            this.model.plans?.forEach(plan => {
-                plan.appointments.forEach(app => {
-                const id = app.appointment_id;
-                if (seen.has(id)) {
-                    // only add once
-                    if (!duplicates.includes(id)) {
-                        duplicates.push(id);
-                    }
-                } else {
-                    seen.add(id);
-                }
-                });
-            });
-            
-            return duplicates;
-        } else {
-            return [];
-        }
-    }
-
     constructor() {
         super("acorn:model");
 
@@ -303,7 +277,7 @@ export class PlansViewElement extends View<Model, Msg> {
 
     const renderPlan = (plan: Plan) => {
         return html`
-            <plan-view .plan=${plan} .duplicates=${this.duplicate_appointment_ids}></plan-view>
+            <plan-view .plan=${plan}></plan-view>
         `;
     };
 

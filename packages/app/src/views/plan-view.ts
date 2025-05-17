@@ -27,8 +27,12 @@ export class PlanViewElement extends View<Model, Msg> {
     @property({ attribute: false })
     plan?: Plan;
 
-    @property({ attribute: true, reflect: true })
-    duplicates?: Array<number>;
+    @state()
+    get other_appointment_ids(): Array<number> | undefined {
+        return this.model.plans?.filter(p => p.plan_id !== this.plan?.plan_id)
+            .flatMap(p => p.appointments.map(a => a.appointment_id))
+            ?? [];
+    }
 
     constructor() {
         super("acorn:model");
@@ -103,7 +107,7 @@ export class PlanViewElement extends View<Model, Msg> {
 
     const renderAppointment = (app: Appointment) => {
         return html`
-            <li class="${this.duplicates?.includes(app.appointment_id) ? 'duplicate' : ''}">
+            <li class="${this.other_appointment_ids?.includes(app.appointment_id) ? 'duplicate' : ''}">
                 <span>${app.property_info.property_name}</span>
                 <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}> 
                     <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
