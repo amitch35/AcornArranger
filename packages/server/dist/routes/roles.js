@@ -63,7 +63,7 @@ const selectRoles = `
     can_lead_team, 
     can_clean
   `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("roles").select(selectRoles).order("priority", { ascending: true });
   res.status(status);
   if (error) {
@@ -75,7 +75,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:role_id", (req, res) => __async(void 0, null, function* () {
+router.get("/:role_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("roles").select(selectRoles).eq("id", req.params.role_id).maybeSingle();
   res.status(status);
   if (error) {
@@ -87,7 +87,7 @@ router.get("/:role_id", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.put("/:role_id", (req, res) => __async(void 0, null, function* () {
+router.put("/:role_id", (req, res) => __async(null, null, function* () {
   let { error, status } = yield supabase.from("roles").update({
     description: req.body.description,
     priority: req.body.priority,

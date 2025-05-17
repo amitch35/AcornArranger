@@ -101,7 +101,7 @@ const selectStaffFull = `
       status
     )
   `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   var filter_status_ids = [1, 2, 3];
   if (req.query.filter_status_id) {
     const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
@@ -122,7 +122,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:user_id", (req, res) => __async(void 0, null, function* () {
+router.get("/:user_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("rc_staff").select(selectStaffFull).eq("user_id", req.params.user_id).maybeSingle();
   res.status(status);
   if (error) {

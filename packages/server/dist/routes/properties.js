@@ -72,7 +72,7 @@ status:property_status_key (
   status
 )
 `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   var filter_status_ids = [1];
   if (req.query.filter_status_id) {
     const filterStatusIdsStringArray = Array.isArray(req.query.filter_status_id) ? req.query.filter_status_id : [req.query.filter_status_id];
@@ -89,7 +89,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
+router.get("/:property_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("rc_properties").select(selectProperties).eq("properties_id", req.params.property_id).maybeSingle();
   res.status(status);
   if (error) {
@@ -104,7 +104,7 @@ router.get("/:property_id", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.put("/:property_id", (req, res) => __async(void 0, null, function* () {
+router.put("/:property_id", (req, res) => __async(null, null, function* () {
   if (req.body.estimated_cleaning_mins === void 0 && req.body.double_unit === void 0) {
     res.status(400).json({ Error: "Bad Request, must provide estimated_cleaning_mins and/or double_unit " });
   }

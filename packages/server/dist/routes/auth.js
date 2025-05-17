@@ -60,7 +60,7 @@ import_dotenv.default.config({ path: [".env.local", ".env"] });
 const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 const router = import_express.default.Router();
 const supabase = import_client.supabaseClient;
-router.post("/signup", (req, res) => __async(void 0, null, function* () {
+router.post("/signup", (req, res) => __async(null, null, function* () {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });
   } else {
@@ -85,7 +85,7 @@ router.post("/signup", (req, res) => __async(void 0, null, function* () {
     }
   }
 }));
-router.post("/login", (req, res) => __async(void 0, null, function* () {
+router.post("/login", (req, res) => __async(null, null, function* () {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ "error": "Bad request: Invalid input data. Make sure you provide an email and password" });
   } else {
@@ -102,7 +102,7 @@ router.post("/login", (req, res) => __async(void 0, null, function* () {
     }
   }
 }));
-router.get("/user", (req, res) => __async(void 0, null, function* () {
+router.get("/user", (req, res) => __async(null, null, function* () {
   const token = getToken(req);
   if (token) {
     const { data: { user }, error } = yield supabase.auth.getUser(token);
@@ -130,8 +130,7 @@ function supabaseMiddleware(req, res, next) {
         break;
       default:
         import_jsonwebtoken.default.verify(token, TOKEN_SECRET, (error, decoded) => {
-          if (error)
-            res.send(error).end();
+          if (error) res.send(error).end();
           else if (decoded) {
             const token_json = decoded;
             if (token_json.user_role && token_json.user_role === "authorized_user") {
@@ -139,8 +138,7 @@ function supabaseMiddleware(req, res, next) {
             } else {
               res.status(403).json({ "error": "User not Authorized, contact administrator for authorization" }).end();
             }
-          } else
-            res.status(403).end();
+          } else res.status(403).end();
         });
         break;
     }

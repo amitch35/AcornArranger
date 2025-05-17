@@ -82,7 +82,7 @@ const selectAppointments = `
       status
     )
   `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   const per_page = req.query.per_page || 50;
   const page = req.query.page || 0;
   const offset = per_page * page;
@@ -121,7 +121,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:appointment_id", (req, res) => __async(void 0, null, function* () {
+router.get("/:appointment_id", (req, res) => __async(null, null, function* () {
   let query = supabase.from("rc_appointments").select(selectAppointments).eq("appointment_id", req.params.appointment_id).maybeSingle();
   const { data, error, status } = yield query;
   res.status(status);

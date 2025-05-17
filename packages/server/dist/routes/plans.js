@@ -91,7 +91,7 @@ const selectPlans = `
       )
     )
   `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   const per_page = req.query.per_page || 20;
   const page = req.query.page || 0;
   const offset = per_page * page;
@@ -116,7 +116,7 @@ router.get("/", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.get("/:plan_id", (req, res) => __async(void 0, null, function* () {
+router.get("/:plan_id", (req, res) => __async(null, null, function* () {
   let query = supabase.from("schedule_plans").select(selectPlans).eq("valid", true).filter("plan_appointments.valid", "eq", true).filter("plan_staff.valid", "eq", true).eq("id", req.params.plan_id).order("ord", { referencedTable: "plan_appointments", ascending: true }).maybeSingle();
   const { data, error, status } = yield query;
   res.status(status);
@@ -129,7 +129,7 @@ router.get("/:plan_id", (req, res) => __async(void 0, null, function* () {
     res.send();
   }
 }));
-router.post("/:plan_id/staff/:user_id", (req, res) => __async(void 0, null, function* () {
+router.post("/:plan_id/staff/:user_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_add_staff",
     {
@@ -144,7 +144,7 @@ router.post("/:plan_id/staff/:user_id", (req, res) => __async(void 0, null, func
     res.send(data);
   }
 }));
-router.delete("/:plan_id/staff/:user_id", (req, res) => __async(void 0, null, function* () {
+router.delete("/:plan_id/staff/:user_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_remove_staff",
     {
@@ -159,7 +159,7 @@ router.delete("/:plan_id/staff/:user_id", (req, res) => __async(void 0, null, fu
     res.send(data);
   }
 }));
-router.post("/:plan_id/appointment/:appointment_id", (req, res) => __async(void 0, null, function* () {
+router.post("/:plan_id/appointment/:appointment_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_add_appointment",
     {
@@ -174,7 +174,7 @@ router.post("/:plan_id/appointment/:appointment_id", (req, res) => __async(void 
     res.send(data);
   }
 }));
-router.delete("/:plan_id/appointment/:appointment_id", (req, res) => __async(void 0, null, function* () {
+router.delete("/:plan_id/appointment/:appointment_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_remove_appointment",
     {
@@ -189,7 +189,7 @@ router.delete("/:plan_id/appointment/:appointment_id", (req, res) => __async(voi
     res.send(data);
   }
 }));
-router.post("/build/:plan_date", (req, res) => __async(void 0, null, function* () {
+router.post("/build/:plan_date", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "build_schedule_plan",
     {
@@ -211,7 +211,7 @@ router.post("/build/:plan_date", (req, res) => __async(void 0, null, function* (
     res.send(data);
   }
 }));
-router.post("/copy/:plan_date", (req, res) => __async(void 0, null, function* () {
+router.post("/copy/:plan_date", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "copy_schedule_plan",
     {
@@ -225,7 +225,7 @@ router.post("/copy/:plan_date", (req, res) => __async(void 0, null, function* ()
     res.send(data);
   }
 }));
-router.post("/send/:plan_date", (req, res) => __async(void 0, null, function* () {
+router.post("/send/:plan_date", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "schedule_send_rc_schedule_plans",
     {
@@ -239,7 +239,7 @@ router.post("/send/:plan_date", (req, res) => __async(void 0, null, function* ()
     res.send(data);
   }
 }));
-router.post("/add/:plan_date", (req, res) => __async(void 0, null, function* () {
+router.post("/add/:plan_date", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.rpc(
     "plan_create_new",
     {

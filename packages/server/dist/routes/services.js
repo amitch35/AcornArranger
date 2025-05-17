@@ -59,7 +59,7 @@ const selectServices = `
     service_id, 
     service_name:name
   `;
-router.get("/", (req, res) => __async(void 0, null, function* () {
+router.get("/", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("service_key").select(selectServices).order("name", { ascending: true });
   res.status(status);
   if (error) {
