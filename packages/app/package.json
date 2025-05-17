@@ -14,7 +14,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@calpoly/mustang": "^0.1.13",
+    "@calpoly/mustang": "^1.0.15",
     "boxicons": "^2.1.4",
     "esbuild": "0.25.4",
     "jwt-decode": "^4.0.0",
