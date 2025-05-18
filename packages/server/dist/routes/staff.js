@@ -122,6 +122,23 @@ router.get("/", (req, res) => __async(null, null, function* () {
     res.send();
   }
 }));
+router.get("/shifts", (req, res) => __async(null, null, function* () {
+  const from_date = req.query.from_shift_date;
+  const to_date = req.query.to_shift_date || from_date;
+  const { data, error, status } = yield supabase.rpc(
+    "get_staff_shifts",
+    {
+      date_from: from_date,
+      date_to: to_date
+    }
+  );
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+}));
 router.get("/:user_id", (req, res) => __async(null, null, function* () {
   const { data, error, status } = yield supabase.from("rc_staff").select(selectStaffFull).eq("user_id", req.params.user_id).maybeSingle();
   res.status(status);

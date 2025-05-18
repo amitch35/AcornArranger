@@ -111,7 +111,63 @@ Returns:
     }
 ]
 ```
-### 2.2 Get Staff - `/staff/{user_id}` - GET
+### 2.2 Get Staff Shifts - `/staff/shifts` - GET
+Allows users to see staff's shifts in Homebase for given days
+
+Query Parameters:
+- `from_shift_date`: date YYYY-MM-DD - filters out any shifts with service date before this value (Can be supplied on its own to set both from and to)
+- `to_shift_date`: date YYYY-MM-DD - filters out any shifts with service date after this value
+
+Returns:
+```commandline
+[
+  {
+    "matched": <boolean>,
+    "user_id": <number>,
+    "name": <string>,
+    "shift": {
+      "id": <number>,
+      "timecard_id": <number>,
+      "open": <boolean>,
+      "role": <string>,
+      "department": <string>,
+      "first_name": <string>,
+      "last_name": <string>,
+      "location_id": <number>,
+      "job_id": <number>,
+      "user_id": <number>,
+      "wage_rate": <number>,
+      "published": <boolean>,
+      "scheduled": <boolean>,
+      "labor": {
+        "wage_type": <string>,
+        "scheduled_hours": <number>,
+        "scheduled_overtime": <number>,
+        "scheduled_regular": <number>,
+        "scheduled_daily_overtime": <number>,
+        "scheduled_weekly_overtime": <number>,
+        "scheduled_double_overtimes": <number>,
+        "scheduled_seventh_day_overtime_15": <number>,
+        "scheduled_seventh_day_overtime_20": <number>,
+        "scheduled_unpaid_breaks_hours": <number>,
+        "scheduled_costs": <number>,
+        "scheduled_overtime_costs": <number>,
+        "scheduled_spread_of_hours": <number>,
+        "scheduled_blue_laws_hours": <number>
+      },
+      "created_at": <string (ISO Timestamp)>,
+      "updated_at": <string (ISO Timestamp)>,
+      "start_at": <string (ISO Timestamp)>,
+      "end_at": <string (ISO Timestamp)>,
+      "note": {
+        "text": <string>,
+        "author": <string>
+      }
+    }
+  }
+]
+```
+### 2.3 Get Staff - `/staff/{user_id}` - GET
 Gets full information about a single staff member including more detailed 
 information about their role
 
@@ -136,6 +192,7 @@ Returns:
     }
 }
 ```
+
 
 ## 3. Roles
 ### 3.1 Show Roles - `/roles` - GET

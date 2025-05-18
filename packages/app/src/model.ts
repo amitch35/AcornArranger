@@ -1,4 +1,4 @@
-import { Property, Role, Staff, Appointment, Plan, Service, ErrorResponse } from "server/models";
+import { Property, Role, Staff, Appointment, Plan, Service, ErrorResponse, StaffShift } from "server/models";
 
 export interface Model {
   role?: Role;
@@ -16,6 +16,7 @@ export interface Model {
   available?: Array<number>;
   omissions?: Array<number>;
   unscheduled?: Array<Appointment>;
+  shifts?: Array<StaffShift>;
 }
 
 export const init: Model = {};

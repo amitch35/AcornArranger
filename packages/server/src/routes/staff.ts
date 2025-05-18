@@ -92,6 +92,26 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/shifts', async (req: Request, res: Response) => {
+  const from_date = req.query.from_shift_date as string;
+  const to_date = (req.query.to_shift_date as string) || from_date;
+
+  const { data, error, status } = await supabase.rpc(
+    'get_staff_shifts', 
+    {
+      date_from: from_date,
+      date_to: to_date,
+    }
+  );
+
+  res.status(status);
+  if (error) {
+    res.send(error);
+  } else {
+    res.send(data);
+  }
+});
+
 router.get('/:user_id', async (req: Request, res: Response) => {
     const {data, error, status} = await supabase
         .from('rc_staff')

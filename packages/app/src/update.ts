@@ -1,5 +1,5 @@
 import { Auth, Update } from "@calpoly/mustang";
-import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions, Service } from "server/models";
+import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions, Service, StaffShift } from "server/models";
 import { Msg } from "./messages";
 import { Model } from "./model";
 import { ErrorResponse } from "server/models";
@@ -149,6 +149,12 @@ export default function update(
           apply((model) => ({ ...model, staff }))
       );
       break;
+    case "staff/shifts":
+        selectShifts(message[1], user).then(
+        (shifts: Array<StaffShift> | undefined) =>
+          apply((model) => ({ ...model, shifts }))
+        );
+        break;
     case "services/":
       selectServices(user).then((services) =>
         apply((model) => ({ ...model, services }))
@@ -650,6 +656,38 @@ function selectStaff(
       if (json) {
         console.log("Staff:", json);
         return json as Array<Staff>;
+      }
+    });
+}
+
+function selectShifts(
+  msg: { 
+    from_shift_date: string; 
+    to_shift_date?: string; 
+    },
+  user: Auth.User
+) {
+  // Base URL
+  let url = `/api/staff/shifts?from_shift_date=${msg.from_shift_date}`;
+
+  // Add query parameters if present
+  if (msg.to_shift_date) {
+    url += `&to_shift_date=${msg.to_shift_date}`;
+  }
+
+  return fetch(url, {
+    headers: Auth.headers(user)
+  })
+    .then((response: Response) => {
+      if (response.status === 200) {
+        return response.json();
+      }
+      return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        console.log("Shifts:", json);
+        return json as Array<StaffShift>;
       }
     });
 }

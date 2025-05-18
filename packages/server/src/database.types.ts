@@ -430,6 +430,7 @@ export type Database = {
         Row: {
           created_at: string
           first_name: string | null
+          hb_user_id: number | null
           id: number
           last_name: string | null
           name: string | null
@@ -440,6 +441,7 @@ export type Database = {
         Insert: {
           created_at?: string
           first_name?: string | null
+          hb_user_id?: number | null
           id?: number
           last_name?: string | null
           name?: string | null
@@ -450,6 +452,7 @@ export type Database = {
         Update: {
           created_at?: string
           first_name?: string | null
+          hb_user_id?: number | null
           id?: number
           last_name?: string | null
           name?: string | null
@@ -717,15 +720,7 @@ export type Database = {
           email?: string | null
           id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -777,14 +772,14 @@ export type Database = {
             foreignKeyName: "public_plan_appointments_appointment_id_fkey"
             columns: ["appointment_id"]
             isOneToOne: false
-            referencedRelation: "rc_appointments"
+            referencedRelation: "appointment_details"
             referencedColumns: ["appointment_id"]
           },
           {
             foreignKeyName: "public_plan_appointments_appointment_id_fkey"
             columns: ["appointment_id"]
             isOneToOne: false
-            referencedRelation: "appointment_details"
+            referencedRelation: "rc_appointments"
             referencedColumns: ["appointment_id"]
           },
           {
@@ -844,32 +839,28 @@ export type Database = {
         Returns: undefined
       }
       copy_schedule_plan: {
-        Args: {
-          schedule_date: string
-        }
+        Args: { schedule_date: string }
         Returns: undefined
       }
       custom_access_token_hook: {
-        Args: {
-          event: Json
-        }
+        Args: { event: Json }
         Returns: Json
       }
       get_geom_and_placeid_from_address: {
-        Args: {
-          address: string
-        }
+        Args: { address: string }
         Returns: Record<string, unknown>
       }
       get_geom_from_address: {
-        Args: {
-          address: string
-        }
+        Args: { address: string }
         Returns: unknown
       }
       get_rc_token: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_staff_shifts: {
+        Args: { date_from: string; date_to: string }
+        Returns: Json
       }
       get_total_time: {
         Args: {
@@ -881,17 +872,11 @@ export type Database = {
         Returns: Record<string, unknown>
       }
       http_get_appointments: {
-        Args: {
-          date_from: string
-          date_to: string
-        }
+        Args: { date_from: string; date_to: string }
         Returns: number
       }
       http_get_distance_matrix: {
-        Args: {
-          origin_place_ids: string[]
-          destination_place_ids: string[]
-        }
+        Args: { origin_place_ids: string[]; destination_place_ids: string[] }
         Returns: number
       }
       http_get_employees: {
@@ -899,13 +884,15 @@ export type Database = {
         Returns: number
       }
       http_get_geocode: {
-        Args: {
-          address: string
-        }
+        Args: { address: string }
         Returns: number
       }
       http_get_properties: {
         Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      http_get_shifts: {
+        Args: { date_from: string; date_to: string }
         Returns: number
       }
       http_get_staff: {
@@ -913,30 +900,19 @@ export type Database = {
         Returns: number
       }
       http_put_appointment_staff: {
-        Args: {
-          appointment_id: number
-          assignment_json: Json
-        }
+        Args: { appointment_id: number; assignment_json: Json }
         Returns: number
       }
       plan_add_appointment: {
-        Args: {
-          target_plan: number
-          appointment_to_add: number
-        }
+        Args: { target_plan: number; appointment_to_add: number }
         Returns: undefined
       }
       plan_add_staff: {
-        Args: {
-          target_plan: number
-          staff_to_add: number
-        }
+        Args: { target_plan: number; staff_to_add: number }
         Returns: undefined
       }
       plan_create_new: {
-        Args: {
-          target_plan_date: string
-        }
+        Args: { target_plan_date: string }
         Returns: {
           id: number
           plan_date: string
@@ -944,17 +920,11 @@ export type Database = {
         }[]
       }
       plan_remove_appointment: {
-        Args: {
-          target_plan: number
-          appointment_to_remove: number
-        }
+        Args: { target_plan: number; appointment_to_remove: number }
         Returns: undefined
       }
       plan_remove_staff: {
-        Args: {
-          target_plan: number
-          staff_to_remove: number
-        }
+        Args: { target_plan: number; staff_to_remove: number }
         Returns: undefined
       }
       process_send_schedule_job_queue: {
@@ -962,42 +932,27 @@ export type Database = {
         Returns: undefined
       }
       schedule_send_rc_schedule_plans: {
-        Args: {
-          schedule_date: string
-        }
+        Args: { schedule_date: string }
         Returns: undefined
       }
       send_rc_schedule_plans: {
-        Args: {
-          schedule_date: string
-        }
+        Args: { schedule_date: string }
         Returns: undefined
       }
       set_rc_appointment_staff: {
-        Args: {
-          appointment_id: number
-          staff_ids: number[]
-        }
+        Args: { appointment_id: number; staff_ids: number[] }
         Returns: boolean
       }
       set_staff_group: {
-        Args: {
-          appt_id: number
-          staff_json: Json
-        }
+        Args: { appt_id: number; staff_json: Json }
         Returns: undefined
       }
       set_travel_times: {
-        Args: {
-          address_id: number
-        }
+        Args: { address_id: number }
         Returns: undefined
       }
       update_appointments: {
-        Args: {
-          date_from: string
-          date_to: string
-        }
+        Args: { date_from: string; date_to: string }
         Returns: undefined
       }
       update_employee_roles: {
@@ -1051,27 +1006,29 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+type DefaultSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1079,20 +1036,22 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1100,20 +1059,22 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema["Tables"]
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
-    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1121,14 +1082,69 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema["Enums"]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
-    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      app_permission: [
+        "rc_addresses.select",
+        "rc_appointments.select",
+        "rc_properties.select",
+        "rc_properties.update",
+        "rc_staff.select",
+        "rc_tokens.select",
+        "roles.select",
+        "roles.update",
+        "schedule_plans.select",
+        "schedule_plans.update",
+        "schedule_plans.insert",
+        "plan_appointments.select",
+        "plan_appointments.update",
+        "plan_appointments.insert",
+        "plan_staff.select",
+        "plan_staff.update",
+        "plan_staff.insert",
+        "service_key.select",
+        "appointment_status_key.select",
+        "property_status_key.select",
+        "staff_status_key.select",
+        "appointments_staff.select",
+        "error_log.select",
+        "error_log.insert",
+        "http_response.select",
+        "http_response.insert",
+        "travel_times.select",
+        "send_schedule_job_queue.insert",
+      ],
+      app_role: ["authenticated", "authorized_user"],
+    },
+  },
+} as const

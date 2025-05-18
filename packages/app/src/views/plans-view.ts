@@ -13,6 +13,7 @@ import { OmissionsModal } from "./omissions-modal";
 import { BuildErrorDialog } from "../components/build-error-dialog";
 import { InfoDialog } from "../components/info-dialog";
 import { UnscheduledModal } from "./unscheduled-modal";
+import { ShiftCheckModal } from "./shift-check-modal";
 import 'boxicons';
 
 interface ServiceOption {
@@ -30,7 +31,8 @@ export class PlansViewElement extends View<Model, Msg> {
             "omissions-modal": OmissionsModal,
             "build-error-dialog": BuildErrorDialog,
             "info-dialog": InfoDialog,
-            "unscheduled-modal": UnscheduledModal
+            "unscheduled-modal": UnscheduledModal,
+            "shift-check_modal": ShiftCheckModal
         }
     );
 
@@ -390,6 +392,7 @@ export class PlansViewElement extends View<Model, Msg> {
                     <div class="modal-buttons">
                         <build-error-dialog code=${(this.build_error ? this.build_error.code! : `no-error:${this.build_count}`)} .error=${this.build_error}></build-error-dialog>
                         <unscheduled-modal date=${this.from_plan_date} .services=${this.filter_service_ids}></unscheduled-modal>
+                        <shift-check_modal date=${this.from_plan_date}></shift-check_modal>
                     </div>
                     <button @click=${this.buildSchedule}>
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>

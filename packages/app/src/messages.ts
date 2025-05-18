@@ -22,6 +22,7 @@ export type Msg =
   | ["plans/add", { plan_date: string; }]
   | ["staff/select", { user_id: number; }]
   | ["staff/", { filter_status_ids?: Array<number>; filter_can_clean?: boolean; }]
+  | ["staff/shifts", { from_shift_date: string; to_shift_date?: string; }]
   | ["services/", { }]
   | ["available/save", { available: Array<number> }]
   | ["omissions/save", { omissions: Array<number> }]
