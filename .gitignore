@@ -3,3 +3,4 @@
 # local env files
 .env*.local
 packages/server/my.log
+node_modules/
