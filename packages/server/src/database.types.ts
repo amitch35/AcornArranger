@@ -937,7 +937,7 @@ export type Database = {
       }
       send_rc_schedule_plans: {
         Args: { schedule_date: string }
-        Returns: undefined
+        Returns: boolean
       }
       set_rc_appointment_staff: {
         Args: { appointment_id: number; staff_ids: number[] }
