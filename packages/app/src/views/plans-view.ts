@@ -128,6 +128,16 @@ export class PlansViewElement extends View<Model, Msg> {
           ]);
     }
 
+    // Shows confirmation dialog to the user after a delay for a duration (in milliseconds)
+    confirmationDialog(delay: number, duration: number) {
+        setTimeout(() => { // wait delay milliseconds before opening
+            this.showConfirmationDialog()
+            setTimeout(() => {
+                this.closeConfirmationDialog();
+            }, duration); // wait duration milliseconds before closing
+        }, delay);
+    }
+
     buildSchedule() {
         if (this.build_error) this.dispatchMessage([ "build_error/reset", { } ]);
         this.dispatchMessage([
@@ -146,7 +156,9 @@ export class PlansViewElement extends View<Model, Msg> {
             }
           ]);
         this.build_count++;
-    }
+        this.closeBuildModal();
+        this.confirmationDialog(500, 1500);
+    } 
 
     copySchedule() {
         this.dispatchMessage([
@@ -156,6 +168,8 @@ export class PlansViewElement extends View<Model, Msg> {
             }
           ]);
         this.build_count++;
+        this.closeCopyModal();
+        this.confirmationDialog(250, 700);
     }
 
     sendSchedule() {
@@ -167,12 +181,7 @@ export class PlansViewElement extends View<Model, Msg> {
           ]);
         this.build_count++;
         this.closeSendModal();
-        setTimeout(() => {
-            this.showConfirmationDialog()
-            setTimeout(() => {
-                this.closeConfirmationDialog();
-            }, 1500); // wait 2 seconds before closing
-        }, 500);
+        this.confirmationDialog(500, 1500);
     }
 
     addPlan() {
@@ -231,6 +240,26 @@ export class PlansViewElement extends View<Model, Msg> {
         this.page++;
         this.updatePlans();
     }
+
+    closeBuildModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.build-modal') as HTMLDialogElement;
+        dialog.close();
+    }
+
+    showBuildModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.build-modal') as HTMLDialogElement;
+        dialog.showModal();
+    } 
+
+    closeCopyModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.copy-modal') as HTMLDialogElement;
+        dialog.close();
+    }
+
+    showCopyModal() {
+        const dialog = this.shadowRoot!.querySelector('dialog.copy-modal') as HTMLDialogElement;
+        dialog.showModal();
+    } 
 
     closeSendModal() {
         const dialog = this.shadowRoot!.querySelector('dialog.send-modal') as HTMLDialogElement;
@@ -292,7 +321,35 @@ export class PlansViewElement extends View<Model, Msg> {
                     <box-icon name='check' color="var(--text-color-body)" size="calc(var(--icon-size) * 2)"></box-icon>
                 </div>
                 <div class="align-center">
-                    <h4>Plan Sent</h4>
+                    <h4>Working on it</h4>
+                </div>
+            </div>
+        </dialog>
+        <dialog class="build-modal modal">
+            <div class="modal-content">
+                <div class="align-center">
+                    <h4>Confirm Build</h4>
+                </div>
+                <div>
+                    <p>Are you sure you'd like to build a new schedule?</p>
+                </div>
+                <div class="spread-apart cancel-send">
+                    <button @click=${this.closeBuildModal}>Cancel</button>
+                    <button @click=${this.buildSchedule}>Build</button>
+                </div>
+            </div>
+        </dialog>
+        <dialog class="copy-modal modal">
+            <div class="modal-content">
+                <div class="align-center">
+                    <h4>Confirm Copy</h4>
+                </div>
+                <div>
+                    <p>Are you sure you'd like to copy to a new schedule?</p>
+                </div>
+                <div class="spread-apart cancel-send">
+                    <button @click=${this.closeCopyModal}>Cancel</button>
+                    <button @click=${this.copySchedule}>Copy</button>
                 </div>
             </div>
         </dialog>
@@ -394,11 +451,11 @@ export class PlansViewElement extends View<Model, Msg> {
                         <unscheduled-modal date=${this.from_plan_date} .services=${this.filter_service_ids}></unscheduled-modal>
                         <shift-check_modal date=${this.from_plan_date}></shift-check_modal>
                     </div>
-                    <button @click=${this.buildSchedule}>
+                    <button @click=${this.showBuildModal}>
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                         <span>Build</span>
                     </button>
-                    <button class="copy" @click=${this.copySchedule} ?disabled=${!this.plans || this.plans.length < 1 || (this.plans[0].appointments[0] && this.plans[0].appointments[0].sent_to_rc === null)}>
+                    <button class="copy" @click=${this.showCopyModal} ?disabled=${!this.plans || this.plans.length < 1 || (this.plans[0].appointments[0] && this.plans[0].appointments[0].sent_to_rc === null)}>
                         <box-icon name='copy' color="var(--text-color-body)"></box-icon>
                         <span>Copy</span>
                     </button>
