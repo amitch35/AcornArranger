@@ -14,8 +14,13 @@ export class ShiftCheckModal extends View<Model, Msg> {
 
     @state()
     get staff_shift_issues() {
-        const shifts = this.model.shifts || [];
+        let shifts = this.model.shifts || [];
         const plans = this.model.plans || [];
+
+        // Only include shifts with the desired roles
+        shifts = shifts.filter(shift =>
+            shift.shift.role === "Lead Housekeeper" || shift.shift.role === "Housekeeper"
+        );
     
         const planned_staff = new Map<number, { user_id: number; name: string }>();
         const scheduled_staff = new Map<number, { user_id: number; name: string }>();
