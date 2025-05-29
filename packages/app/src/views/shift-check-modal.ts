@@ -19,7 +19,9 @@ export class ShiftCheckModal extends View<Model, Msg> {
 
         // Only include shifts with the desired roles
         shifts = shifts.filter(shift =>
-            shift.shift.role === "Lead Housekeeper" || shift.shift.role === "Housekeeper"
+            shift.shift.role === "Lead Housekeeper" || 
+            shift.shift.role === "Housekeeper" || 
+            shift.shift.role === "Hospitality Manager"
         );
     
         const planned_staff = new Map<number, { user_id: number; name: string }>();
