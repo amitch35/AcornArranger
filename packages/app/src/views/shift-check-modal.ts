@@ -21,7 +21,8 @@ export class ShiftCheckModal extends View<Model, Msg> {
         shifts = shifts.filter(shift =>
             shift.shift.role === "Lead Housekeeper" || 
             shift.shift.role === "Housekeeper" || 
-            shift.shift.role === "Hospitality Manager"
+            shift.shift.role === "Hospitality Manager" ||
+            shift.shift.role === "Quality Control Manager"
         );
     
         const planned_staff = new Map<number, { user_id: number; name: string }>();
