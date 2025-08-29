@@ -1,8 +1,9 @@
 import express, { NextFunction, Request, Response } from "express";
 import { supabaseClient } from "../utils/supabase/client";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { TokenJSON } from "@/models";
+// import { TokenJSON } from "@/models";
+// import { JwtPayload } from "@supabase/supabase-js";
 
 dotenv.config({ path: ['.env.local', '.env'] });
 
@@ -62,11 +63,11 @@ router.post('/login', async (req: Request, res: Response) => {
 router.get('/user', async (req: Request, res: Response) => {
     const token = getToken(req);
     if (token) {
-      const { data: { user }, error } = await supabase.auth.getUser(token)
-      if (error) {
+      const { data, error } = await supabase.auth.getClaims(token)
+      if (error || !data?.claims) {
         res.send(error);
       } else {
-        res.send(user);
+        res.send(data.claims);
       }
     } else {
       res.status(401).json({'error': 'Authorization header not present'})
@@ -83,27 +84,32 @@ function getToken(req: Request) {
   return null;
 }
 
-export async function supabaseMiddleware (req: Request, res: Response, next: NextFunction) {
-  const token = getToken(req)
+export async function supabaseMiddleware(req: Request, res: Response, next: NextFunction) {
+  const token = getToken(req);
 
-  switch(token){
-    case null:
-      res.status(401).json({'error': 'Authorization header not present'}).end()
-      break;
-    default:
-      jwt.verify(token, TOKEN_SECRET, (error, decoded) => {
-        if (error) res.send(error).end()
-        else if (decoded) {
-          const token_json = decoded as TokenJSON;
-          if (token_json.user_role && token_json.user_role === 'authorized_user') {
-            next();
-          } else {
-            res.status(403).json({'error': 'User not Authorized, contact administrator for authorization'}).end()
-          }
-        }
-        else res.status(403).end();
-      });
-      break;
+  if (!token) {
+    return res.status(401).json({ error: "Authorization header not present" }).end();
+  }
+
+  try {
+    const { data, error } = await supabase.auth.getClaims(token);
+
+    if (error || !data?.claims) {
+      return res.status(403).json({ error: "Invalid or expired token" }).end();
+    }
+
+    // const claims = data.claims as JwtPayload & { user_role?: string };
+
+    if (data.claims.user_role === "authorized_user") {
+      return next();
+    } else {
+      return res.status(403).json({
+        error: "User not Authorized, contact administrator for authorization",
+      }).end();
+    }
+  } catch (err) {
+    console.error("Token verification error:", err);
+    return res.status(403).json({ error: "Token verification failed" }).end();
   }
 }
 
