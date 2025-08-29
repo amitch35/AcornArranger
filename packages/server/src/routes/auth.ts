@@ -7,8 +7,6 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ['.env.local', '.env'] });
 
-const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
-
 const router = express.Router();
 
 const supabase = supabaseClient;
