@@ -71,7 +71,7 @@ export class UnscheduledModal extends View<Model, Msg> {
                 per_page: 100,
                 page: 0,
                 filter_status_ids: [1,2], // Only show appointments that are not complete and not canceled
-                filter_service_ids: this.services,
+                filter_service_ids: this.services?.length ? this.services : [21942, 23044],
                 show_unscheduled: true
             }
           ]);

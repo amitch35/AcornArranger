@@ -56,7 +56,6 @@ var import_express = __toESM(require("express"));
 var import_client = require("../utils/supabase/client");
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
-const TOKEN_SECRET = process.env.SUPABASE_JWT_SECRET || "NOT_A_SECRET";
 const router = import_express.default.Router();
 const supabase = import_client.supabaseClient;
 router.post("/signup", (req, res) => __async(null, null, function* () {
