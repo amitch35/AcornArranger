@@ -33,6 +33,12 @@ var import_services = __toESM(require("./routes/services"));
 var import_auth = __toESM(require("./routes/auth"));
 var import_dotenv = __toESM(require("dotenv"));
 import_dotenv.default.config({ path: [".env.local", ".env"] });
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+});
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
+});
 const { queryParser } = require("express-query-parser");
 const app = (0, import_express.default)();
 const port = process.env.PORT || 3e3;

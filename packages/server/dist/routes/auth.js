@@ -120,27 +120,24 @@ function getToken(req) {
   return null;
 }
 function supabaseMiddleware(req, res, next) {
-  return __async(this, null, function* () {
-    const token = getToken(req);
-    if (!token) {
-      return res.status(401).json({ error: "Authorization header not present" }).end();
+  const token = getToken(req);
+  if (!token) {
+    return res.status(401).json({ error: "Authorization header not present" }).end();
+  }
+  supabase.auth.getClaims(token).then(({ data, error }) => {
+    if (error || !(data == null ? void 0 : data.claims)) {
+      return res.status(403).json({ error: "Invalid or expired token" }).end();
     }
-    try {
-      const { data, error } = yield supabase.auth.getClaims(token);
-      if (error || !(data == null ? void 0 : data.claims)) {
-        return res.status(403).json({ error: "Invalid or expired token" }).end();
-      }
-      if (data.claims.user_role === "authorized_user") {
-        return next();
-      } else {
-        return res.status(403).json({
-          error: "User not Authorized, contact administrator for authorization"
-        }).end();
-      }
-    } catch (err) {
-      console.error("Token verification error:", err);
-      return res.status(403).json({ error: "Token verification failed" }).end();
+    if (data.claims.user_role === "authorized_user") {
+      return next();
+    } else {
+      return res.status(403).json({
+        error: "User not Authorized, contact administrator for authorization"
+      }).end();
     }
+  }).catch((err) => {
+    console.error("Token verification error:", err);
+    return res.status(403).json({ error: "Token verification failed" }).end();
   });
 }
 var auth_default = router;

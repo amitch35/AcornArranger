@@ -82,33 +82,34 @@ function getToken(req: Request) {
   return null;
 }
 
-export async function supabaseMiddleware(req: Request, res: Response, next: NextFunction) {
+export function supabaseMiddleware(req: Request, res: Response, next: NextFunction) {
   const token = getToken(req);
 
   if (!token) {
     return res.status(401).json({ error: "Authorization header not present" }).end();
   }
 
-  try {
-    const { data, error } = await supabase.auth.getClaims(token);
+  // Wrap the async operation in a promise that handles rejections
+  supabase.auth.getClaims(token)
+    .then(({ data, error }) => {
+      if (error || !data?.claims) {
+        return res.status(403).json({ error: "Invalid or expired token" }).end();
+      }
 
-    if (error || !data?.claims) {
-      return res.status(403).json({ error: "Invalid or expired token" }).end();
-    }
+      // const claims = data.claims as JwtPayload & { user_role?: string };
 
-    // const claims = data.claims as JwtPayload & { user_role?: string };
-
-    if (data.claims.user_role === "authorized_user") {
-      return next();
-    } else {
-      return res.status(403).json({
-        error: "User not Authorized, contact administrator for authorization",
-      }).end();
-    }
-  } catch (err) {
-    console.error("Token verification error:", err);
-    return res.status(403).json({ error: "Token verification failed" }).end();
-  }
+      if (data.claims.user_role === "authorized_user") {
+        return next();
+      } else {
+        return res.status(403).json({
+          error: "User not Authorized, contact administrator for authorization",
+        }).end();
+      }
+    })
+    .catch((err) => {
+      console.error("Token verification error:", err);
+      return res.status(403).json({ error: "Token verification failed" }).end();
+    });
 }
 
 export default router;
