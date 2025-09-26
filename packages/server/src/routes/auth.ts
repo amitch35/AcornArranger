@@ -59,17 +59,21 @@ router.post('/login', async (req: Request, res: Response) => {
 });
   
 router.get('/user', async (req: Request, res: Response) => {
-    const token = getToken(req);
-    if (token) {
-      const { data, error } = await supabase.auth.getClaims(token)
-      if (error || !data?.claims) {
-        res.send(error);
-      } else {
-        res.send(data.claims);
-      }
-    } else {
-      res.status(401).json({'error': 'Authorization header not present'})
+  const token = getToken(req);
+  if (!token) {
+    return res.status(401).json({ 'error': 'Authorization header not present' });
+  }
+
+  try {
+    const { data, error } = await supabase.auth.getClaims(token);
+    if (error || !data?.claims) {
+      return res.status(401).json({ error: 'Invalid or expired token' });
     }
+    return res.send(data.claims);
+  } catch (err) {
+    console.error('Token verification error:', err);
+    return res.status(401).json({ error: 'Token verification failed' });
+  }
 });
 
 function getToken(req: Request) {
@@ -93,7 +97,7 @@ export function supabaseMiddleware(req: Request, res: Response, next: NextFuncti
   supabase.auth.getClaims(token)
     .then(({ data, error }) => {
       if (error || !data?.claims) {
-        return res.status(403).json({ error: "Invalid or expired token" }).end();
+        return res.status(401).json({ error: "Invalid or expired token" }).end();
       }
 
       // const claims = data.claims as JwtPayload & { user_role?: string };
@@ -108,7 +112,7 @@ export function supabaseMiddleware(req: Request, res: Response, next: NextFuncti
     })
     .catch((err) => {
       console.error("Token verification error:", err);
-      return res.status(403).json({ error: "Token verification failed" }).end();
+      return res.status(401).json({ error: "Token verification failed" }).end();
     });
 }
 
