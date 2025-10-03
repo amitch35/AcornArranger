@@ -1675,7 +1675,7 @@ svg {
             <h5>Appointments</h5>
             <!-- show non-cancelled appointments in plan -->
             <ul> 
-                ${this.plan.appointments.map(s=>s.appointment_info.status.status_id!==5?e(s.appointment_info):h``)}
+                ${this.plan.appointments.map(s=>Number(s.appointment_info.status.status_id)!==5?e(s.appointment_info):h``)}
                 <add-appointment-modal .plan=${this.plan}></add-appointment-modal>
             </ul>
         </section>

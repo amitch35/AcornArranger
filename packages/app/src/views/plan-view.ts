@@ -132,7 +132,7 @@ export class PlanViewElement extends View<Model, Msg> {
             <h5>Appointments</h5>
             <!-- show non-cancelled appointments in plan -->
             <ul> 
-                ${this.plan.appointments.map((a) => a.appointment_info.status.status_id !== 5 ? renderAppointment(a.appointment_info) : html``)}
+                ${this.plan.appointments.map((a) => Number(a.appointment_info.status.status_id) !== 5 ? renderAppointment(a.appointment_info) : html``)}
                 <add-appointment-modal .plan=${this.plan}></add-appointment-modal>
             </ul>
         </section>
