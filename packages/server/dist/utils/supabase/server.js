@@ -65,12 +65,19 @@ const supabase = (0, import_supabase_js.createClient)(
     }
   }
 );
-supabase.auth.signInWithPassword(
-  {
-    email: process.env.SUPABASE_SERVER_ACCT_EMAIL,
-    password: process.env.SUPABASE_SERVER_ACCT_PSWD
+(() => __async(null, null, function* () {
+  try {
+    const { data, error } = yield supabase.auth.signInWithPassword({
+      email: process.env.SUPABASE_SERVER_ACCT_EMAIL,
+      password: process.env.SUPABASE_SERVER_ACCT_PSWD
+    });
+    if (error) {
+      console.error("Supabase server sign-in failed:", error);
+    }
+  } catch (err) {
+    console.error("Supabase server sign-in threw:", err);
   }
-);
+}))();
 function sendErrorEmail(errorLog, retryCount = 3) {
   return __async(this, null, function* () {
     var transporter = import_nodemailer.default.createTransport({

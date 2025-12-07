@@ -16,12 +16,20 @@ const supabase = createClient<Database>(
       }
     );
 
-supabase.auth.signInWithPassword(
-  {
-    email: process.env.SUPABASE_SERVER_ACCT_EMAIL!,
-    password: process.env.SUPABASE_SERVER_ACCT_PSWD!,
+// Ensure server-side sign-in is handled and does not leak unhandled rejections
+(async () => {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: process.env.SUPABASE_SERVER_ACCT_EMAIL!,
+      password: process.env.SUPABASE_SERVER_ACCT_PSWD!,
+    });
+    if (error) {
+      console.error('Supabase server sign-in failed:', error);
+    }
+  } catch (err) {
+    console.error('Supabase server sign-in threw:', err);
   }
-);
+})();
 
 type ErrorLogRecord = {
   created_at: string;
