@@ -8,6 +8,7 @@ import reset from "../css/reset";
 import page from "../css/page";
 import { PlanViewElement } from "./plan-view";
 import { toISOLocal } from "../utils/dates";
+import { plansDayHasAnySentToRc } from "../utils/plan-sent";
 import { AvailableStaffModal } from "./available-modal";
 import { OmissionsModal } from "./omissions-modal";
 import { BuildErrorDialog } from "../components/build-error-dialog";
@@ -455,7 +456,7 @@ export class PlansViewElement extends View<Model, Msg> {
                         <box-icon type='solid' name='wrench' color="var(--text-color-body)"></box-icon>
                         <span>Build</span>
                     </button>
-                    <button class="copy" @click=${this.showCopyModal} ?disabled=${!this.plans || this.plans.length < 1 || (this.plans[0].appointments[0] && this.plans[0].appointments[0].sent_to_rc === null)}>
+                    <button class="copy" @click=${this.showCopyModal} ?disabled=${!plansDayHasAnySentToRc(this.plans)}>
                         <box-icon name='copy' color="var(--text-color-body)"></box-icon>
                         <span>Copy</span>
                     </button>

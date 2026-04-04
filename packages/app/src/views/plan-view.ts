@@ -7,6 +7,7 @@ import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
 import { formatDate } from "../utils/dates";
+import { planHasAnySentToRc } from "../utils/plan-sent";
 import 'boxicons';
 import { AddStaffModal } from "./add-staff-modal";
 import { AddAppointmentModal } from "./add-appointment-modal";
@@ -94,11 +95,13 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`<section><p>Loading...</p></section>`;
     }
 
+    const sentToRc = planHasAnySentToRc(this.plan);
+
     const renderStaff = (staff: Staff) => {
         return html`
             <li>
                 <span>${staff.name}</span>
-                <button class="trash" name=${staff.user_id} @click=${this.handleStaffRemove} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}> 
+                <button class="trash" name=${staff.user_id} @click=${this.handleStaffRemove} ?disabled=${sentToRc}> 
                     <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
                 </button>
             </li>
@@ -109,7 +112,7 @@ export class PlanViewElement extends View<Model, Msg> {
         return html`
             <li class="${this.other_appointment_ids?.includes(app.appointment_id) ? 'duplicate' : ''}">
                 <span>${app.property_info.property_name}</span>
-                <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}> 
+                <button class="trash" name=${app.appointment_id} @click=${this.handleAppointmentRemove} ?disabled=${sentToRc}> 
                     <box-icon name='trash' size="var(--text-font-size-body)" color="var(--accent-color-red)"></box-icon>
                 </button>
             </li>
@@ -120,7 +123,7 @@ export class PlanViewElement extends View<Model, Msg> {
         <section>
             <div>
                 <p>ID: ${this.plan.plan_id}</p>
-                <p>${this.plan.appointments[0] && this.plan.appointments[0].sent_to_rc !== null ? html`<box-icon name='upload' color="var(--text-color-body)" size="var(--text-font-size-body)"></box-icon>` : html``}</p>
+                <p>${sentToRc ? html`<box-icon name='upload' color="var(--text-color-body)" size="var(--text-font-size-body)"></box-icon>` : html``}</p>
                 <p>${formatDate(this.plan.plan_date)}</p>
             </div>
             <h4>Team ${this.plan.team}</h4>

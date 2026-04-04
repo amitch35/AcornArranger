@@ -6,6 +6,7 @@ import { Msg } from "../messages";
 import { Model } from "../model";
 import reset from "../css/reset";
 import page from "../css/page";
+import { planHasAnySentToRc } from "../utils/plan-sent";
 import 'boxicons';
 
 interface AppointmentOption {
@@ -148,7 +149,7 @@ export class AddAppointmentModal extends View<Model, Msg> {
 
     return html`
         <div class="add-one">
-            <button @click=${this.showModal} ?disabled=${this.plan?.appointments[0] && this.plan?.appointments[0].sent_to_rc !== null}>
+            <button @click=${this.showModal} ?disabled=${this.plan ? planHasAnySentToRc(this.plan) : false}>
                 <box-icon name='plus' color='var(--text-color-body)'></box-icon>
                 <span>Add Appointment</span>
             </button>
