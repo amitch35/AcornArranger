@@ -4,3 +4,4 @@
 .env*.local
 packages/server/my.log
 node_modules/
+packages/app/dist
