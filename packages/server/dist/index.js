@@ -43,7 +43,7 @@ const { queryParser } = require("express-query-parser");
 const app = (0, import_express.default)();
 const port = process.env.PORT || 3e3;
 const staticDir = process.env.STATIC || "public";
-app.use(import_express.default.static(staticDir));
+app.use(import_express.default.static(staticDir, { dotfiles: "deny" }));
 app.use(import_express.default.json());
 app.use(
   queryParser({
@@ -53,12 +53,15 @@ app.use(
     parseNumber: true
   })
 );
-const nodeModules = import_path.default.resolve(
+const mustangDist = import_path.default.resolve(
   __dirname,
-  "../../../node_modules"
+  "../../../node_modules/@calpoly/mustang/dist"
 );
-console.log("Serving NPM packages from", nodeModules);
-app.use("/node_modules", import_express.default.static(nodeModules));
+console.log("Serving @calpoly/mustang from", mustangDist);
+app.use(
+  "/node_modules/@calpoly/mustang/dist",
+  import_express.default.static(mustangDist, { dotfiles: "deny", index: false })
+);
 app.use("/auth", import_auth.default);
 app.use("/api/properties", import_auth.supabaseMiddleware, import_properties.default);
 app.use("/api/staff", import_auth.supabaseMiddleware, import_staff.default);

@@ -1,177 +1,248 @@
-import { Auth, Update } from "@calpoly/mustang";
+import { Auth } from "@calpoly/mustang";
+import type { ThenUpdate } from "@calpoly/mustang";
 import { Appointment, Property, Role, Staff, Plan, PlanBuildOptions, Service, StaffShift } from "server/models";
 import { Msg } from "./messages";
 import { Model } from "./model";
 import { ErrorResponse } from "server/models";
 
-// // Type guard to check if the value is an array of plans
-// function isPlanArray(item: any): item is Array<Plan> {
-//   return Array.isArray(item) && 'plan_id' in item[0];
-// }
+// `Message.None` is exported as `[]`. Use a local alias for readability.
+type None = [];
 
-// // Type guard to check if the value is an error response
-// function isErrorResponse(item: any): item is ErrorResponse {
-//   return item && 'details' in item;
-// }
+// Helper: build a model/patch message that mustang will dispatch back to update.
+// Returning `None` instead skips the patch (used when the fetch returned no data).
+function patch(p: Partial<Model>): Msg {
+  return ["model/patch", p];
+}
 
 export default function update(
   message: Msg,
-  apply: Update.ApplyMap<Model>,
+  model: Model,
   user: Auth.User
-) {
+): Model | ThenUpdate<Model, Msg> {
   switch (message[0]) {
     case "properties/save":
-      saveProperty(message[1], user)
-        .then((property) =>
-          apply((model) => ({ ...model, property }))
-        ).then(() => {
-          const { onSuccess } = message[1];
-          if (onSuccess) onSuccess();
-        })
-        .catch((error: Error) => {
-          const { onFailure } = message[1];
-          if (onFailure) onFailure(error);
-        });
-      break;
+      return [
+        model,
+        saveProperty(message[1], user)
+          .then((property): Msg | None => {
+            const { onSuccess } = message[1];
+            if (onSuccess) onSuccess();
+            return property ? patch({ property }) : [];
+          })
+          .catch((error: Error): None => {
+            const { onFailure } = message[1];
+            if (onFailure) onFailure(error);
+            return [];
+          })
+      ];
+
     case "properties/select":
-      selectProperty(message[1], user).then((property) =>
-        apply((model) => ({ ...model, property }))
-      );
-      break;
+      return [
+        model,
+        selectProperty(message[1], user).then(
+          (property): Msg | None =>
+            property ? patch({ property }) : []
+        )
+      ];
+
     case "properties/":
-      selectProperties(message[1], user).then((properties) =>
-        apply((model) => ({ ...model, properties }))
-      );
-      break;
+      return [
+        model,
+        selectProperties(message[1], user).then(
+          (properties): Msg | None =>
+            properties ? patch({ properties }) : []
+        )
+      ];
+
     case "roles/save":
-      saveRole(message[1], user).then((role) =>
-        apply((model) => ({ ...model, role }))
-      );
-      break;
+      return [
+        model,
+        saveRole(message[1], user).then(
+          (role): Msg | None => (role ? patch({ role }) : [])
+        )
+      ];
+
     case "roles/select":
-      selectRole(message[1], user).then(
-      (role: Role | undefined) =>
-        apply((model) => ({ ...model, role }))
-      );
-      break;
+      return [
+        model,
+        selectRole(message[1], user).then(
+          (role: Role | undefined): Msg | None =>
+            role ? patch({ role }) : []
+        )
+      ];
+
     case "roles/":
-      selectRoles(user).then((roles) =>
-        apply((model) => ({ ...model, roles }))
-      );
-      break;
+      return [
+        model,
+        selectRoles(user).then(
+          (roles): Msg | None => (roles ? patch({ roles }) : [])
+        )
+      ];
+
     case "appointments/select":
-      selectAppointment(message[1], user).then(
-      (appointment: Appointment | undefined) =>
-        apply((model) => ({ ...model, appointment }))
-      );
-      break;
+      return [
+        model,
+        selectAppointment(message[1], user).then(
+          (appointment: Appointment | undefined): Msg | None =>
+            appointment ? patch({ appointment }) : []
+        )
+      ];
+
     case "appointments/":
-      selectAppointments(message[1], user).then(
-      (appointments: Array<Appointment> | undefined) =>
-        apply((model) => ({ ...model, appointments }))
-      );
-      break;
+      return [
+        model,
+        selectAppointments(message[1], user).then(
+          (appointments: Array<Appointment> | undefined): Msg | None =>
+            appointments ? patch({ appointments }) : []
+        )
+      ];
+
     case "appointments/select-unscheduled":
-      selectAppointments(message[1], user).then(
-      (unscheduled: Array<Appointment> | undefined) =>
-        apply((model) => ({ ...model, unscheduled }))
-      );
-      break;
+      return [
+        model,
+        selectAppointments(message[1], user).then(
+          (unscheduled: Array<Appointment> | undefined): Msg | None =>
+            unscheduled ? patch({ unscheduled }) : []
+        )
+      ];
+
     case "plans/select":
-      selectPlan(message[1], user).then(
-      (plan: Plan | undefined) =>
-        apply((model) => ({ ...model, plan }))
-      );
-      break;
+      return [
+        model,
+        selectPlan(message[1], user).then(
+          (plan: Plan | undefined): Msg | None =>
+            plan ? patch({ plan }) : []
+        )
+      ];
+
     case "plans/":
-      selectPlans(message[1], user).then(
-      (plans: Array<Plan> | undefined) =>
-        apply((model) => ({ ...model, plans }))
-      );
-      break;
+      return [
+        model,
+        selectPlans(message[1], user).then(
+          (plans: Array<Plan> | undefined): Msg | None =>
+            plans ? patch({ plans }) : []
+        )
+      ];
+
     case "plans/staff/add":
-      addPlanStaff(message[1], user).then(
-      (plan: Plan | undefined) =>
-        apply((model) => ({ ...model, plan }))
-      );
-      break;
+      return [
+        model,
+        addPlanStaff(message[1], user).then(
+          (plan: Plan | undefined): Msg | None =>
+            plan ? patch({ plan }) : []
+        )
+      ];
+
     case "plans/staff/remove":
-      removePlanStaff(message[1], user).then(
-      (plan: Plan | undefined) =>
-        apply((model) => ({ ...model, plan }))
-      );
-      break;
+      return [
+        model,
+        removePlanStaff(message[1], user).then(
+          (plan: Plan | undefined): Msg | None =>
+            plan ? patch({ plan }) : []
+        )
+      ];
+
     case "plans/appointment/add":
-      addPlanAppointment(message[1], user).then(
-      (plan: Plan | undefined) =>
-        apply((model) => ({ ...model, plan }))
-      );
-      break;
+      return [
+        model,
+        addPlanAppointment(message[1], user).then(
+          (plan: Plan | undefined): Msg | None =>
+            plan ? patch({ plan }) : []
+        )
+      ];
+
     case "plans/appointment/remove":
-      removePlanAppointment(message[1], user).then(
-      (plan: Plan | undefined) =>
-        apply((model) => ({ ...model, plan }))
-      );
-      break;
+      return [
+        model,
+        removePlanAppointment(message[1], user).then(
+          (plan: Plan | undefined): Msg | None =>
+            plan ? patch({ plan }) : []
+        )
+      ];
+
     case "plans/build":
-      buildPlan(message[1], user).then(
-      (error: ErrorResponse | undefined) => {
-          apply((model) => ({ ...model, build_error: error }))
-      });
-      break;
+      return [
+        model,
+        buildPlan(message[1], user).then(
+          (error: ErrorResponse | undefined): Msg => patch({ build_error: error })
+        )
+      ];
+
     case "plans/copy":
-      copyPlan(message[1], user).then(
-      (error: ErrorResponse | undefined) => {
-          apply((model) => ({ ...model, build_error: error }))
-      });
-      break;
+      return [
+        model,
+        copyPlan(message[1], user).then(
+          (error: ErrorResponse | undefined): Msg => patch({ build_error: error })
+        )
+      ];
+
     case "plans/send":
-      sendPlan(message[1], user).then(
-      (error: ErrorResponse | undefined) => {
-          apply((model) => ({ ...model, build_error: error }))
-      });
-      break;
+      return [
+        model,
+        sendPlan(message[1], user).then(
+          (error: ErrorResponse | undefined): Msg => patch({ build_error: error })
+        )
+      ];
+
     case "plans/add":
-      addPlan(message[1], user).then(
-      (error: ErrorResponse | undefined) => {
-          apply((model) => ({ ...model, build_error: error }))
-      });
-      break;
+      return [
+        model,
+        addPlan(message[1], user).then(
+          (error: ErrorResponse | undefined): Msg => patch({ build_error: error })
+        )
+      ];
+
     case "staff/select":
-      selectStaffMember(message[1], user).then(
-      (staff_member: Staff | undefined) =>
-        apply((model) => ({ ...model, staff_member }))
-      );
-      break;
+      return [
+        model,
+        selectStaffMember(message[1], user).then(
+          (staff_member: Staff | undefined): Msg | None =>
+            staff_member ? patch({ staff_member }) : []
+        )
+      ];
+
     case "staff/":
-      selectStaff(message[1], user).then(
-        (staff: Array<Staff> | undefined) =>
-          apply((model) => ({ ...model, staff }))
-      );
-      break;
+      return [
+        model,
+        selectStaff(message[1], user).then(
+          (staff: Array<Staff> | undefined): Msg | None =>
+            staff ? patch({ staff }) : []
+        )
+      ];
+
     case "staff/shifts":
+      return [
+        model,
         selectShifts(message[1], user).then(
-        (shifts: Array<StaffShift> | undefined) =>
-          apply((model) => ({ ...model, shifts }))
-        );
-        break;
+          (shifts: Array<StaffShift> | undefined): Msg | None =>
+            shifts ? patch({ shifts }) : []
+        )
+      ];
+
     case "services/":
-      selectServices(user).then((services) =>
-        apply((model) => ({ ...model, services }))
-      );
-      break;
+      return [
+        model,
+        selectServices(user).then(
+          (services: Array<Service> | undefined): Msg | None =>
+            services ? patch({ services }) : []
+        )
+      ];
+
     case "available/save":
-      apply((model) => ({ ...model, available: message[1].available }));
-      break;
+      return { ...model, available: message[1].available };
+
     case "omissions/save":
-      apply((model) => ({ ...model, omissions: message[1].omissions }));
-      break;
+      return { ...model, omissions: message[1].omissions };
+
     case "build_error/reset":
-      apply((model) => ({ ...model, build_error: undefined }));
-      break;
+      return { ...model, build_error: undefined };
+
+    case "model/patch":
+      return { ...model, ...message[1] };
+
     default:
-      const unhandled: never = message[0];
-      throw new Error(`Unhandled Auth message "${unhandled}"`);
+      const unhandled: never = message;
+      throw new Error(`Unhandled message ${JSON.stringify(unhandled)}`);
   }
 }
 
@@ -218,6 +289,7 @@ function selectProperty(
         console.log("Property:", json);
         return json as Property;
       }
+      return undefined;
     });
 }
 
@@ -248,6 +320,7 @@ function selectProperties(
         console.log("Properties:", json);
         return json as Array<Property>;
       }
+      return undefined;
     });
 }
 
@@ -294,6 +367,7 @@ function selectRole(
         console.log("Role:", json);
         return json as Role;
       }
+      return undefined;
     });
 }
 
@@ -314,6 +388,7 @@ function selectRoles(
         console.log("Roles:", json);
         return json as Array<Role>;
       }
+      return undefined;
     });
 }
 
@@ -335,18 +410,20 @@ function selectAppointment(
         console.log("Appointment:", json);
         return json as Appointment;
       }
+      return undefined;
     });
 }
 
 function selectAppointments(
-  msg: { 
-    from_service_date: string; 
-    to_service_date: string; 
-    per_page?: number; 
+  msg: {
+    from_service_date: string;
+    to_service_date: string;
+    per_page?: number;
     page?: number;
     filter_status_ids?: Array<number>;
     filter_service_ids?: Array<number>;
-    show_unscheduled?: boolean; },
+    show_unscheduled?: boolean;
+  },
   user: Auth.User
 ) {
   // Base URL
@@ -389,6 +466,7 @@ function selectAppointments(
         console.log("Appointments:", json);
         return json as Array<Appointment>;
       }
+      return undefined;
     });
 }
 
@@ -410,15 +488,17 @@ function selectPlan(
         console.log("Plan:", json);
         return json as Plan;
       }
+      return undefined;
     });
 }
 
 function selectPlans(
-  msg: { 
-    from_plan_date: string; 
-    to_plan_date?: string; 
-    per_page?: number; 
-    page?: number; },
+  msg: {
+    from_plan_date: string;
+    to_plan_date?: string;
+    per_page?: number;
+    page?: number;
+  },
   user: Auth.User
 ) {
   // Base URL
@@ -449,6 +529,7 @@ function selectPlans(
         console.log("Plans:", json);
         return json as Array<Plan>;
       }
+      return undefined;
     });
 }
 
@@ -521,18 +602,19 @@ function buildPlan(
     body: JSON.stringify(msg.build_options)
   })
     .then((response: Response) => {
-        if (response.status === 400) return response.json();
-        else return undefined;
-      })
-      .then((json: unknown) => {
-        if (json) {
-          const error_json = json as ErrorResponse;
-          if (error_json.details) {
-            return error_json;
-          }
-          return undefined;
+      if (response.status === 400) return response.json();
+      else return undefined;
+    })
+    .then((json: unknown) => {
+      if (json) {
+        const error_json = json as ErrorResponse;
+        if (error_json.details) {
+          return error_json;
         }
-      });
+        return undefined;
+      }
+      return undefined;
+    });
 }
 
 function copyPlan(
@@ -555,6 +637,7 @@ function copyPlan(
         }
         return undefined;
       }
+      return undefined;
     });
 }
 
@@ -578,6 +661,7 @@ function sendPlan(
         }
         return undefined;
       }
+      return undefined;
     });
 }
 
@@ -601,6 +685,7 @@ function addPlan(
         }
         return undefined;
       }
+      return undefined;
     });
 }
 
@@ -622,6 +707,7 @@ function selectStaffMember(
         console.log("Staff Member:", json);
         return json as Staff;
       }
+      return undefined;
     });
 }
 
@@ -657,14 +743,15 @@ function selectStaff(
         console.log("Staff:", json);
         return json as Array<Staff>;
       }
+      return undefined;
     });
 }
 
 function selectShifts(
-  msg: { 
-    from_shift_date: string; 
-    to_shift_date?: string; 
-    },
+  msg: {
+    from_shift_date: string;
+    to_shift_date?: string;
+  },
   user: Auth.User
 ) {
   // Base URL
@@ -689,6 +776,7 @@ function selectShifts(
         console.log("Shifts:", json);
         return json as Array<StaffShift>;
       }
+      return undefined;
     });
 }
 
@@ -709,5 +797,6 @@ function selectServices(
         console.log("Services:", json);
         return json as Array<Service>;
       }
+      return undefined;
     });
 }

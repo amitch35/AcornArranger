@@ -1,6 +1,10 @@
 import { Property, Role, PlanBuildOptions } from "server/models";
+import type { Model } from "./model";
 
 export type Msg =
+  // Internal patch message used by update() to apply async results to the model.
+  // Dispatched indirectly via ThenUpdate; not intended for direct use by views.
+  | ["model/patch", Partial<Model>]
   | ["properties/save", { properties_id: number; property: Property; onSuccess?: () => void; onFailure?: (err: Error) => void; }]
   | ["properties/select", { properties_id: number; }]
   | ["properties/", { filter_status_ids?: Array<number> }]

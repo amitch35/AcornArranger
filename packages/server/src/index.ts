@@ -28,7 +28,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const staticDir = process.env.STATIC || "public";
 
-app.use(express.static(staticDir));
+app.use(express.static(staticDir, { dotfiles: "deny" }));
 
 app.use(express.json());
 
@@ -41,13 +41,21 @@ app.use(
   })
 )
 
-// NPM Packages
-const nodeModules = path.resolve(
+// NPM packages exposed to the browser.
+// Previously this mounted the entire node_modules tree at /node_modules, which
+// exposed every file (READMEs, source maps, anything next to node_modules).
+// The proto frontend's import map only requests
+//   /node_modules/@calpoly/mustang/dist/mustang.mjs
+// scope the public mount to exactly that subtree.
+const mustangDist = path.resolve(
   __dirname,
-  "../../../node_modules"
+  "../../../node_modules/@calpoly/mustang/dist"
 );
-console.log("Serving NPM packages from", nodeModules);
-app.use("/node_modules", express.static(nodeModules));
+console.log("Serving @calpoly/mustang from", mustangDist);
+app.use(
+  "/node_modules/@calpoly/mustang/dist",
+  express.static(mustangDist, { dotfiles: "deny", index: false })
+);
 
 app.use('/auth', auth);
 
